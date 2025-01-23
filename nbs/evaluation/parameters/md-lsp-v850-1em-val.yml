@@ -1,0 +1,87 @@
+desc: |
+  Initial go with just v850 input to a diffusion model for model development chapter
+  Val split
+  1em models
+  Compare different inputs
+eval_vars: [pr]
+derived_variables_config: {}
+dataset_configs:
+    CPM: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr
+split: val
+ensemble_members: ["01"]
+samples_per_run: 3
+sample_configs:
+    CPM:
+      - label: v850
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_v850
+            checkpoint: epoch_100
+            input_xfm: bham64_ccpm-4x_1em_vort850_pr-stan
+            dataset: bham64_ccpm-4x_1em_vort850_pr
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        UQ: True
+        PSD: True
+        color: "blue"
+        order: 10
+      - label: v850-ls1
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_v850-ls-1
+            checkpoint: epoch_120
+            input_xfm: bham64_ccpm-4x_1em_vort850_pr-stan
+            dataset: bham64_ccpm-4x_1em_vort850_pr
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        UQ: True
+        PSD: True
+        color: red
+        order: 10
+      - label: v850-ls4
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_v850-ls-4
+            checkpoint: epoch_120
+            input_xfm: bham64_ccpm-4x_1em_vort850_pr-stan
+            dataset: bham64_ccpm-4x_1em_vort850_pr
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        UQ: True
+        PSD: True
+        color: orange
+        order: 10
+      - label: v850-ls8
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_v850-ls-8
+            checkpoint: epoch_180
+            input_xfm: bham64_ccpm-4x_1em_vort850_pr-stan
+            dataset: bham64_ccpm-4x_1em_vort850_pr
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        UQ: True
+        PSD: True
+        color: green
+        order: 10
+example_percentiles:
+  CPM:
+    DJF Wet:
+      percentile:  0.8
+      variable: pr
+      season: DJF
+    DJF Wettest:
+      percentile: 1
+      variable: pr
+      season: DJF
+    JJA Wet:
+      percentile:  0.8
+      variable: pr
+      season: JJA
+    JJA Wettest:
+      percentile: 1
+      variable: pr
+      season: JJA
+example_overrides:
+    CPM: {} # for test split "JJA Wet": ["01", "1993-08-01 12:00:00"]}
+    GCM: {}

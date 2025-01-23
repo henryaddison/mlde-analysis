@@ -1,0 +1,13 @@
+var: target_relhum150cm
+dataset: bham64_ccpm-4x_12em_mv
+ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
+split: test
+derived_variables_config: {}
+xfm_keys:
+  - pcrecen
+  - mmrecen # stanmmrecen is functionally equivalent
+  - stan # equivalent to mm;stan and stan;mm
+  - stan;ur
+  - sqrturrecen
+thresholds: [35, 100]
+plotted_thresholds: [35, 100]

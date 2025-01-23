@@ -1,0 +1,73 @@
+desc: |
+  Comparison of diffusion model with different data availability for pr results chapter
+  Test split
+  Compare full emulator with one trained using only a single ensemble member and time period
+eval_vars: [pr]
+derived_variables_config: {}
+dataset_configs:
+    CPM: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
+    GCM: bham64_gcm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
+split: test
+ensemble_members: ["01"]
+samples_per_run: 6
+sample_configs:
+    CPM:
+      - label: CPMGEM-cCPM
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec
+            checkpoint: epoch_20
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        PSD: True
+        color: tab:blue
+        order: 11
+      # - label: ld-cCPM
+      #   sample_specs:
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+      #       checkpoint: epoch_200
+      #       dataset: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
+      #       input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:purple
+      #   order: 20
+      #   Samples: True
+      - label: CPMGEM_ld-cCPM
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/xarray_cncsnpp_continuous/bham-4x_1em_PslS4T4V4_random-season-historic-IstanTsqrturrecen-no-loc-spec
+            checkpoint: epoch_300
+            dataset: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
+            input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
+            variables: [pr]
+        deterministic: False
+        PSD: True
+        Samples: True
+        color: tab:red
+        order: 21
+    GCM:
+      # - label: ld-GCM
+      #   sample_specs:
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+      #       checkpoint: epoch_200
+      #       dataset: bham64_gcm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
+      #       input_xfm: bham64_gcm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-pixelmmsstan
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: magenta
+      #   order: 100
+      - label: CPMGEM_ld-GCM
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/xarray_cncsnpp_continuous/bham-4x_1em_PslS4T4V4_random-season-historic-IstanTsqrturrecen-no-loc-spec
+            checkpoint: epoch_300
+            dataset: bham64_gcm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
+            input_xfm: bham64_gcm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-pixelmmsstan
+            variables: [pr]
+        deterministic: False
+        PSD: True
+        color: tab:pink
+        order: 101

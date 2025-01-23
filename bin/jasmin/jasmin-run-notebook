@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+# Wrapper for running notebook on JASMIN in background
+
+# eval "$(mamba shell.bash hook)"
+# mamba activate mlde-notebooks
+
+set -euo pipefail
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+# export DERIVED_DATA=/gws/nopw/j04/bris_climdyn/henrya/bp-backups/
+
+job_id=${RANDOM}
+
+echo ${job_id}
+nohup sh ${SCRIPT_DIR}/../run-notebook $@ 2>&1 >> nohup-${job_id}.out &

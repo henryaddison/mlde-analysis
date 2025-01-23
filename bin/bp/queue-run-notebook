@@ -1,0 +1,27 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+lmem=128
+ltime=3
+
+while getopts ":m:t:" opt; do
+  case ${opt} in
+    m)
+      lmem=${OPTARG}
+      ;;
+    t)
+      ltime=${OPTARG}
+      ;;
+    \? )
+      # echo "Invalid option: -${OPTARG}" 1>&2
+     ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      exit 1
+      ;;
+  esac
+done
+shift "$((OPTIND -1))"
+
+lbatch -m ${lmem} -a ${HPC_PROJECT_CODE} -q short,compute,cnu -t ${ltime} --condaenv mlde-notebooks -- bin/run-notebook $@

@@ -1,0 +1,68 @@
+desc: |
+  Comparison of different implementations of U-Net
+  Val split
+  12em models
+  Same architecture but training and sampling code is different (Old uses something bespoke, New uses the same training and sampling framework as diffusion models, slightly adapted for deterministic approach)
+eval_vars: [pr]
+derived_variables_config: {}
+dataset_configs:
+    CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+split: val
+ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
+samples_per_run: 1
+sample_configs:
+    CPM:
+      - label: Untuned-cCPM
+        sample_specs:
+          - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-no-ema
+            checkpoint: epoch_100
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
+        deterministic: True
+        CCS: True
+        UQ: True
+        PSD: True
+        color: green
+        order: 12
+      - label: Old-rr-cCPM
+        sample_specs:
+            - fq_model_id: u-net/ukcp_local_12em_pr/bham_pSTV-rerun
+              checkpoint: epoch_100
+              input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+              dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+              variables: ["pr"]
+        deterministic: True
+        color: purple
+        order: 2
+      - label: Old-cCPM
+        sample_specs:
+          - fq_model_id: u-net/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen
+            checkpoint: epoch_100
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: ["pr"]
+        deterministic: True
+        color: orange
+        order: 1
+example_percentiles:
+  CPM:
+    DJF Wet:
+      percentile:  0.8
+      variable: pr
+      season: DJF
+    DJF Wettest:
+      percentile: 1
+      variable: pr
+      season: DJF
+    JJA Wet:
+      percentile:  0.8
+      variable: pr
+      season: JJA
+    JJA Wettest:
+      percentile: 1
+      variable: pr
+      season: JJA
+example_overrides:
+    CPM: {} # for test split "JJA Wet": ["01", "1993-08-01 12:00:00"]}
+    GCM: {}

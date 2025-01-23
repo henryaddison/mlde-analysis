@@ -1,0 +1,28 @@
+#!/bin/bash
+# Script for queueing all the notebooks used for MD chapter on LOTUS on JASMIN
+
+set -euo pipefail
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+# Distribution
+
+set -x; for p in nbs/evaluation/parameters/md-*.yml; do bin/jasmin/queue-run-notebook -m 64G nbs/evaluation/distribution.ipynb $p; done
+
+# CCS
+
+set -x; for p in nbs/evaluation/parameters/md-temp*.yml; do bin/jasmin/queue-run-notebook -m 64G nbs/evaluation/ccs-figures.ipynb $p; done; set +x
+
+set -x; for p in nbs/evaluation/parameters/md-*-gcm-only.yml; do bin/jasmin/queue-run-notebook -m 64G nbs/evaluation/ccs-figures.ipynb  $p; done; set +x
+
+# Samples
+
+bin/jasmin/queue-run-notebook -m 64G nbs/evaluation/samples.ipynb  nbs/evaluation/parameters/md-best-unet-12em.yml
+
+bin/jasmin/queue-run-notebook -m 64G nbs/evaluation/samples.ipynb nbs/evaluation/parameters/md-imperfect-12em-val.yml
+
+# UQ
+
+bin/jasmin/queue-run-notebook -m 128G nbs/evaluation/uq.ipynb nbs/evaluation/parameters/md-12em-val-epoch-20.yml
+
+bin/jasmin/queue-run-notebook -m 16G nbs/evaluation/uq.ipynb nbs/evaluation/parameters/md-1em-val.yml

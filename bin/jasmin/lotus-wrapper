@@ -1,0 +1,13 @@
+#!/bin/bash
+# Wrapper script around commands for running notebook from LOTUS queue
+
+source ~/.bashrc
+mamba activate mlde-notebooks
+
+set -euo pipefail
+
+export DERIVED_DATA=/gws/nopw/j04/bris_climdyn/henrya/bp-backups/
+
+set -x
+$@
+set +x

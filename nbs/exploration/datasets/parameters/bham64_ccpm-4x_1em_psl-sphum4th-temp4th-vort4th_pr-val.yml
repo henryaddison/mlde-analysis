@@ -1,0 +1,3 @@
+dataset_name: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr
+split: val
+ensemble_members: ["01"]

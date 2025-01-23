@@ -1,0 +1,11 @@
+var: target_pr
+dataset: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr
+ensemble_members: ["01"]
+split: val
+derived_variables_config: {}
+xfm_keys:
+  - stanurrecen
+  - sqrturrecen
+  - stanmmrecen
+thresholds: [0.1, 25, 75, 125]
+plotted_thresholds: [25, 75]

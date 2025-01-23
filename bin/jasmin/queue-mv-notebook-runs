@@ -1,0 +1,30 @@
+#!/bin/bash
+# Script for queueing all the notebooks used for MV chapter on LOTUS on JASMIN
+
+set -euo pipefail
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+split=${1:-test}
+
+params_path=nbs/evaluation/parameters/mv-${split}.yml
+
+# TODO: add: ccs-figures
+
+# 128G
+
+set -x; for nb in distribution structure samples uq; do bin/jasmin/queue-run-notebook -m 128G nbs/evaluation/${nb}.ipynb ${params_path}; done; set +x;
+
+# 12 hours
+
+set -x; for nb in multivariate; do bin/jasmin/queue-run-notebook -m 128G -t 12:00:00 nbs/evaluation/${nb}.ipynb ${params_path}; done; set +x;
+
+# 256G
+
+set -x; for nb in seasonal-distribution; do bin/jasmin/queue-run-notebook -m 256G -t 12:00:00 nbs/evaluation/${nb}.ipynb ${params_path}; done; set +x;
+
+# sWBGT
+
+params_path=nbs/evaluation/parameters/mv-swbgt-${split}.yml
+
+set -x; for nb in distribution structure samples uq; do bin/jasmin/queue-run-notebook -m 128G nbs/evaluation/${nb}.ipynb ${params_path}; done; set +x;

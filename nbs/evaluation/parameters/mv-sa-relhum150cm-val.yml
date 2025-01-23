@@ -1,0 +1,94 @@
+desc: |
+  Compare s/a model attempts for relhum
+  Val split
+  pSTV inputs
+  12em models
+  All models at epoch 20
+eval_vars: [relhum150cm]
+dataset_configs:
+    CPM: bham64_ccpm-4x_12em_mv
+split: val
+ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
+samples_per_run: 3
+sample_configs:
+    CPM:
+      - label: pcrecen
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_rs_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_Rs
+            checkpoint: epoch_20
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm-stan
+            variables: [relhum150cm]
+        deterministic: False
+        CCS: True
+        color: tab:blue
+        order: 10
+      - label: mmrecen
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_rs_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_Rs-mm
+            checkpoint: epoch_20
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm-stan
+            variables: [relhum150cm]
+        deterministic: False
+        CCS: True
+        color: tab:green
+        order: 11
+      - label: sqrturrecen
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_rs_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_Rs-sqrturrecen
+            checkpoint: epoch_20
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm-stan
+            variables: [relhum150cm]
+        deterministic: False
+        CCS: True
+        color: tab:red
+        order: 12
+      - label: stan;ur
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_rs_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_Rs-stanur
+            checkpoint: epoch_20
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm-stan
+            variables: [relhum150cm]
+        deterministic: False
+        CCS: True
+        color: tab:orange
+        order: 13
+      - label: stan
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_rs_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_Rs-stan
+            checkpoint: epoch_20
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm-stan
+            variables: [relhum150cm]
+        deterministic: False
+        CCS: True
+        color: tab:brown
+        order: 14
+derived_variables_config: {}
+example_percentiles:
+  CPM:
+    DJF Humid:
+      percentile:  0.8
+      variable: relhum150cm
+      season: DJF
+    DJF Most Humid:
+      percentile: 1
+      variable: relhum150cm
+      season: DJF
+    JJA Dry:
+      percentile:  0.2
+      variable: relhum150cm
+      season: JJA
+    JJA Dryest:
+      percentile: 0
+      variable: relhum150cm
+      season: JJA
+    JJA Convective:
+      percentile:  0.8
+      variable: pr
+      season: JJA
+example_overrides:
+    CPM: {"JJA Convective": ["01", "1993-08-01 12:00:00"]} # test set override
