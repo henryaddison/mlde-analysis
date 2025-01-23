@@ -16,5 +16,7 @@ ATTRS = {
 }
 
 
-def pretty_table(da: xr.DataArray, round: int = 1) -> None:
-    IPython.display.display_html(da.round(round).to_dataframe().to_html(), raw=True)
+def pretty_table(da: xr.DataArray, round: int = 1, dim_order=None) -> None:
+    df = da.to_dataframe(dim_order=dim_order)
+    df = df.style.format(precision=round)
+    IPython.display.display_html(df.to_html(), raw=True)

@@ -76,7 +76,10 @@ def threshold_exceeded_prop_stats(
 
 
 def plot_threshold_exceedence_errors(threshold_exceedence_stats, style="raw"):
-    fig = plt.figure(layout="constrained", figsize=(10, 10))
+    nmodels = len(threshold_exceedence_stats["model"])
+    fig = plt.figure(
+        layout="constrained", figsize=((1 + nmodels) * 2.5, (1 + nmodels) * 2.5)
+    )
 
     seasons = list(threshold_exceedence_stats["season"].data)
 
