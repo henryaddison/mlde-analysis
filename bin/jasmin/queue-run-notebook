@@ -31,4 +31,4 @@ while getopts ":m:p:t:" opt; do
 done
 shift "$((OPTIND -1))"
 
-sbatch --parsable --chdir=/home/users/vf20964/code/mlde-notebooks --partition=${spartition} --time=${stime} --mem=${smem} -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
+sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --partition=${spartition} --time=${stime} --mem=${smem} -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
