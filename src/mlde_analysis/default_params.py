@@ -75,7 +75,7 @@ sample_configs = {
 
 derived_variables_config = {
     "swbgt": [
-        "mlde_notebooks.derived_variables.swbgt",
+        "mlde_analysis.derived_variables.swbgt",
         {"temp": "tmean150cm", "rh": "relhum150cm"},
     ]
 }
