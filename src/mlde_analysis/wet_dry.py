@@ -5,7 +5,12 @@ from mlde_utils import cp_model_rotated_pole
 
 from . import plot_map
 
-THRESHOLDS = {"pr": [0.1], "tmean150cm": [273], "relhum150cm": [50], "swbgt": [20]}
+THRESHOLDS = {
+    "pr": [0.1],
+    "tmean150cm": [273, 283, 298],
+    "relhum150cm": [60, 80, 100],
+    "swbgt": [20],
+}
 
 
 def threshold_exceeded_prop(da, threshold):
@@ -42,7 +47,7 @@ def threshold_exceeded_prop_change(da, threshold):
 
 
 def threshold_exceeded_prop_stats(
-    sample_das,
+    sample_da,
     target_da,
     threshold,
     threshold_exceeded_prop_statistic=threshold_exceeded_prop,
@@ -60,13 +65,11 @@ def threshold_exceeded_prop_stats(
         ).expand_dims(model=["CPM"])
         seasonal_stats = xr.concat(
             [
-                threshold_exceeded_prop_statistic(
-                    sample_da.sel(season_mask),
-                    threshold=threshold,
-                )
-                for sample_da in sample_das
-            ]
-            + [seasonal_cpm_stats],
+                sample_da.sel(season_mask)
+                .groupby("model")
+                .map(threshold_exceeded_prop_statistic, threshold=threshold),
+                seasonal_cpm_stats,
+            ],
             dim="model",
         ).expand_dims(dim={"season": [season]})
 
@@ -155,3 +158,29 @@ def plot_threshold_exceedence_errors(threshold_exceedence_stats, style="raw"):
                 ax.set_title(label, fontsize="medium")
 
     return fig, axd
+
+
+def wd_mean(da, threshold):
+    dims = set(da.dims) - set(["grid_latitude", "grid_longitude"])
+    return da.where(da > threshold).mean(dim=dims).rename("wd mean (mm/day)")
+
+
+def wd_mean_change(da, threshold):
+    from_da = da.where(da["time_period"] == "historic", drop=True)
+    to_da = da.where(da["time_period"] == "future", drop=True)
+
+    from_wd_mean = wd_mean(from_da, threshold=threshold).rename(
+        "Historic wd mean (mm/day)"
+    )
+    to_wd_mean = wd_mean(to_da, threshold=threshold).rename("Future wd mean (mm/day)")
+
+    change = (to_wd_mean - from_wd_mean).rename("Change in wd mean (mm/day)")
+
+    return xr.merge([from_wd_mean, to_wd_mean, change])
+
+
+def wd_mean_bias(pred_da, cpm_da, threshold):
+    pred_wd_mean = wd_mean(pred_da, threshold)
+    cpm_wd_mean = wd_mean(cpm_da, threshold)
+
+    return pred_wd_mean - cpm_wd_mean

@@ -183,7 +183,7 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
         ]
     )
 
-    return metrics_ds, thshd_exceedence_ds
+    return xr.merge([metrics_ds, thshd_exceedence_ds])
 
 
 def plot_freq_density(
