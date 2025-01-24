@@ -1,24 +1,59 @@
 #! /usr/bin/env bash
 
+help()
+{
+  cat << EOF
+Helper script for running a notebook from the nbs directory with papermill and saving the result within a given output directory
+
+Usage: run-notebook <notebook_filepath> <output_base_dirpath> [parameters_filepath]
+If parameters_filepath is provided, the notebook will be run with the parameters in the file.
+Otherwise, the notebook will be run without parameters.
+The result will be saved in output_base_dirpath with the same structure mirroring the location of the source notebook in this repo.
+If parameters_filepath is provided, the output will be saved in a subdirectory named after the parameters file.
+
+Example: run-notebook nbs/evaluation/distribution.ipynb output nbs/evaluation/parameters/example.yml
+Output will be saved in output/nbs/evaluation/output/parameters/example/distribution.ipynb
+
+Example: run-notebook /path/to/output nbs/evaluation/perspective_paper_figures.ipynb
+Output will be saved in /path/to/output/nbs/evaluation/output/perspective_paper_figures.ipynb
+EOF
+}
+
 set -euo pipefail
 
+while getopts ':h' option; do
+  case "$option" in
+    h) help
+       exit
+       ;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2
+       exit 1
+       ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 notebook_filepath=$1
+output_base_dirpath=$2
 
-output_dirpath="$(dirname ${notebook_filepath})/output"
-mkdir -p ${output_dirpath}
+full_notebook_filepath=$(realpath ${notebook_filepath})
+full_notebook_dirpath=$(dirname ${full_notebook_filepath})
+output_dirpath="${output_base_dirpath}/${full_notebook_dirpath/*\/nbs/nbs}/output"
 
-if [ $# -eq 2 ]; then # if parameters file provided
-  parameters_filepath=$2
-
+if [ $# -eq 3 ]; then # if parameters file provided
+  parameters_filepath=$3
   parameters=$(basename ${parameters_filepath} .yml)
+  output_dirpath="${output_dirpath}/${parameters}"
   output_filename="$(basename ${notebook_filepath} .ipynb)-${parameters}.ipynb"
-  output_dirpath=${output_dirpath}/${parameters}
-  mkdir -p ${output_dirpath}
-  output_filepath=${output_dirpath}/${output_filename}
+  output_filepath="${output_dirpath}/${output_filename}"
 
+  mkdir -p ${output_dirpath}
   papermill ${notebook_filepath} ${output_filepath} -f ${parameters_filepath}
 else
-  output_filepath=${output_dirpath}/$(basename ${notebook_filepath})
+  output_filename="$(basename ${notebook_filepath})"
+  output_filepath="${output_dirpath}/${output_filename}"
+
+  mkdir -p ${output_dirpath}
   papermill ${notebook_filepath} ${output_filepath}
 fi
 

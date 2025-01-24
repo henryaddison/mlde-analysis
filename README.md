@@ -43,15 +43,18 @@ Manage environment variables as you wish though the python-dotenv package is inc
 
 ### Running Notebooks
 
-#### Interactive
-
-Use jupyter: `jupyter lab`
+The main expected way to run notebooks with full datasets is via batch jobs running a helper script that uses papermill but it is possible to run the notebooks interactively (and this is the expected way to develop and test new data analysis).
 
 #### Batch
 
-This can be used with a helper script to run a notebook in batch mode along with an (optional) parameter files: `bin/run-notebook nbs/my/notebook.ipynb nbs/my/parameters/setA.yml`
+This can be used with a helper script to run a notebook in batch mode along with an (optional) parameter files: `bin/run-notebook nbs/my/notebook.ipynb /output/base/dir/ nbs/my/parameters/setA.yml`.
+See `run-notebook` file itself for further details.
 
 There are further helpers (`queue-run-notebook`) for doing this on Blue Pebble and JASMIN in `bin/bp` and `bin/jasmin` respectively. These include support for options like memory and time requirements or partition.
+
+#### Interactive
+
+Use jupyter: `jupyter lab`
 
 ### CLI
 
