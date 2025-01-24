@@ -2,8 +2,8 @@ import numpy as np
 import pytest
 import xarray as xr
 
-import mlde_notebooks
-from mlde_notebooks import data
+import mlde_analysis
+from mlde_analysis import data
 
 
 @pytest.fixture
@@ -40,18 +40,18 @@ def combined_preds_eval_ds(predictions, eval_dataset) -> xr.Dataset:
 def test_attach_derived_variables(combined_preds_eval_ds):
     conf = {
         "swbgt": [
-            "mlde_notebooks.derived_variables.swbgt",
+            "mlde_analysis.derived_variables.swbgt",
             {"temp": "temp150cm", "rh": "relhum150cm"},
         ]
     }
     actual_ds = data.attach_derived_variables(combined_preds_eval_ds, conf)
 
-    expected_pred_dv = mlde_notebooks.derived_variables.swbgt(
+    expected_pred_dv = mlde_analysis.derived_variables.swbgt(
         temp=combined_preds_eval_ds["pred_temp150cm"],
         rh=combined_preds_eval_ds["pred_relhum150cm"],
     )
 
-    expected_target_dv = mlde_notebooks.derived_variables.swbgt(
+    expected_target_dv = mlde_analysis.derived_variables.swbgt(
         temp=combined_preds_eval_ds["target_temp150cm"],
         rh=combined_preds_eval_ds["target_relhum150cm"],
     )

@@ -2,7 +2,7 @@ import math
 import numpy as np
 import pytest
 
-from mlde_notebooks import derived_variables
+from mlde_analysis import derived_variables
 
 
 @pytest.fixture

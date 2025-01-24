@@ -7,7 +7,7 @@ import xarray as xr
 
 from mlde_utils import cp_model_rotated_pole
 
-from mlde_notebooks import plot_map
+from mlde_analysis import plot_map
 
 
 def mean_bias(sample_da, cpm_da, normalize=False):
