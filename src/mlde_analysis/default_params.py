@@ -1,7 +1,7 @@
-eval_vars = ["pr", "tmean150cm", "relhum150cm", "swbgt"]
+eval_vars = ["pr"]
 dataset_configs = {
-    "CPM": "bham64_ccpm-4x_12em_mv",
-    "GCM": "bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr",
+    "CPM": "demo-ccpm_pr",
+    "GCM": "demo-gcm_pr",
 }
 split = "val"
 ensemble_members = [
@@ -24,67 +24,66 @@ sample_configs = {
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "score-sde/subvpsde/ukcp_local_rs_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_Rs",
+                    "fq_model_id": "score-sde/demo-cpmgem-pr",
                     "checkpoint": "epoch_20",
-                    "dataset": "bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm",
-                    "input_xfm": "bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_relhum150cm-stan",
-                    "variables": ["relhum150cm"],
-                },
-                {
-                    "fq_model_id": "score-sde/subvpsde/ukcp_local_ts_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_Ts",
-                    "checkpoint": "epoch_20",
-                    "dataset": "bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_tmean150cm",
-                    "input_xfm": "bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_tmean150cm-stan",
-                    "variables": ["tmean150cm"],
-                },
-                {
-                    "fq_model_id": "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec",
-                    "checkpoint": "epoch_20",
-                    "dataset": "bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr",
-                    "input_xfm": "bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan",
+                    "dataset": "demo-ccpm_pr",
+                    "input_xfm": "demo-ccpm_pr-stan",
                     "variables": ["pr"],
                 },
             ],
             "label": "sa-cCPM",
             "deterministic": False,
             "PSD": True,
-            "color": "blue",
+            "color": "tab:blue",
             "order": 10,
             "CCS": True,
         },
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "score-sde/subvpsde/ukcp_local_mv_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_PrRsTs",
+                    "fq_model_id": "score-sde/demo-cpmgem-mv",
                     "checkpoint": "epoch_20",
-                    "dataset": "bham64_ccpm-4x_12em_mv",
-                    "input_xfm": "bham64_ccpm-4x_12em_mv-stan",
-                    "variables": ["pr", "tmean150cm", "relhum150cm"],
+                    "dataset": "demo-ccpm_mv",
+                    "input_xfm": "demo-ccpm_mv-stan",
+                    "variables": ["pr"],
                 },
             ],
             "label": "mv-cCPM",
             "deterministic": False,
             "PSD": True,
-            "color": "cyan",
+            "color": "tab:orange",
             "order": 11,
             "CCS": True,
         },
     ],
-    # "GCM": []
+    "GCM": [
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "score-sde/demo-cpmgem-pr",
+                    "checkpoint": "epoch_20",
+                    "dataset": "demo-gcm_pr",
+                    "input_xfm": "demo-gcm_pr-pixelmmsstan",
+                    "variables": ["pr"],
+                },
+            ],
+            "label": "sa-GCM",
+            "deterministic": False,
+            "PSD": True,
+            "color": "tab:cyan",
+            "order": 100,
+            "CCS": True,
+        },
+    ],
 }
 
-derived_variables_config = {
-    "swbgt": [
-        "mlde_analysis.derived_variables.swbgt",
-        {"temp": "tmean150cm", "rh": "relhum150cm"},
-    ]
-}
+derived_variables_config = {}
 
 example_percentiles = {
     "CPM": {
-        "JJA Hot": {"percentile": 0.8, "variable": "tmean150cm", "season": "JJA"},
-        "DJF Humid": {"percentile": 0.8, "variable": "relhum150cm", "season": "DJF"},
-        "DJF Cold": {"percentile": 0.2, "variable": "tmean150cm", "season": "DJF"},
+        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
+        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
+        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
     },
 }
 example_overrides = {
