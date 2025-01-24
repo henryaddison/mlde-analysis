@@ -1,96 +1,97 @@
-eval_vars: ["pr"]
+desc: |
+    Comparison of diffusion model for CPMGEM-pr paper
+    Test split
+    12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
+    Compare techniques: diffusion, u-net, bilinear
+eval_vars: [pr]
+derived_variables_config: {}
 dataset_configs:
-    CPM: "bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season"
-    GCM: "bham_60km-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season"
-split: "test"
+    CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+    GCM: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+split: test
 ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
 samples_per_run: 6
 sample_configs:
     CPM:
-      - label: Diffusion-cCPM
+      - label: CPMGEM-cCPM
         sample_specs:
-          - fq_model_id: "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec"
+          - fq_model_id: score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec
             checkpoint: epoch_20
-            input_xfm: bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-stan
-            dataset: "bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season"
-            variables: ["pr"]
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
         deterministic: False
         CCS: True
-        color: "blue"
-        order: 10
+        color: tab:blue
+        order: 11
       - label: U-Net-cCPM
         sample_specs:
-          - fq_model_id: "u-net/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen"
+          - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
             checkpoint: epoch_100
-            input_xfm: bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-stan
-            dataset: "bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season"
-            variables: ["pr"]
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
         deterministic: True
-        color: "orange"
+        color: tab:orange
         order: 1
       - label: cCPM Bilinear
         sample_specs:
-          - fq_model_id: "id-linpr"
-            checkpoint: "epoch_0"
-            input_xfm: "none"
-            dataset: "bham_gcmx-4x_12em_linpr_eqvt_random-season"
-            variables: ["pr"]
+          - fq_model_id: id-linpr
+            checkpoint: epoch_0
+            input_xfm: none
+            dataset: bham64_ccpm-4x_12em_linpr_pr
+            variables: [pr]
         deterministic: True
-        color: "dimgrey"
+        color: dimgrey
         order: 0
     GCM:
-      - label: Diffusion-GCM
+      - label: CPMGEM-GCM
         sample_specs:
-          - fq_model_id: "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec"
+          - fq_model_id: score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec
             checkpoint: epoch_20
-            input_xfm: bham_60km-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-pixelmmsstan
-            dataset: "bham_60km-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season"
-            variables: ["pr"]
+            input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
+            dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
         deterministic: False
         CCS: True
-        color: "green"
+        color: tab:green
         order: 20
-gcm_lr_lin_pr_dataset: "bham_60km-4x_12em_linpr_eqvt_random-season"
-cpm_hr_pr_dataset: "bham_gcmx-4x_12em_linpr_eqvt_random-season"
 example_percentiles:
   CPM:
-    - label: "Wet"
+    DJF Wet:
       percentile:  0.8
-      variable: "pr"
-    - label: "Wettest"
+      variable: pr
+      season: DJF
+    DJF Wettest:
       percentile: 1
-      variable: "pr"
+      variable: pr
+      season: DJF
+    JJA Wet:
+      percentile:  0.8
+      variable: pr
+      season: JJA
+    JJA Wettest:
+      percentile: 1
+      variable: pr
+      season: JJA
   GCM:
-    - label: "Wet"
+    DJF Wet:
       percentile:  0.8
-      variable: "pr"
-    - label: "Wettest"
+      variable: pr
+      season: DJF
+    DJF Wettest:
       percentile: 1
-      variable: "pr"
+      variable: pr
+      season: DJF
+    JJA Wet:
+      percentile:  0.8
+      variable: pr
+      season: JJA
+    JJA Wettest:
+      percentile: 1
+      variable: pr
+      season: JJA
 example_overrides:
     CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
     GCM: {}
-
-desc: |
-    Multi-ensemble member models
-    Splits are based on random choice of seasons with equal number of seasons from each time slice
-
-    Compare:
-
-    ### Diffusion models
-    * PslS4T4V4 IstanTsqrturrecen no-loc-spec
-
-    ### Lo-res precip:
-    * id-linpr
-
-    ## Diff models and U-net models
-
-    No loc-spec params (diff models only)
-
-    Inputs from: pressure at sea level and 4 levels of spechum, temp and vorticity
-
-    Target domain and resolution: 64x64 2.2km-4x England and Wales
-
-    Input resolution: 60km/gcmx
-
-    Input transforms are fitted on dataset in use (ie separate GCM and CPM versions) while target transform is fitted only at training on the CPM dataset
+n_samples_per_example: 2
