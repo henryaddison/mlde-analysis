@@ -141,6 +141,11 @@ VAR_LABELS = {
     "swbgt": "Simplified WBGT (C)",
 }
 
+SUBREGIONS = {
+    "SE": dict(grid_latitude=slice(10, 26), grid_longitude=slice(38, 54)),
+    "NW": dict(grid_latitude=slice(44, 60), grid_longitude=slice(18, 34)),
+}
+
 
 def create_map_fig(grid_spec, width=None, height=None):
     if width is None:
