@@ -5,17 +5,25 @@ set -euo pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+saccount=furflex
 smem=128G
-spartition=high-mem
+spartition=highres
+sqos=highres
 stime=02:00:00
 
-while getopts ":m:p:t:" opt; do
+while getopts ":a:m:p:q:t:" opt; do
   case ${opt} in
+    a)
+      saccount=${OPTARG}
+      ;;
     m)
       smem=${OPTARG}
       ;;
     p)
       spartition=${OPTARG}
+      ;;
+    q)
+      sqos=${OPTARG}
       ;;
     t)
       stime=${OPTARG}
@@ -31,4 +39,4 @@ while getopts ":m:p:t:" opt; do
 done
 shift "$((OPTIND -1))"
 
-sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --partition=${spartition} --time=${stime} --mem=${smem} -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
+sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --account=${saccount} --partition=${spartition} --qos=${sqos}--time=${stime} --mem=${smem} -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
