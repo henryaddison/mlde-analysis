@@ -72,7 +72,7 @@ def normalized_std_bias(sample_da, cpm_da):
 
 def xr_hist(da, bins, **kwargs):
     def _np_hist(da, bins, **kwargs):
-        return np.histogram(da, bins=bins, density=True, **kwargs)[0]
+        return np.histogram(da, bins=bins, **kwargs)[0]
 
     return xr.apply_ufunc(
         _np_hist,
@@ -80,7 +80,7 @@ def xr_hist(da, bins, **kwargs):
         input_core_dims=[da.dims],  # list with one entry per arg
         output_core_dims=[["bins"]],
         vectorize=True,
-        kwargs=kwargs | dict(bins=bins),
+        kwargs=dict(bins=bins, density=True) | kwargs,
     ).rename("frequency_density")
 
 
