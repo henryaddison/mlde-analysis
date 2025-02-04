@@ -9,3 +9,4 @@ xfm_keys:
   - stanmmrecen
 thresholds: [0.1, 25, 75, 125]
 plotted_thresholds: [75, 125]
+niterations: 30
