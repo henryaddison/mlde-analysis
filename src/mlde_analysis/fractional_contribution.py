@@ -1,9 +1,11 @@
 import numpy as np
 
+from .distribution import xr_hist
+
 # import scipy
 
 
-def compute_fractional_contribution(pr_da, calchist=np.histogram):
+def fc_bins():
     bin2 = np.exp(
         np.log(0.005)
         + np.sqrt(
@@ -11,28 +13,28 @@ def compute_fractional_contribution(pr_da, calchist=np.histogram):
             * ((np.square(np.log(120.0) - np.log(0.005))) / 59.0)
         )
     )
-    bins = np.pad(bin2, (1, 0), "constant", constant_values=0) / 24.0 * 1.5
-    NBINS = len(bins) - 1
-    binval = np.zeros((NBINS), dtype=float)
-    for ibin in np.arange(NBINS):
+    return np.pad(bin2, (1, 0), "constant", constant_values=0) / 24.0 * 1.5
+
+
+def fc_binval(bins):
+    nbins = len(bins) - 1
+    binval = np.zeros((nbins), dtype=float)
+    for ibin in np.arange(nbins):
         binval[ibin] = (bins[ibin] + bins[ibin + 1]) / 2.0
 
-    # calculating fractional distribution
-    dist = np.zeros(NBINS)
+    return binval
 
-    fracdist = np.zeros(NBINS)
 
-    # for i,timeseries in enumerate(pr_da.slices('time')):
-    hist = calchist(pr_da, bins)
-    dist[:] = dist[:] + hist[0]
+def compute_fractional_contribution(pr_da, bins):
+    binval = fc_binval(bins)
 
-    for ibin in np.arange(NBINS):
-        fracdist[ibin] = dist[ibin] * binval[ibin]
-    fracdist[:] = (
-        fracdist[:] / float(fracdist.sum()) * 100.0
-    )  # fractional distribution in %
+    hist = xr_hist(pr_da, bins)
 
-    return fracdist, binval
+    fracdist = hist * binval
+
+    fracdist = fracdist / float(fracdist.sum()) * 100.0  # fractional distribution in %
+
+    return fracdist
 
 
 # my version
@@ -89,30 +91,41 @@ def plot_fractional_contribution(
     ax.set_ylim([0, 2])  # for diff or change use ax.set_ylim([-0.4, 0.4])
 
 
-def frac_contrib_change(pr_da):
+def frac_contrib_change(pr_da, bins):
     fpr = pr_da.where(pr_da["time_period"] == "future", drop=True)
-    ffraccontrib, fbinvals = compute_fractional_contribution(fpr)
+    ffraccontrib = compute_fractional_contribution(fpr, bins)
 
     hpr = pr_da.where(pr_da["time_period"] == "historic", drop=True)
-    hfraccontrib, hbinvals = compute_fractional_contribution(hpr)
+    hfraccontrib = compute_fractional_contribution(hpr, bins)
 
-    assert np.all(fbinvals == hbinvals)
-
-    return ffraccontrib - hfraccontrib, fbinvals
+    return ffraccontrib - hfraccontrib
 
 
-def plot_fractional_contribution_change(frcontrib_change_data, ax, title):
+def plot_fractional_contribution_change(
+    frcontrib_change_data,
+    ax,
+    title,
+    linestyle="-",
+    alpha=0.95,
+    linewidth=2,
+    **kwargs,
+):
+
     for pred in frcontrib_change_data:
+        frac_contrib = pred["data"][0]
+        binval = pred["data"][1]
+
         ax.plot(
-            pred["data"][1][1:],
-            pred["data"][0][1:],
+            binval[1:],
+            frac_contrib[1:],
             # baseline=None,
             # fill=False,
             color=pred["color"],
-            alpha=pred.get("alpha", 0.95),
-            linestyle=pred.get("linestyle", "-"),
-            linewidth=1,
+            alpha=pred.get("alpha", alpha),
+            linestyle=pred.get("linestyle", linestyle),
+            linewidth=linewidth,
             label=f"{pred['label']}",
+            **kwargs,
         )
     ax.set_title(title)
     ax.set_xlabel("Precip (mm/day)")
