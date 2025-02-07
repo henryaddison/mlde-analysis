@@ -10,6 +10,9 @@ from mlde_utils import cp_model_rotated_pole
 from mlde_analysis import plot_map
 
 
+QUANTILES = 1 - np.power(10.0, np.arange(-2, -10, -1))
+
+
 def mean_bias(sample_da, cpm_da, normalize=False):
     sample_dims = set(["ensemble_member", "sample_id", "time"]) & set(sample_da.dims)
 
@@ -139,39 +142,28 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
         .rename("J-S distance")
     )
 
-    thshd_exceedence_prop_da = xr.concat(
-        [
-            da.rename("emu_threshold_exceedence")
-            .groupby("model", squeeze=False)
+    das = []
+    for threshold in thresholds:
+        emu_exceedence_da = (
+            da.groupby("model", squeeze=False)
             .map(
                 lambda group_da: (
                     group_da.where(group_da > threshold).count() / group_da.count()
                 )
             )
-            .expand_dims(dict(threshold=[threshold]))
-            for threshold in thresholds
-        ],
-        dim="threshold",
-    ).transpose("model", "threshold")
-    cpm_thshd_exceedence_prop_da = xr.concat(
-        [
-            (cpm_da.where(cpm_da > threshold).count() / cpm_da.count()).expand_dims(
-                dict(threshold=[threshold])
-            )
-            for threshold in thresholds
-        ],
-        dim="threshold",
-    ).rename("cpm_threshold_exceedence")
+            .rename(f"Emu > {threshold}")
+        )
 
-    thshd_exceedence_ds = xr.merge(
-        [
-            cpm_thshd_exceedence_prop_da,
-            thshd_exceedence_prop_da,
-            (thshd_exceedence_prop_da - cpm_thshd_exceedence_prop_da).rename(
-                "threhold_exceedence_diff"
-            ),
-        ]
-    )
+        cpm_exceedence_da = (
+            cpm_da.where(cpm_da > threshold).count() / cpm_da.count()
+        ).rename(f"CPM > {threshold}")
+
+        diff_da = (emu_exceedence_da - cpm_exceedence_da).rename(
+            f"Emu > {threshold} - CPM > {threshold}"
+        )
+        das.extend([emu_exceedence_da, diff_da])
+
+    thshd_exceedence_ds = xr.merge(das)
 
     metrics_ds = xr.merge(
         [
@@ -220,19 +212,12 @@ def plot_freq_density(
                 max(hrange[1], target_da.max().values),
             )
 
-    if target_da is not None:
-        print(f"Target max: {target_da.max().values}")
-    for d in hist_data:
-        print(f"{d['label']} max: {d['data'].max().values}")
-
     bins = np.histogram_bin_edges([], bins=50, range=hrange)
 
     if target_da is not None:
         if yscale == "log":
             min_density = 1 / np.product(target_da.shape)
-            print(min_density)
             ymin = 10 ** (math.floor(math.log10(min_density))) / 2
-            print(ymin)
         elif yscale == "linear":
             ymin = 0
         else:

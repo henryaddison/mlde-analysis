@@ -98,3 +98,6 @@ n_samples_per_example = 1
 desc = """
 Describe in more detail the models being compared
 """
+
+# bootstrapping
+niterations = 5

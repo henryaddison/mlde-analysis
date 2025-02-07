@@ -1,11 +1,18 @@
 from mlde_utils import cp_model_rotated_pole, TIME_PERIODS
 import numpy as np
+import seaborn as sns
 import string
 import xarray as xr
 import xskillscore as xs
 
 from . import plot_map
 from .distribution import plot_freq_density
+from .fractional_contribution import (
+    fc_bins,
+    compute_fractional_contribution,
+    frac_contrib_change,
+)
+from .utils import chained_groupby_map
 
 
 def plot_tp_fd(pred_pr, cpm_pr, fig, source, model, spec, hrange=None):
@@ -261,3 +268,82 @@ def bootstrap_seasonal_mean_pr_change_samples(cpm_pr, pred_pr, nsamples=1000):
     ) - fut_mean_samples["target_pr"].mean(["ensemble_member", "tp_season_year"])
 
     return fut_mean_pr_differences - hist_mean_pr_differences
+
+
+def ccs_fc_da(pred_da, cpm_da, extra_pred_dims=[], extra_cpm_dims=[]):
+    return xr.merge(
+        [
+            chained_groupby_map(
+                pred_da,
+                ["model", "time_period", *extra_pred_dims],
+                compute_fractional_contribution,
+                bins=fc_bins(),
+            ),
+            chained_groupby_map(
+                cpm_da,
+                ["time_period", *extra_cpm_dims],
+                compute_fractional_contribution,
+                bins=fc_bins(),
+            ).expand_dims(model=["CPM"]),
+            chained_groupby_map(
+                pred_da,
+                ["model", *extra_pred_dims],
+                frac_contrib_change,
+                bins=fc_bins(),
+            ),
+            chained_groupby_map(
+                cpm_da, [*extra_cpm_dims], frac_contrib_change, bins=fc_bins()
+            ).expand_dims(model=["CPM"]),
+        ]
+    )
+
+
+def plot_ccs_fc_figure(fig, fcdata, **kwargs):
+    axd = fig.subplot_mosaic(
+        np.append(fcdata.time_period.values, "Change").reshape(-1, 1), sharex=True
+    )
+    for tp, tp_fcdata in fcdata.groupby("time_period"):
+        data = tp_fcdata["frac_contrib"].to_dataframe()
+        ax = axd[tp]
+        g_results = sns.lineplot(
+            data=data,
+            x="bins",
+            y="frac_contrib",
+            hue="model",
+            linewidth=1,
+            ax=ax,
+            **kwargs,
+        )
+        g_results.set(
+            title=f"{tp}",
+            xscale="log",
+            xlabel="Precip (mm/day)",
+            ylabel="Frac. contrib.",
+            xlim=[0.1, 200.0],
+            ylim=[0, 2],
+        )
+        if tp == "historic":
+            ax.legend(fontsize="x-small")
+        else:
+            ax.get_legend().remove()
+
+    data = fcdata["frac_contrib_change"].to_dataframe()
+    ax = axd["Change"]
+    g_results = sns.lineplot(
+        data=data,
+        x="bins",
+        y="frac_contrib_change",
+        hue="model",
+        linewidth=1,
+        ax=ax,
+        **kwargs,
+    )
+    g_results.set(
+        title=f"Change from Historic to Future",
+        xscale="log",
+        xlabel="Precip (mm/day)",
+        ylabel="Change in frac. contrib.",
+        xlim=[0.1, 200.0],
+        ylim=[-0.4, 0.4],
+    )
+    ax.get_legend().remove()

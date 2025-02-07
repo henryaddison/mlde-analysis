@@ -32,7 +32,7 @@ def compute_fractional_contribution(pr_da, bins):
     fracdist = hist * binval
     fracdist = fracdist / float(fracdist.sum()) * 100.0  # fractional distribution in %
 
-    return fracdist
+    return fracdist.rename("frac_contrib")
 
 
 # my version
@@ -57,7 +57,7 @@ def frac_contrib_change(pr_da, bins):
     hpr = pr_da.where(pr_da["time_period"] == "historic", drop=True)
     hfraccontrib = compute_fractional_contribution(hpr, bins)
 
-    return ffraccontrib - hfraccontrib
+    return (ffraccontrib - hfraccontrib).rename("frac_contrib_change")
 
 
 def plot_fractional_contribution(
