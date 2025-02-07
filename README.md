@@ -8,7 +8,7 @@ This guide assumes you are using conda (or mamba) to manage packages and python 
 
 1. Install conda environment:
   * If you wish to re-use the exact environment: `conda env create --file environment.lock.yml` and activate it: `conda activate mlde-notebooks`
-  * OR install the needed conda and pip packages to your own environment: `conda install --file environment.txt`
+  * OR install the needed conda and pip packages to your own environment: `conda install --file=environment.txt`
 2. Install this package (including a few pip dependencies which may not have been included in the previous step): `pip install -e .`
 3. Create .env file: cp .env.example .env and then update to match your needs:
   * `DERIVED_DATA`: path to where derived data such datasets and model artefacts are kept
@@ -17,7 +17,7 @@ This guide assumes you are using conda (or mamba) to manage packages and python 
 
 To add new packages or update their version, it is recommended to use the `environment.txt` file (for conda packages) and `requirements.txt` file (for pip packages) then run:
 ```sh
-conda env install -f environment.txt
+conda install --file=environment.txt
 pip install -e . # this will implicitly use requirement.txt
 conda env export -f environment.lock.yml
 ```

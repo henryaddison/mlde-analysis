@@ -28,7 +28,7 @@ def fc_binval(bins):
 def compute_fractional_contribution(pr_da, bins):
     binval = fc_binval(bins)
 
-    hist = xr_hist(pr_da, bins, density=False)
+    hist = xr_hist(pr_da, bins, density=False).assign_coords({"bins": ("bins", binval)})
     fracdist = hist * binval
     fracdist = fracdist / float(fracdist.sum()) * 100.0  # fractional distribution in %
 
