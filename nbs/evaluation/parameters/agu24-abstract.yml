@@ -14,7 +14,7 @@ sample_configs:
     CPM:
       - label: CPMGEM-cCPM
         sample_specs:
-          - fq_model_id: "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec"
+          - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV"
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: "bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr"
@@ -26,7 +26,7 @@ sample_configs:
     GCM:
       - label: CPMGEM-GCM
         sample_specs:
-          - fq_model_id: "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec"
+          - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV"
             checkpoint: epoch_20
             input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
             dataset: "bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr"

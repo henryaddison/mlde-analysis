@@ -68,7 +68,7 @@ sample_configs:
         order: 13
       - label: pSTV
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -81,7 +81,7 @@ sample_configs:
         order: 14
       # - label: pSTV-rerun
       #   sample_specs:
-      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_psl-sphum4th-temp4th-vort4th
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_pSTV-rerun-2
       #       checkpoint: epoch_20
       #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
       #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -121,7 +121,7 @@ sample_configs:
         order: 103
       - label: pSTV-GCM
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -134,7 +134,7 @@ sample_configs:
         order: 111
       - label: pSTV-GCM-bc
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
             input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
             dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -147,7 +147,7 @@ sample_configs:
         order: 112
       # - label: pSTV-rerun-GCM
       #   sample_specs:
-      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_psl-sphum4th-temp4th-vort4th
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_pSTV-rerun-2
       #       checkpoint: epoch_20
       #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
       #       dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -160,7 +160,7 @@ sample_configs:
       #   order: 115
       # - label: pSTV-rerun-GCM-bc
       #   sample_specs:
-      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_psl-sphum4th-temp4th-vort4th
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_pSTV-rerun-2
       #       checkpoint: epoch_20
       #       input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
       #       dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr

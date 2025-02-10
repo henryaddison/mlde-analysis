@@ -15,7 +15,7 @@ sample_configs:
     CPM:
       - label: epoch_20
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_psl-sphum4th-temp4th-vort4th
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_pSTV-rerun-2
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -28,7 +28,7 @@ sample_configs:
         order: 10
       - label: epoch_100
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_psl-sphum4th-temp4th-vort4th
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_pSTV-rerun-2
             checkpoint: epoch_100
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -41,7 +41,7 @@ sample_configs:
         order: 11
       - label: epoch_160
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_psl-sphum4th-temp4th-vort4th
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_pSTV-rerun-2
             checkpoint: epoch_160
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -54,7 +54,7 @@ sample_configs:
         order: 12
       - label: epoch_200
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_psl-sphum4th-temp4th-vort4th
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/archive/2024-09-18-pSTV-rerun/bham-4x_12em_pSTV-rerun-2
             checkpoint: epoch_200
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr

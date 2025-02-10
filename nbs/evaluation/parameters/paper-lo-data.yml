@@ -3,7 +3,7 @@ ensemble_members: ["01"]
 samples_per_run: 6
 data_configs:
     CPM:
-      - fq_model_id: "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec"
+      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV"
         checkpoint: epoch_20
         input_xfm: bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-stan
         label: Diffusion-cCPM
@@ -11,7 +11,7 @@ data_configs:
         deterministic: False
         color: "blue"
         order: 10
-      - fq_model_id: "score-sde/subvpsde/xarray_cncsnpp_continuous/bham-4x_1em_PslS4T4V4_random-season-historic-IstanTsqrturrecen-no-loc-spec"
+      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata"
         checkpoint: epoch_300
         input_xfm: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-stan
         label: Diffusion_ld-cCPM
@@ -20,7 +20,7 @@ data_configs:
         color: "purple"
         order: 15
     GCM:
-      - fq_model_id: "score-sde/subvpsde/xarray_cncsnpp_continuous/bham-4x_1em_PslS4T4V4_random-season-historic-IstanTsqrturrecen-no-loc-spec"
+      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata"
         checkpoint: epoch_300
         input_xfm: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-pixelmmsstan
         label: Diffusion_ld-GCM

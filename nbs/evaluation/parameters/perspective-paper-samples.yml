@@ -3,7 +3,7 @@ ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "
 samples_per_run: 6
 data_configs:
     CPM:
-      - fq_model_id: "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec"
+      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV"
         checkpoint: epoch_20
         input_xfm: stan
         label: Diffusion (cCPM)
@@ -13,7 +13,7 @@ data_configs:
         color: "blue"
         order: 10
     GCM:
-      - fq_model_id: "score-sde/subvpsde/xarray_12em_cncsnpp_continuous/bham-4x_12em_PslS4T4V4_random-season-IstanTsqrturrecen-no-loc-spec"
+      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV"
         checkpoint: epoch_20
         input_xfm: pixelmmsstan
         label: Diffusion (GCM)
