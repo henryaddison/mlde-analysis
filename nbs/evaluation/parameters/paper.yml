@@ -59,12 +59,12 @@ sample_configs:
 sample_configs_at_60km:
     - label: CPMGEM-GCM@60km
       sample_specs:
-        - fq_model_id": demo_data/workdirs/score-sde/demo-cpmgem-pr/postprocess/gcm-grid
-          checkpoint": epoch_20
-          input_xfm": bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
-          label": CPMGEM-GCM@60km
-          dataset": bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-          variables": [pr]
+        - fq_model_id: demo_data/workdirs/score-sde/demo-cpmgem-pr/postprocess/gcm-grid
+          checkpoint: epoch_20
+          input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
+          label: CPMGEM-GCM@60km
+          dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+          variables: [pr]
       deterministic: False
 dataset_configs_at_60km:
     CPM: bham64_ccpm-60km_12em_pr_pr
