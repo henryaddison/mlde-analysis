@@ -59,7 +59,7 @@ sample_configs:
 sample_configs_at_60km:
     - label: CPMGEM-GCM@60km
       sample_specs:
-        - fq_model_id: demo_data/workdirs/score-sde/demo-cpmgem-pr/postprocess/gcm-grid
+        - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
           checkpoint: epoch_20
           input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
           label: CPMGEM-GCM@60km
