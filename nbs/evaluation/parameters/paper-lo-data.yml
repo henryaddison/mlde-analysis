@@ -25,6 +25,7 @@ sample_configs:
             input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
             variables: [pr]
         deterministic: False
+        samples: True
         color: tab:purple
         order: 15
     GCM:
