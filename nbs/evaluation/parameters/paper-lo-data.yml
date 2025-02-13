@@ -2,8 +2,8 @@ split: test
 ensemble_members: ["01"]
 samples_per_run: 6
 dataset_configs:
-    CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
-    GCM: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
+    CPM: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
+    GCM: bham64_gcm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
 sample_configs:
     CPM:
       - label: CPMGEM-cCPM
