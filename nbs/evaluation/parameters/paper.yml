@@ -42,7 +42,7 @@ sample_configs:
             dataset: bham64_ccpm-4x_12em_linpr_pr
             variables: [pr]
         deterministic: True
-        color: dimgrey
+        color: tab:grey
         order: 0
     GCM:
       - label: CPMGEM-GCM
