@@ -19,22 +19,22 @@ sample_configs:
         order: 10
       - label: CPMGEM_ld-cCPM
         sample_specs:
-          fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
-          checkpoint: epoch_300
-          dataset: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
-          input_xfm: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-stan
-          variables: [pr]
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+            checkpoint: epoch_300
+            dataset: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
+            input_xfm: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-stan
+            variables: [pr]
         deterministic: False
         color: tab:purple
         order: 15
     GCM:
       - label: CPMGEM_ld-GCM
         sample_specs:
-          fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
-          checkpoint: epoch_300
-          dataset: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
-          input_xfm: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-pixelmmsstan
-          variables: [pr]
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+            checkpoint: epoch_300
+            dataset: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
+            input_xfm: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-pixelmmsstan
+            variables: [pr]
         deterministic: False
         color: tab:brown
         order: 20
