@@ -1,48 +1,55 @@
-split: "test"
+split: test
 ensemble_members: ["01"]
 samples_per_run: 6
-data_configs:
+dataset_configs:
+    CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
+    GCM: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
+sample_configs:
     CPM:
-      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV"
-        checkpoint: epoch_20
-        input_xfm: bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-stan
-        label: Diffusion-cCPM
-        dataset: "bham_gcmx-4x_12em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic"
+      - label: CPMGEM-cCPM
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+            checkpoint: epoch_20
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            variables: [pr]
         deterministic: False
-        color: "blue"
+        CCS: True
+        color: tab:blue
         order: 10
-      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata"
-        checkpoint: epoch_300
-        input_xfm: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-stan
-        label: Diffusion_ld-cCPM
-        dataset: "bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic"
+      - label: CPMGEM_ld-cCPM
+        sample_specs:
+          fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+          checkpoint: epoch_300
+          dataset: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
+          input_xfm: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-stan
+          variables: [pr]
         deterministic: False
-        color: "purple"
+        color: tab:purple
         order: 15
     GCM:
-      - fq_model_id: "score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata"
-        checkpoint: epoch_300
-        input_xfm: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-pixelmmsstan
-        label: Diffusion_ld-GCM
-        dataset: "bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic"
+      - label: CPMGEM_ld-GCM
+        sample_specs:
+          fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+          checkpoint: epoch_300
+          dataset: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
+          input_xfm: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-pixelmmsstan
+          variables: [pr]
         deterministic: False
-        color: "darkgreen"
+        color: tab:brown
         order: 20
         CCS: False
-highlighted_cpm_models: ["Diffusion-cCPM", "Diffusion_ld-cCPM"]
-gcm_lr_lin_pr_dataset: "bham_60km-4x_12em_linpr_eqvt_random-season"
-cpm_hr_pr_dataset: "bham_gcmx-4x_12em_linpr_eqvt_random-season"
 desc: |
     Models trained on just one ensemble member and one time period vs 12 ensemble members and three time periods
     Splits are based on random choice of seasons with equal number of seasons from each time slice
 
     Compare:
 
-    ### Diffusion models PslS4T4V4 IstanTsqrturrecen no-loc-spec
+    ### Diffusion models pSTV
     * 12 ensemble members, three time periods in training data
     * 1 ensemble member, one time period in training data
 
-    Inputs from: pressure at sea level and 4 levels of temp and vorticity
+    Inputs from: pressure at sea level and 4 levels of temp, spec hum and vorticity
 
     Target domain and resolution: 64x64 2.2km-4x England and Wales
 
@@ -51,4 +58,4 @@ desc: |
     Input transforms are fitted on dataset in use (ie separate GCM and CPM versions) while target transform is fitted only at training on the CPM dataset
     NB this does mean the sampling input transform uses training data from all 12 ensemble members and all three time periods for both diffusion models which is not ideal.
 
-    Evaluated on 1 time period (historic) and 1 ensemble member (01) like Diffusion_ld
+    Evaluated on 1 time period (historic) and 1 ensemble member (01) like CPMGEM_ld
