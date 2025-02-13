@@ -7,8 +7,8 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 saccount=furflex
 smem=128G
-spartition=highres
-sqos=highres
+spartition=standard
+sqos=standard
 stime=02:00:00
 
 while getopts ":a:m:p:q:t:" opt; do
