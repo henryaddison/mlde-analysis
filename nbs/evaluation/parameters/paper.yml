@@ -54,6 +54,7 @@ sample_configs:
             variables: [pr]
         deterministic: False
         CCS: True
+        UQ: False
         color: tab:green
         order: 20
 sample_configs_at_60km:
