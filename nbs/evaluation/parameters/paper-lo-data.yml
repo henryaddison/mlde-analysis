@@ -21,8 +21,8 @@ sample_configs:
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
             checkpoint: epoch_300
-            dataset: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
-            input_xfm: bham_gcmx-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
             variables: [pr]
         deterministic: False
         color: tab:purple
@@ -32,8 +32,8 @@ sample_configs:
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
             checkpoint: epoch_300
-            dataset: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic
-            input_xfm: bham_60km-4x_1em_psl-sphum4th-temp4th-vort4th_eqvt_random-season-historic-pixelmmsstan
+            dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic
+            input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-historic-pixelmmsstan
             variables: [pr]
         deterministic: False
         color: tab:brown
