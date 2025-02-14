@@ -26,7 +26,7 @@ sample_configs:
             variables: [pr]
         deterministic: False
         Samples: True
-        color: tab:purple
+        color: tab:red
         order: 15
     GCM:
       - label: CPMGEM_ld-GCM
