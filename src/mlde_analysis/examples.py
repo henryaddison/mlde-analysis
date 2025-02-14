@@ -3,6 +3,7 @@ import math
 
 # import matplotlib
 
+import matplotlib
 from mlde_utils import cp_model_rotated_pole
 
 from . import (
@@ -103,6 +104,23 @@ def plot_examples(
 ):
     n_vars = len(vars)
 
+    examples = {
+        desc: ds.sel(ensemble_member=ts[0]).sel(time=ts[1], method="nearest")
+        for desc, ts in em_ts.items()
+    }
+
+    input_limits = {
+        input_var: {
+            "vmin": min(
+                [example_ds[input_var].min() for example_ds in examples.values()]
+            ),
+            "vmax": max(
+                [example_ds[input_var].max() for example_ds in examples.values()]
+            ),
+        }
+        for input_var in inputs
+    }
+
     det_models = [
         mlabel for mlabel, mconfig in models.items() if mconfig["deterministic"]
     ]
@@ -137,16 +155,29 @@ def plot_examples(
 
         for input_idx, input_var in enumerate(inputs):
             ax = axes[tsi][n_vars + bilinear_present + input_idx]
-            plot_map(
+            # contours = ts_ds[input_var].plot.contour(ax=ax, add_colorbar=False, cmap="Greys")
+            # ax.clabel(contours, inline=True, fontsize="small")
+            # ax.set_title("")
+            # ax.coastlines(**{"resolution": "10m", "linewidth": 0.3})
+            input_pcm = plot_map(
                 ts_ds[input_var],
                 ax,
                 style=None,
-                cmap="Greys",
+                # cmap="coolwarm",
+                cmap=matplotlib.colormaps.get_cmap("coolwarm").resampled(11),
+                norm=matplotlib.colors.CenteredNorm(
+                    vcenter=0,
+                    halfrange=max(
+                        abs(input_limits[input_var]["vmin"]),
+                        abs(input_limits[input_var]["vmax"]),
+                    ),
+                ),
                 add_colorbar=False,
+                # **input_limits[input_var],
             )
             # label column
             if tsi == 0:
-                ax.set_title(f"Example coarse\ninput", fontsize="small")
+                ax.set_title(f"Example\ncoarse\ninput", fontsize="small")
 
         for mi, model in enumerate(stoch_models):
             for sample_idx in range(n_samples_per_example):
@@ -202,7 +233,29 @@ def plot_examples(
                     add_colorbar=False,
                 )
                 if tsi == 0:
-                    ax.set_title(f"{model}", fontsize="small")
+                    title = []
+                    if ivar == 0:
+                        if sample_idx == 0:
+                            title.append(f"{model}")
+                        title.append(f"Sample {sample_idx+1}")
+                    title.append(display.ATTRS[var]["long_name"])
+                    ax.set_title("\n".join(title), fontsize="small")
+
+    input_cb = fig.colorbar(
+        input_pcm,
+        ax=axes,
+        location="bottom",
+        orientation="horizontal",
+        shrink=0.5,
+        extend="neither",
+    )
+    # input_cb.formatter.set_powerlimits((0, 0))
+    input_cb.formatter.set_useMathText(True)
+    input_cb.formatter.set_useOffset(False)
+    input_cb.ax.tick_params(labelsize="x-small")
+    input_cb.ax.ticklabel_format(useOffset=False, useMathText=True)
+    input_cb.set_label("Rel. Vort. @ 850hPa ($s^{-1}$)", fontsize="x-small")
+    input_cb.ax.xaxis.get_offset_text().set_fontsize("x-small")
 
     for var in reversed(vars):
         cb = fig.colorbar(
@@ -210,7 +263,7 @@ def plot_examples(
             ax=axes,
             location="bottom",
             orientation="horizontal",
-            shrink=0.5,
+            shrink=0.8,
             extend="both",
         )
         cb.ax.tick_params(axis="both", which="major", labelsize="small")

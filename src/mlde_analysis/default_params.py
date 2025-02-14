@@ -55,6 +55,40 @@ sample_configs = {
             "order": 11,
             "CCS": True,
         },
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "u-net/bham-4x_12em_pSTV",
+                    "checkpoint": "epoch_100",
+                    "dataset": "demo-ccpm_pr",
+                    "input_xfm": "demo-ccpm_pr-stan",
+                    "variables": ["pr"],
+                },
+            ],
+            "label": "U-Net-cCPM",
+            "deterministic": True,
+            "PSD": True,
+            "color": "tab:red",
+            "order": 5,
+            "CCS": False,
+        },
+        {
+            "label": "cCPM Bilinear",
+            "sample_specs": [
+                {
+                    "fq_model_id": "id-linpr",
+                    "checkpoint": "epoch_0",
+                    "dataset": "demo-ccpm_pr",
+                    "input_xfm": "none",
+                    "variables": ["pr"],
+                },
+            ],
+            "deterministic": True,
+            "color": "tab:grey",
+            "CCS": False,
+            "UQ": False,
+            "order": 1,
+        },
     ],
     "GCM": [
         {
@@ -93,7 +127,7 @@ example_overrides = {
     "GCM": {},
 }
 example_inputs = ["vorticity850"]
-n_samples_per_example = 1
+n_samples_per_example = 2
 
 desc = """
 Describe in more detail the models being compared

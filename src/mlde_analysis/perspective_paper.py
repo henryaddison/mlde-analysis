@@ -11,14 +11,23 @@ VAR_LABELS = {
 }
 
 
-def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_example=2):
+def pp_plot_examples(
+    ds,
+    em_ts,
+    vars,
+    models,
+    fig,
+    sim_title,
+    n_samples_per_example=2,
+    inputs=["vorticity850"],
+):
     n_vars = len(vars)
 
     examples = {
         desc: ds.sel(ensemble_member=ts[0]).sel(time=ts[1], method="nearest")
         for desc, ts in em_ts.items()
     }
-    inputs = ["vorticity850"]
+
     input_limits = {
         input_var: {
             "vmin": min(
@@ -178,8 +187,13 @@ def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_exam
         shrink=0.5,
         extend="neither",
     )
-    input_cb.ax.tick_params(labelsize="xx-small")
-    input_cb.set_label("Rel. Vort. @ 850hPa", fontsize="x-small")
+    # input_cb.formatter.set_powerlimits((0, 0))
+    input_cb.formatter.set_useMathText(True)
+    input_cb.formatter.set_useOffset(False)
+    input_cb.ax.tick_params(labelsize="x-small")
+    input_cb.ax.ticklabel_format(useOffset=False, useMathText=True)
+    input_cb.set_label("Rel. Vort. @ 850hPa ($s^{-1}$)", fontsize="x-small")
+    input_cb.ax.xaxis.get_offset_text().set_fontsize("x-small")
 
     # if var == "pr":
     for var in vars:
