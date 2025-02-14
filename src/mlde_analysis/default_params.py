@@ -115,14 +115,15 @@ derived_variables_config = {}
 
 example_percentiles = {
     "CPM": {
-        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
         "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
         "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
+        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
+        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
     },
 }
 example_overrides = {
     "CPM": {
-        "JJA Convective": ["01", "1993-08-01 12:00:00"],
+        "JJA Wet": ["01", "1993-08-01 12:00:00"],
     },
     "GCM": {},
 }

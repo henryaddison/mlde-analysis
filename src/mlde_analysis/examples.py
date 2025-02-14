@@ -18,22 +18,20 @@ def em_timestamps(ds, percentiles, overrides={}):
     em_ts = {}
     mean_sorted_em_time_cache = {}
 
-    # first just grab the samples defined in overrides
-    for sample_key, override in overrides.items():
-        em_ts[sample_key] = (
-            override[0],
-            cftime._cftime.Datetime360Day.strptime(
-                override[1], "%Y-%m-%d %H:%M:%S", calendar="360_day"
-            ),
-        )
-
     # then get the other samples based on percentiles
     for sample_key, sample_percentile in percentiles.items():
         season = sample_percentile["season"]
         variable = sample_percentile["variable"]
         cache_key = f"{season} {variable}"
-        # already got samples defined in overrides so can those
+        # if example is defined in override can just grab it
         if sample_key in overrides:
+            override = overrides[sample_key]
+            em_ts[sample_key] = (
+                override[0],
+                cftime._cftime.Datetime360Day.strptime(
+                    override[1], "%Y-%m-%d %H:%M:%S", calendar="360_day"
+                ),
+            )
             continue
 
         # avoiding having to re-sort time if already done it once
@@ -54,6 +52,16 @@ def em_timestamps(ds, percentiles, overrides={}):
                 ),
             )
         ]
+
+    # add any overrides not already in the list
+    for sample_key, override in overrides.items():
+        if sample_key not in em_ts:
+            em_ts[sample_key] = (
+                override[0],
+                cftime._cftime.Datetime360Day.strptime(
+                    override[1], "%Y-%m-%d %H:%M:%S", calendar="360_day"
+                ),
+            )
 
     return em_ts
 
