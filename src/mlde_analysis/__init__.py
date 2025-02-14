@@ -119,7 +119,7 @@ hurs_cmap = matplotlib.colormaps.get_cmap("Blues").resampled(20)
 swbgt_cmap = matplotlib.colormaps.get_cmap("coolwarm").resampled(25)
 
 STYLES = {
-    "pr": {"cmap": precip_cmap, "norm": precip_norm},
+    "pr": {"cmap": accessible_precip_cmap, "norm": accessible_precip_norm},
     "accessible_pr": {"cmap": accessible_precip_cmap, "norm": accessible_precip_norm},
     "relhum150cm": {"cmap": hurs_cmap, "vmin": 0, "vmax": 100},
     "tmean150cm": {"cmap": tas_cmap, "norm": tas_norm},
