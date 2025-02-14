@@ -120,6 +120,12 @@ example_percentiles = {
         "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
         "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
     },
+    "GCM": {
+        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
+        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
+        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
+        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
+    },
 }
 example_overrides = {
     "CPM": {

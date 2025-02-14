@@ -82,7 +82,8 @@ def _plot_sim_example(example_ds, axes, vars, sim_title, example_label, example_
             title = []
             if ivar == 0:
                 title.append(sim_title)
-            title.append(display.ATTRS[var]["long_name"])
+            if len(vars) > 1:
+                title.append(display.ATTRS[var]["long_name"])
             ax.set_title("\n".join(title), fontsize="small")
 
         # label row
@@ -214,7 +215,9 @@ def plot_examples(
                             if sample_idx == 0:
                                 title.append(f"{model}")
                             title.append(f"Sample {sample_idx+1}")
-                        title.append(display.ATTRS[var]["long_name"])
+                        if len(vars) > 1:
+                            title.append(display.ATTRS[var]["long_name"])
+
                         ax.set_title("\n".join(title), fontsize="small")
 
         det_model_offset = 0
@@ -243,10 +246,9 @@ def plot_examples(
                 if tsi == 0:
                     title = []
                     if ivar == 0:
-                        if sample_idx == 0:
-                            title.append(f"{model}")
-                        title.append(f"Sample {sample_idx+1}")
-                    title.append(display.ATTRS[var]["long_name"])
+                        title.append(f"{model}")
+                    if len(vars) > 1:
+                        title.append(display.ATTRS[var]["long_name"])
                     ax.set_title("\n".join(title), fontsize="small")
 
     input_cb = fig.colorbar(
@@ -257,7 +259,7 @@ def plot_examples(
         shrink=0.5,
         extend="neither",
     )
-    # input_cb.formatter.set_powerlimits((0, 0))
+    input_cb.formatter.set_powerlimits((0, 0))
     input_cb.formatter.set_useMathText(True)
     input_cb.formatter.set_useOffset(False)
     input_cb.ax.tick_params(labelsize="x-small")
