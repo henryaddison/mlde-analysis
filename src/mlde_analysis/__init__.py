@@ -39,9 +39,36 @@ accessible_precip_cmap = (
     .resampled(len(accessible_precip_clevs) - 1)
     .with_extremes(under="white")
 )
-accessible_precip_norm = matplotlib.colors.BoundaryNorm(
-    accessible_precip_clevs, accessible_precip_cmap.N
+
+gist_earth_precip_cmap = (
+    matplotlib.colormaps.get_cmap("gist_earth")
+    .reversed()
+    .resampled(len(accessible_precip_clevs) - 1)
+    .with_extremes(under="white")
 )
+
+import cmweather  # noqa
+
+
+def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+    new_cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
+        "trunc({n},{a:.2f},{b:.2f})".format(n=cmap.name, a=minval, b=maxval),
+        cmap(np.linspace(minval, maxval, n)),
+    )
+    return new_cmap
+
+
+chase_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("ChaseSpectral"), 0.0, 0.5)
+    .reversed()
+    .resampled(len(accessible_precip_clevs) - 1)
+    .with_extremes(under="white")
+)
+
+
+def precip_norm(precip_levs, precip_cmap):
+    return matplotlib.colors.BoundaryNorm(precip_levs, precip_cmap.N)
+
 
 tas_levs = list(
     map(
@@ -119,8 +146,22 @@ hurs_cmap = matplotlib.colormaps.get_cmap("Blues").resampled(20)
 swbgt_cmap = matplotlib.colormaps.get_cmap("coolwarm").resampled(25)
 
 STYLES = {
-    "pr": {"cmap": accessible_precip_cmap, "norm": accessible_precip_norm},
-    "accessible_pr": {"cmap": accessible_precip_cmap, "norm": accessible_precip_norm},
+    "pr": {
+        "cmap": accessible_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, accessible_precip_cmap),
+    },
+    "accessible_pr": {
+        "cmap": accessible_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, accessible_precip_cmap),
+    },
+    "chase_pr": {
+        "cmap": chase_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, chase_precip_cmap),
+    },
+    "gist_earth_pr": {
+        "cmap": gist_earth_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, gist_earth_precip_cmap),
+    },
     "relhum150cm": {"cmap": hurs_cmap, "vmin": 0, "vmax": 100},
     "tmean150cm": {"cmap": tas_cmap, "norm": tas_norm},
     "swbgt": {"cmap": swbgt_cmap, "vmin": -10, "vmax": 40},

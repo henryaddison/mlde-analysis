@@ -66,7 +66,9 @@ def em_timestamps(ds, percentiles, overrides={}):
     return em_ts
 
 
-def _plot_sim_example(example_ds, axes, vars, sim_title, example_label, example_idx):
+def _plot_sim_example(
+    example_ds, axes, vars, sim_title, example_label, example_idx, style_prefix=""
+):
     pcms = {}
     for ivar, var in enumerate(vars):
         ax = axes[example_idx][ivar]
@@ -74,7 +76,7 @@ def _plot_sim_example(example_ds, axes, vars, sim_title, example_label, example_
         pcms[var] = plot_map(
             sim_example_da,
             ax,
-            style=var,
+            style=f"{style_prefix}{var}",
             add_colorbar=False,
         )
         # label column
@@ -110,6 +112,7 @@ def plot_examples(
     sim_title,
     n_samples_per_example=2,
     inputs=["vorticity850"],
+    style_prefix="",
 ):
     n_vars = len(vars)
 
@@ -160,7 +163,9 @@ def plot_examples(
                 f"{desc} sample actually  for EM{ts_ds['ensemble_member'].data.item()} on {ts_ds['time'].data.item()}"
             )
 
-        pcms = _plot_sim_example(ts_ds, axes, vars, sim_title, desc, tsi)
+        pcms = _plot_sim_example(
+            ts_ds, axes, vars, sim_title, desc, tsi, style_prefix=style_prefix
+        )
 
         for input_idx, input_var in enumerate(inputs):
             ax = axes[tsi][n_vars + bilinear_present + input_idx]
@@ -205,7 +210,7 @@ def plot_examples(
                             f"pred_{var}"
                         ],
                         ax,
-                        style=var,
+                        style=f"{style_prefix}{var}",
                         add_colorbar=False,
                     )
 
@@ -240,7 +245,7 @@ def plot_examples(
                 plot_map(
                     ts_ds.sel(model=model).isel(sample_id=0)[f"pred_{var}"],
                     ax,
-                    style=var,
+                    style=f"{style_prefix}{var}",
                     add_colorbar=False,
                 )
                 if tsi == 0:
