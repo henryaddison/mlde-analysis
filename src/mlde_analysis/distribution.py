@@ -11,7 +11,7 @@ from mlde_analysis import plot_map
 
 
 QUANTILES = 1 - np.power(10.0, np.arange(-2, -10, -1))
-PER_GRIDBOX_QUANTILES = 1 - np.power(10.0, np.arange(-2, -5, -1))
+PER_GRIDBOX_QUANTILES = 1 - np.power(10.0, np.arange(-2, -4, -1))
 
 
 def mean_bias(sample_da, cpm_da, normalize=False):
