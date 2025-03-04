@@ -11,12 +11,31 @@ from mlde_utils import cp_model_rotated_pole
 # precip_clevs = [0, 1, 2.5, 5, 7.5, 10, 15, 20, 30, 40,
 #      50, 70, 100, 150, 200, 250, 300, 400, 500, 600, 750, 1000]
 # precip_norm, precip_cmap = metpy.plots.ctables.registry.get_with_boundaries('precipitation', precip_clevs)
-precip_clevs = [0, 0.1, 1, 2.5, 5, 7.5, 10, 15, 20, 30, 40, 50, 70, 100, 150, 200]
-precip_cmap = matplotlib.colors.ListedColormap(
-    metpy.plots.ctables.colortables["precipitation"][: len(precip_clevs) - 1],
+rainbow_precip_clevs = [
+    0,
+    0.1,
+    1,
+    2.5,
+    5,
+    7.5,
+    10,
+    15,
+    20,
+    30,
+    40,
+    50,
+    70,
+    100,
+    150,
+    200,
+]
+rainbow_precip_cmap = matplotlib.colors.ListedColormap(
+    metpy.plots.ctables.colortables["precipitation"][: len(rainbow_precip_clevs) - 1],
     "precipitation",
 )
-precip_norm = matplotlib.colors.BoundaryNorm(precip_clevs, precip_cmap.N)
+rainbow_precip_norm = matplotlib.colors.BoundaryNorm(
+    rainbow_precip_clevs, rainbow_precip_cmap.N
+)
 accessible_precip_clevs = [
     0.1,
     1,
@@ -161,6 +180,10 @@ STYLES = {
     "gist_earth_pr": {
         "cmap": gist_earth_precip_cmap,
         "norm": precip_norm(accessible_precip_clevs, gist_earth_precip_cmap),
+    },
+    "rainbow_pr": {
+        "cmap": rainbow_precip_cmap,
+        "norm": precip_norm(rainbow_precip_clevs, rainbow_precip_cmap),
     },
     "relhum150cm": {"cmap": hurs_cmap, "vmin": 0, "vmax": 100},
     "tmean150cm": {"cmap": tas_cmap, "norm": tas_norm},
