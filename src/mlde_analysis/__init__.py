@@ -59,12 +59,6 @@ accessible_precip_cmap = (
     .with_extremes(under="white")
 )
 
-gist_earth_precip_cmap = (
-    matplotlib.colormaps.get_cmap("gist_earth")
-    .reversed()
-    .resampled(len(accessible_precip_clevs) - 1)
-    .with_extremes(under="white")
-)
 
 import cmweather  # noqa
 
@@ -77,11 +71,55 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     return new_cmap
 
 
-chase_precip_cmap = (
+gist_earth_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("gist_earth"), 0, 1.0)
+    .reversed()
+    .resampled(len(accessible_precip_clevs) - 1)
+    .with_extremes(under="white")
+)
+
+chaselow_precip_cmap = (
     truncate_colormap(matplotlib.colormaps.get_cmap("ChaseSpectral"), 0.0, 0.5)
     .reversed()
     .resampled(len(accessible_precip_clevs) - 1)
     .with_extremes(under="white")
+)
+
+chasehigh_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("ChaseSpectral"), 0.25, 1.0)
+    .resampled(len(accessible_precip_clevs) - 1)
+    .with_extremes(under="white")
+)
+
+chase_precip_cmap = (
+    matplotlib.colormaps.get_cmap("ChaseSpectral")
+    .resampled(len(accessible_precip_clevs) - 1)
+    .with_extremes(under="white")
+)
+
+homeyer_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("HomeyerRainbow"), 0.0, 1.0)
+    .resampled(len(accessible_precip_clevs) - 1)
+    .with_extremes(under="white")
+)
+
+viridis_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("viridis"), 0.25, 1.0)
+    # .reversed()
+    .resampled(len(accessible_precip_clevs) - 1).with_extremes(under="white")
+)
+
+viridisr_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("viridis"), 0.0, 1.0)
+    .reversed()
+    .resampled(len(accessible_precip_clevs) - 1)
+    .with_extremes(under="white")
+)
+
+cmrmap_cmap = (
+    matplotlib.colormaps.get_cmap("CMRmap")
+    .reversed()
+    .resampled(len(rainbow_precip_clevs) - 1)
 )
 
 
@@ -176,6 +214,30 @@ STYLES = {
     "chase_pr": {
         "cmap": chase_precip_cmap,
         "norm": precip_norm(accessible_precip_clevs, chase_precip_cmap),
+    },
+    "chaselow_pr": {
+        "cmap": chaselow_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, chaselow_precip_cmap),
+    },
+    "chasehigh_pr": {
+        "cmap": chasehigh_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, chasehigh_precip_cmap),
+    },
+    "HomeyerRainbow_pr": {
+        "cmap": homeyer_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, homeyer_precip_cmap),
+    },
+    "viridis_pr": {
+        "cmap": viridis_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, viridis_precip_cmap),
+    },
+    "viridisr_pr": {
+        "cmap": viridisr_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, viridisr_precip_cmap),
+    },
+    "cmrmap_pr": {
+        "cmap": cmrmap_cmap,
+        "norm": precip_norm(rainbow_precip_clevs, cmrmap_cmap),
     },
     "gist_earth_pr": {
         "cmap": gist_earth_precip_cmap,
