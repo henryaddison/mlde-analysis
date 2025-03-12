@@ -1,3 +1,5 @@
+import cmcrameri
+import cmweather  # noqa
 import string
 import matplotlib
 import matplotlib.pyplot as plt
@@ -60,9 +62,6 @@ accessible_precip_cmap = (
 )
 
 
-import cmweather  # noqa
-
-
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     new_cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
         "trunc({n},{a:.2f},{b:.2f})".format(n=cmap.name, a=minval, b=maxval),
@@ -121,6 +120,8 @@ cmrmap_cmap = (
     .reversed()
     .resampled(len(rainbow_precip_clevs) - 1)
 )
+
+batlow_cmap = cmcrameri.cm.batlowW.reversed().resampled(len(rainbow_precip_clevs) - 1)
 
 
 def precip_norm(precip_levs, precip_cmap):
@@ -238,6 +239,10 @@ STYLES = {
     "cmrmap_pr": {
         "cmap": cmrmap_cmap,
         "norm": precip_norm(rainbow_precip_clevs, cmrmap_cmap),
+    },
+    "batlow_pr": {
+        "cmap": batlow_cmap,
+        "norm": precip_norm(rainbow_precip_clevs, batlow_cmap),
     },
     "gist_earth_pr": {
         "cmap": gist_earth_precip_cmap,

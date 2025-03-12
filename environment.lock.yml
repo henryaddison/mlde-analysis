@@ -436,6 +436,7 @@ dependencies:
   - pip:
       - astunparse==1.6.3
       - cfgv==3.3.1
+      - cmcrameri==1.9
       - cmweather==0.3.2
       - compliance-checker==5.1.1
       - distlib==0.3.6
