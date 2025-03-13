@@ -7,7 +7,7 @@ eval_vars: [pr]
 derived_variables_config: {}
 dataset_configs:
     CPM: scotland64_ccpm-4x_1em_pSTV_pr-draft
-split: test
+split: train
 ensemble_members: ["01"]
 samples_per_run: 3
 sample_configs:
