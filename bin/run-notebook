@@ -14,7 +14,7 @@ If parameters_filepath is provided, the output will be saved in a subdirectory n
 Example: run-notebook nbs/evaluation/distribution.ipynb output nbs/evaluation/parameters/example.yml
 Output will be saved in output/nbs/evaluation/output/parameters/example/distribution.ipynb
 
-Example: run-notebook /path/to/output nbs/evaluation/perspective_paper_figures.ipynb
+Example: run-notebook nbs/evaluation/perspective_paper_figures.ipynb /path/to/output
 Output will be saved in /path/to/output/nbs/evaluation/output/perspective_paper_figures.ipynb
 EOF
 }
