@@ -1,0 +1,47 @@
+desc: |
+    Comparison of diffusion model for CPMGEM-pr paper
+    "Train" split of Scotland draft dataset
+    12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
+    Compare techniques: diffusion
+eval_vars: [pr]
+derived_variables_config: {}
+dataset_configs:
+    CPM: scotland64_ccpm-4x_1em_pSTV_pr-draft
+split: test
+ensemble_members: ["01"]
+samples_per_run: 2
+sample_configs:
+    CPM:
+      - label: CPMGEM-cCPM-bham64
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+            checkpoint: epoch_20
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: scotland64_ccpm-4x_1em_pSTV_pr-draft
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        color: tab:blue
+        order: 11
+example_percentiles:
+  CPM:
+    DJF Wet:
+      percentile:  0.8
+      variable: pr
+      season: DJF
+    DJF Wettest:
+      percentile: 1
+      variable: pr
+      season: DJF
+    JJA Wet:
+      percentile:  0.8
+      variable: pr
+      season: JJA
+    JJA Wettest:
+      percentile: 1
+      variable: pr
+      season: JJA
+example_overrides:
+    CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
+n_samples_per_example: 2
+niterations: 30
