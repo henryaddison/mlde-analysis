@@ -9,7 +9,7 @@ dataset_configs:
     CPM: scotland64_ccpm-4x_1em_pSTV_pr-draft
 split: test
 ensemble_members: ["01"]
-samples_per_run: 2
+samples_per_run: 3
 sample_configs:
     CPM:
       - label: CPMGEM-cCPM-bham64
