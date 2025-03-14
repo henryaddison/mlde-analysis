@@ -53,11 +53,6 @@ accessible_precip_clevs = [
     150,
     200,
 ]
-accessible_precip_cmap = (
-    matplotlib.colormaps.get_cmap("YlGnBu")
-    .resampled(len(accessible_precip_clevs) - 1)
-    .with_extremes(under="white")
-)
 
 
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
@@ -81,22 +76,6 @@ chasehigh_precip_cmap = (
     .with_extremes(under="white")
 )
 
-chase_precip_cmap = (
-    matplotlib.colormaps.get_cmap("ChaseSpectral")
-    .resampled(len(accessible_precip_clevs) - 1)
-    .with_extremes(under="white")
-)
-
-batlow_cmap = (
-    cmcrameri.cm.batlow.reversed()
-    .resampled(len(accessible_precip_clevs) - 1)
-    .with_extremes(under="white")
-)
-batlowK_cmap = (
-    cmcrameri.cm.batlowK.reversed()
-    .resampled(len(accessible_precip_clevs) - 1)
-    .with_extremes(under="white")
-)
 batlowW_cmap = (
     cmcrameri.cm.batlowW.reversed()
     .resampled(len(rainbow_precip_clevs) - 1)
@@ -185,16 +164,8 @@ swbgt_cmap = matplotlib.colormaps.get_cmap("coolwarm").resampled(25)
 
 STYLES = {
     "pr": {
-        "cmap": accessible_precip_cmap,
-        "norm": precip_norm(accessible_precip_clevs, accessible_precip_cmap),
-    },
-    "accessible_pr": {
-        "cmap": accessible_precip_cmap,
-        "norm": precip_norm(accessible_precip_clevs, accessible_precip_cmap),
-    },
-    "chase_pr": {
-        "cmap": chase_precip_cmap,
-        "norm": precip_norm(accessible_precip_clevs, chase_precip_cmap),
+        "cmap": chaselow_precip_cmap,
+        "norm": precip_norm(accessible_precip_clevs, chaselow_precip_cmap),
     },
     "chaselow_pr": {
         "cmap": chaselow_precip_cmap,
@@ -203,14 +174,6 @@ STYLES = {
     "chasehigh_pr": {
         "cmap": chasehigh_precip_cmap,
         "norm": precip_norm(accessible_precip_clevs, chasehigh_precip_cmap),
-    },
-    "batlow_pr": {
-        "cmap": batlow_cmap,
-        "norm": precip_norm(accessible_precip_clevs, batlow_cmap),
-    },
-    "batlowK_pr": {
-        "cmap": batlowK_cmap,
-        "norm": precip_norm(accessible_precip_clevs, batlowK_cmap),
     },
     "batlowW_pr": {
         "cmap": batlowW_cmap,
