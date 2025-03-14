@@ -103,6 +103,127 @@ def _plot_sim_example(
     return pcms
 
 
+def _plot_example(
+    axes,
+    tsi,
+    desc,
+    ts,
+    ds,
+    stoch_models,
+    det_models,
+    vars,
+    inputs,
+    style_prefix,
+    sim_title,
+    examples_sample_idxs,
+    n_samples_per_example,
+    n_vars,
+    bilinear_present,
+    input_limits,
+):
+    ts_ds = ds.sel(ensemble_member=ts[0]).sel(time=ts[1], method="nearest")
+    print(f"{desc} sample requested for EM{ts[0]} on {ts[1]}")
+    if (
+        ts_ds["ensemble_member"].data.item() != ts[0]
+        or ts_ds["time"].data.item() != ts[1]
+    ):
+        print(
+            f"{desc} sample actually  for EM{ts_ds['ensemble_member'].data.item()} on {ts_ds['time'].data.item()}"
+        )
+
+    pcms = _plot_sim_example(
+        ts_ds, axes, vars, sim_title, desc, tsi, style_prefix=style_prefix
+    )
+
+    for input_idx, input_var in enumerate(inputs):
+        ax = axes[tsi][n_vars + bilinear_present + input_idx]
+        # contours = ts_ds[input_var].plot.contour(ax=ax, add_colorbar=False, cmap="Greys")
+        # ax.clabel(contours, inline=True, fontsize="small")
+        # ax.set_title("")
+        # ax.coastlines(**{"resolution": "10m", "linewidth": 0.3})
+        input_pcm = plot_map(
+            ts_ds[input_var],
+            ax,
+            style=None,
+            # cmap="coolwarm",
+            cmap=matplotlib.colormaps.get_cmap("coolwarm").resampled(11),
+            norm=matplotlib.colors.CenteredNorm(
+                vcenter=0,
+                halfrange=max(
+                    abs(input_limits[input_var]["vmin"]),
+                    abs(input_limits[input_var]["vmax"]),
+                ),
+            ),
+            add_colorbar=False,
+            # **input_limits[input_var],
+        )
+        # label column
+        if tsi == 0:
+            ax.set_title(f"Example\ncoarse\ninput", fontsize="small")
+
+    for mi, model in enumerate(stoch_models):
+        for si, sample_idx in enumerate(examples_sample_idxs):
+            for ivar, var in enumerate(vars):
+                icol = (
+                    n_vars
+                    + bilinear_present * n_vars
+                    + len(inputs)
+                    + mi * n_samples_per_example * n_vars
+                    + si * n_vars
+                    + ivar
+                )
+                ax = axes[tsi][icol]
+                plot_map(
+                    ts_ds.sel(model=model).isel(sample_id=sample_idx)[f"pred_{var}"],
+                    ax,
+                    style=f"{style_prefix}{var}",
+                    add_colorbar=False,
+                )
+
+                if tsi == 0:
+                    title = []
+                    if ivar == 0:
+                        if si == 0:
+                            title.append(f"{model}")
+                        title.append(f"Sample {si+1}")
+                    if len(vars) > 1:
+                        title.append(display.ATTRS[var]["long_name"])
+
+                    ax.set_title("\n".join(title), fontsize="small")
+
+    det_model_offset = 0
+    for mi, model in enumerate(det_models):
+        for ivar, var in enumerate(vars):
+            if "Bilinear" in model:
+                icol = 1
+                det_model_offset = -1
+            else:
+                icol = (
+                    n_vars
+                    + bilinear_present * n_vars
+                    + len(inputs)
+                    + len(stoch_models) * n_samples_per_example * n_vars
+                    + (mi + det_model_offset) * n_vars
+                    + ivar
+                )
+
+            ax = axes[tsi][icol]
+            plot_map(
+                ts_ds.sel(model=model).isel(sample_id=0)[f"pred_{var}"],
+                ax,
+                style=f"{style_prefix}{var}",
+                add_colorbar=False,
+            )
+            if tsi == 0:
+                title = []
+                if ivar == 0:
+                    title.append(f"{model}")
+                if len(vars) > 1:
+                    title.append(display.ATTRS[var]["long_name"])
+                ax.set_title("\n".join(title), fontsize="small")
+    return input_pcm, pcms
+
+
 def plot_examples(
     ds,
     em_ts,
@@ -110,11 +231,16 @@ def plot_examples(
     models,
     fig,
     sim_title,
-    n_samples_per_example=2,
+    examples_sample_idxs=2,
     inputs=["vorticity850"],
     style_prefix="",
 ):
     n_vars = len(vars)
+    if isinstance(examples_sample_idxs, list):
+        n_samples_per_example = len(examples_sample_idxs)
+    else:
+        n_samples_per_example = examples_sample_idxs
+        examples_sample_idxs = range(examples_sample_idxs)
 
     examples = {
         desc: ds.sel(ensemble_member=ts[0]).sel(time=ts[1], method="nearest")
@@ -153,108 +279,24 @@ def plot_examples(
     bilinear_present = any(map(lambda x: "Bilinear" in x, det_models))
 
     for tsi, (desc, ts) in enumerate(em_ts.items()):
-        ts_ds = ds.sel(ensemble_member=ts[0]).sel(time=ts[1], method="nearest")
-        print(f"{desc} sample requested for EM{ts[0]} on {ts[1]}")
-        if (
-            ts_ds["ensemble_member"].data.item() != ts[0]
-            or ts_ds["time"].data.item() != ts[1]
-        ):
-            print(
-                f"{desc} sample actually  for EM{ts_ds['ensemble_member'].data.item()} on {ts_ds['time'].data.item()}"
-            )
-
-        pcms = _plot_sim_example(
-            ts_ds, axes, vars, sim_title, desc, tsi, style_prefix=style_prefix
+        input_pcm, pcms = _plot_example(
+            axes,
+            tsi,
+            desc,
+            ts,
+            ds,
+            stoch_models,
+            det_models,
+            vars,
+            inputs,
+            style_prefix,
+            sim_title,
+            examples_sample_idxs,
+            n_samples_per_example,
+            n_vars,
+            bilinear_present,
+            input_limits,
         )
-
-        for input_idx, input_var in enumerate(inputs):
-            ax = axes[tsi][n_vars + bilinear_present + input_idx]
-            # contours = ts_ds[input_var].plot.contour(ax=ax, add_colorbar=False, cmap="Greys")
-            # ax.clabel(contours, inline=True, fontsize="small")
-            # ax.set_title("")
-            # ax.coastlines(**{"resolution": "10m", "linewidth": 0.3})
-            input_pcm = plot_map(
-                ts_ds[input_var],
-                ax,
-                style=None,
-                # cmap="coolwarm",
-                cmap=matplotlib.colormaps.get_cmap("coolwarm").resampled(11),
-                norm=matplotlib.colors.CenteredNorm(
-                    vcenter=0,
-                    halfrange=max(
-                        abs(input_limits[input_var]["vmin"]),
-                        abs(input_limits[input_var]["vmax"]),
-                    ),
-                ),
-                add_colorbar=False,
-                # **input_limits[input_var],
-            )
-            # label column
-            if tsi == 0:
-                ax.set_title(f"Example\ncoarse\ninput", fontsize="small")
-
-        for mi, model in enumerate(stoch_models):
-            for sample_idx in range(n_samples_per_example):
-                for ivar, var in enumerate(vars):
-                    icol = (
-                        n_vars
-                        + bilinear_present * n_vars
-                        + len(inputs)
-                        + mi * n_samples_per_example * n_vars
-                        + sample_idx * n_vars
-                        + ivar
-                    )
-                    ax = axes[tsi][icol]
-                    plot_map(
-                        ts_ds.sel(model=model).isel(sample_id=sample_idx)[
-                            f"pred_{var}"
-                        ],
-                        ax,
-                        style=f"{style_prefix}{var}",
-                        add_colorbar=False,
-                    )
-
-                    if tsi == 0:
-                        title = []
-                        if ivar == 0:
-                            if sample_idx == 0:
-                                title.append(f"{model}")
-                            title.append(f"Sample {sample_idx+1}")
-                        if len(vars) > 1:
-                            title.append(display.ATTRS[var]["long_name"])
-
-                        ax.set_title("\n".join(title), fontsize="small")
-
-        det_model_offset = 0
-        for mi, model in enumerate(det_models):
-            for ivar, var in enumerate(vars):
-                if "Bilinear" in model:
-                    icol = 1
-                    det_model_offset = -1
-                else:
-                    icol = (
-                        n_vars
-                        + bilinear_present * n_vars
-                        + len(inputs)
-                        + len(stoch_models) * n_samples_per_example * n_vars
-                        + (mi + det_model_offset) * n_vars
-                        + ivar
-                    )
-
-                ax = axes[tsi][icol]
-                plot_map(
-                    ts_ds.sel(model=model).isel(sample_id=0)[f"pred_{var}"],
-                    ax,
-                    style=f"{style_prefix}{var}",
-                    add_colorbar=False,
-                )
-                if tsi == 0:
-                    title = []
-                    if ivar == 0:
-                        title.append(f"{model}")
-                    if len(vars) > 1:
-                        title.append(display.ATTRS[var]["long_name"])
-                    ax.set_title("\n".join(title), fontsize="small")
 
     input_cb = fig.colorbar(
         input_pcm,

@@ -18,10 +18,15 @@ def pp_plot_examples(
     models,
     fig,
     sim_title,
-    n_samples_per_example=2,
+    examples_sample_idxs=2,
     inputs=["vorticity850"],
 ):
     n_vars = len(vars)
+    if isinstance(examples_sample_idxs, list):
+        n_samples_per_example = len(examples_sample_idxs)
+    else:
+        n_samples_per_example = examples_sample_idxs
+        examples_sample_idxs = range(examples_sample_idxs)
 
     examples = {
         desc: ds.sel(ensemble_member=ts[0]).sel(time=ts[1], method="nearest")
@@ -120,14 +125,14 @@ def pp_plot_examples(
                 ax.set_title(f"Example coarse\ninput", fontsize="small")
 
         for mi, model in enumerate(stoch_models):
-            for sample_idx in range(n_samples_per_example):
+            for si, sample_idx in enumerate(examples_sample_idxs):
                 for ivar, var in enumerate(vars):
                     icol = (
                         n_vars
                         + bilinear_present * n_vars
                         + len(inputs)
                         + mi * n_samples_per_example * n_vars
-                        + sample_idx * n_vars
+                        + si * n_vars
                         + ivar
                     )
                     ax = axes[tsi][icol]
@@ -141,9 +146,9 @@ def pp_plot_examples(
                     )
 
                     if tsi == 0 and ivar == 0:
-                        ax.set_title(f"Sample {sample_idx+1}", fontsize="small")
+                        ax.set_title(f"Sample {si+1}", fontsize="small")
 
-                        if sample_idx == 0:
+                        if si == 0:
                             fig.text(
                                 1,
                                 1.35,

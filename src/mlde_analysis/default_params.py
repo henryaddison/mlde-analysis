@@ -134,7 +134,8 @@ example_overrides = {
     "GCM": {},
 }
 example_inputs = ["vorticity850"]
-n_samples_per_example = 2
+examples_sample_idxs = [0, 2]
+
 
 desc = """
 Describe in more detail the models being compared
