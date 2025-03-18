@@ -51,7 +51,6 @@ accessible_precip_clevs = [
     70,
     100,
     150,
-    200,
 ]
 
 
@@ -71,7 +70,7 @@ chaselow_precip_cmap = (
 )
 
 chasehigh_precip_cmap = (
-    truncate_colormap(matplotlib.colormaps.get_cmap("ChaseSpectral"), 0.25, 1.0)
+    truncate_colormap(matplotlib.colormaps.get_cmap("ChaseSpectral"), 0.35, 0.9)
     .resampled(len(accessible_precip_clevs) - 1)
     .with_extremes(under="white")
 )
