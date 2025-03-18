@@ -1,9 +1,6 @@
 import cftime
 import math
-
-# import matplotlib
-
-import matplotlib
+import numpy as np
 from mlde_utils import cp_model_rotated_pole
 
 from . import (
@@ -67,12 +64,12 @@ def em_timestamps(ds, percentiles, overrides={}):
 
 
 def _plot_sim_example(
-    example_ds, axes, vars, sim_title, example_label, example_idx, style_prefix=""
+    example_ds, axes, vars, sim_title, example_label, show_title=False, style_prefix=""
 ):
     pcms = {}
     for ivar, var in enumerate(vars):
-        ax = axes[example_idx][ivar]
-        sim_example_da = example_ds.isel(model=0)[f"target_{var}"]
+        ax = axes[ivar]
+        sim_example_da = example_ds[f"target_{var}"]
         pcms[var] = plot_map(
             sim_example_da,
             ax,
@@ -80,7 +77,7 @@ def _plot_sim_example(
             add_colorbar=False,
         )
         # label column
-        if example_idx == 0:
+        if show_title:
             title = []
             if ivar == 0:
                 title.append(sim_title)
@@ -101,6 +98,42 @@ def _plot_sim_example(
                 rotation=90,
             )
     return pcms
+
+
+def _plot_input(ax, input_da, limits, show_title=False):
+    input_da.coarsen(grid_latitude=8, grid_longitude=8).mean().interp_like(
+        input_da, kwargs={"fill_value": "extrapolate"}
+    ).plot.contour(
+        ax=ax,
+        add_colorbar=False,
+        colors="black",
+        levels=np.linspace(-1e-4, 1e-4, 21),
+        linewidths=0.5,
+        negative_linestyles="dashed",
+    )
+    ax.set_title("")
+    ax.coastlines(**{"resolution": "10m", "linewidth": 0.3})
+    # input_pcm = plot_map(
+    #     input_da,
+    #     ax,
+    #     style=None,
+    #     cmap=matplotlib.colormaps.get_cmap("coolwarm").resampled(11),
+    #     norm=matplotlib.colors.CenteredNorm(
+    #         vcenter=0,
+    #         halfrange=max(
+    #             abs(limits["vmin"]),
+    #             abs(limits["vmax"]),
+    #         ),
+    #     ),
+    #     add_colorbar=False,
+    #     # **limits,
+    # )
+
+    # label column
+    if show_title:
+        ax.set_title(f"Example\ncoarse\ninput", fontsize="small")
+
+    return None
 
 
 def _plot_example(
@@ -132,34 +165,18 @@ def _plot_example(
         )
 
     pcms = _plot_sim_example(
-        ts_ds, axes, vars, sim_title, desc, tsi, style_prefix=style_prefix
+        ts_ds.isel(model=0),
+        axes[tsi],
+        vars,
+        sim_title,
+        desc,
+        tsi == 0,
+        style_prefix=style_prefix,
     )
 
     for input_idx, input_var in enumerate(inputs):
         ax = axes[tsi][n_vars + bilinear_present + input_idx]
-        # contours = ts_ds[input_var].plot.contour(ax=ax, add_colorbar=False, cmap="Greys")
-        # ax.clabel(contours, inline=True, fontsize="small")
-        # ax.set_title("")
-        # ax.coastlines(**{"resolution": "10m", "linewidth": 0.3})
-        input_pcm = plot_map(
-            ts_ds[input_var],
-            ax,
-            style=None,
-            # cmap="coolwarm",
-            cmap=matplotlib.colormaps.get_cmap("coolwarm").resampled(11),
-            norm=matplotlib.colors.CenteredNorm(
-                vcenter=0,
-                halfrange=max(
-                    abs(input_limits[input_var]["vmin"]),
-                    abs(input_limits[input_var]["vmax"]),
-                ),
-            ),
-            add_colorbar=False,
-            # **input_limits[input_var],
-        )
-        # label column
-        if tsi == 0:
-            ax.set_title(f"Example\ncoarse\ninput", fontsize="small")
+        input_pcm = _plot_input(ax, ts_ds[input_var], input_limits[input_var], tsi == 0)
 
     for mi, model in enumerate(stoch_models):
         for si, sample_idx in enumerate(examples_sample_idxs):
@@ -298,21 +315,22 @@ def plot_examples(
             input_limits,
         )
 
-    input_cb = fig.colorbar(
-        input_pcm,
-        ax=axes,
-        location="bottom",
-        orientation="horizontal",
-        shrink=0.5,
-        extend="neither",
-    )
-    input_cb.formatter.set_powerlimits((0, 0))
-    input_cb.formatter.set_useMathText(True)
-    input_cb.formatter.set_useOffset(False)
-    input_cb.ax.tick_params(labelsize="x-small")
-    input_cb.ax.ticklabel_format(useOffset=False, useMathText=True)
-    input_cb.set_label("Rel. Vort. @ 850hPa ($s^{-1}$)", fontsize="x-small")
-    input_cb.ax.xaxis.get_offset_text().set_fontsize("x-small")
+    if input_pcm is not None:
+        input_cb = fig.colorbar(
+            input_pcm,
+            ax=axes,
+            location="bottom",
+            orientation="horizontal",
+            shrink=0.5,
+            extend="neither",
+        )
+        input_cb.formatter.set_powerlimits((0, 0))
+        input_cb.formatter.set_useMathText(True)
+        input_cb.formatter.set_useOffset(False)
+        input_cb.ax.tick_params(labelsize="x-small")
+        input_cb.ax.ticklabel_format(useOffset=False, useMathText=True)
+        input_cb.set_label("Rel. Vort. @ 850hPa ($s^{-1}$)", fontsize="x-small")
+        input_cb.ax.xaxis.get_offset_text().set_fontsize("x-small")
 
     for var in reversed(vars):
         cb = fig.colorbar(

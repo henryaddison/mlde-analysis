@@ -109,7 +109,7 @@ def pp_plot_examples(
                 ts_ds[input_var],
                 ax,
                 style=None,
-                cmap="coolwarm",
+                cmap=matplotlib.colormaps.get_cmap("coolwarm").resampled(11),
                 norm=matplotlib.colors.CenteredNorm(
                     vcenter=0,
                     halfrange=max(
