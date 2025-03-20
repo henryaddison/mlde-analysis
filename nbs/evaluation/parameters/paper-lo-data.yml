@@ -6,7 +6,7 @@ dataset_configs:
     GCM: bham64_gcm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic
 sample_configs:
     CPM:
-      - label: CPMGEM-cCPM
+      - label: CPMGEM_cCPM
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
@@ -17,7 +17,7 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 10
-      - label: CPMGEM_ld-cCPM
+      - label: CPMGEM_ld_cCPM
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
             checkpoint: epoch_300
@@ -29,7 +29,7 @@ sample_configs:
         color: tab:red
         order: 15
     GCM:
-      - label: CPMGEM_ld-GCM
+      - label: CPMGEM_ld_GCM
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
             checkpoint: epoch_300
