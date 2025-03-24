@@ -106,8 +106,8 @@ def _plot_input(ax, input_da, limits, show_title=False):
     ).plot.contour(
         ax=ax,
         add_colorbar=False,
-        colors="black",
-        levels=np.linspace(-1e-4, 1e-4, 21),
+        colors="gray",
+        levels=np.linspace(-1e-4, 1e-4, 11),
         linewidths=0.5,
         negative_linestyles="dashed",
     )
