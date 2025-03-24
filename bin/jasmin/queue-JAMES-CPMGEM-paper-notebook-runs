@@ -25,16 +25,16 @@ for nb in ccs-seasonal ccs-threshold; do
   bin/jasmin/queue-run-notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
 done
 
-# HIGH MEMORY
+## HIGH MEMORY
 
-for nb in ccs-annual ccs-seasonal-domain-mean-bootstrap ccs-seasonal-frac-contrib-bootstraps; do
+for nb in ccs-seasonal-domain-mean-bootstrap ccs-seasonal-frac-contrib-bootstraps; do
   echo $nb
   bin/jasmin/queue-run-notebook -m 512G nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
 done
 
-## HIGH TIME
+## HIGH TIME & MEMORY
 
-for nb in ccs-seasonal-frac-contrib-bootstraps; do
+for nb in ccs-annual ccs-seasonal-frac-contrib-bootstraps; do
   echo $nb
   bin/jasmin/queue-run-notebook -m 512G -t 23:00:00 nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
 done
