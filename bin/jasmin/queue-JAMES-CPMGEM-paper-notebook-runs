@@ -8,7 +8,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 output_base_dirpath="${SCRIPT_DIR}/../../../mlde-notebooks"
 
 
-for nb in distribution ai-schematic structure uq eval-at-60km-pretty; do #samples
+for nb in distribution ai-schematic structure uq eval-at-60km-pretty samples; do
   echo $nb
   bin/jasmin/queue-run-notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
 done
@@ -20,14 +20,23 @@ done
 
 # CCS
 
-for nb in ccs-annual ccs-seasonal ccs-threshold; do #samples
+for nb in ccs-seasonal ccs-threshold; do
   echo $nb
   bin/jasmin/queue-run-notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
 done
 
-for nb in ccs-seasonal-domain-mean-bootstrap ccs-seasonal-frac-contrib-bootstraps; do #samples
+# HIGH MEMORY
+
+for nb in ccs-annual ccs-seasonal-domain-mean-bootstrap ccs-seasonal-frac-contrib-bootstraps; do
   echo $nb
   bin/jasmin/queue-run-notebook -m 512G nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
+done
+
+## HIGH TIME
+
+for nb in ccs-seasonal-frac-contrib-bootstraps; do
+  echo $nb
+  bin/jasmin/queue-run-notebook -m 512G -t 23:00:00 nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
 done
 
 # lo data figures
