@@ -72,8 +72,8 @@ def plot_fractional_contribution(
     **kwargs,
 ):
     for pred in frac_contrib_data:
-        frac_contrib = pred["data"][0]
-        binval = pred["data"][1]
+        frac_contrib = pred["data"].values
+        binval = pred["data"].bins.values
 
         ax.plot(
             binval[1:],

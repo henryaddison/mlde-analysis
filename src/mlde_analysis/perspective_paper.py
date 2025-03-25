@@ -79,7 +79,7 @@ def pp_plot_examples(
             pcms[var] = plot_map(
                 ts_ds.isel(model=0)[f"target_{var}"],
                 ax,
-                style=f"accessible_{var}",
+                style=f"{var}",
                 add_colorbar=False,
             )
             # label column
@@ -141,7 +141,7 @@ def pp_plot_examples(
                             f"pred_{var}"
                         ],
                         ax,
-                        style=f"accessible_{var}",
+                        style=f"{var}",
                         add_colorbar=False,
                     )
 
@@ -178,7 +178,7 @@ def pp_plot_examples(
                 plot_map(
                     ts_ds.sel(model=model).isel(sample_id=0)[f"pred_{var}"],
                     ax,
-                    style=f"accessible_{var}",
+                    style=f"{var}",
                     add_colorbar=False,
                 )
                 if tsi == 0:
