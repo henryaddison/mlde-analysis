@@ -10,14 +10,14 @@ s_mem=128G
 s_partition=standard
 s_qos=standard
 s_time=02:00:00
-s_exportfile=
+s_export=
 
-while getopts ":a:f:m:p:q:t:" opt; do
+while getopts ":a:e:m:p:q:t:" opt; do
   case ${opt} in
     a)
       s_account=${OPTARG}
       ;;
-    f)
+    e)
       s_exportfile=${OPTARG}
       ;;
     m)
@@ -43,4 +43,4 @@ while getopts ":a:f:m:p:q:t:" opt; do
 done
 shift "$((OPTIND -1))"
 
-sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --account=${s_account} --partition=${s_partition} --qos=${s_qos} --time=${s_time} --mem=${s_mem} $([ -n "$s_exportfile" ] && echo "--export-file=${s_exportfile}") -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
+sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --account=${s_account} --partition=${s_partition} --qos=${s_qos} --time=${s_time} --mem=${s_mem} $([ -n "$s_export" ] && echo "--export=${s_export}") -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
