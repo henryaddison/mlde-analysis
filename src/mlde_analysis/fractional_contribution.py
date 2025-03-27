@@ -91,7 +91,7 @@ def plot_fractional_contribution(
     ax.set_ylabel("Fractional contrib.\n(mm/day)")
     ax.tick_params(axis="both", which="major")
     if legend:
-        ax.legend(fontsize="small")
+        ax.legend(fontsize="x-small", loc="lower left")
     ax.set_xscale("log")
     ax.set_xlim([0.1, 200.0])
     ax.set_ylim(ylim)  # for diff or change use ax.set_ylim([-0.4, 0.4])
