@@ -224,7 +224,7 @@ def plot_changes(changes, seasons, fig, show_change=[]):
     cb = fig.colorbar(
         pcm, ax=change_axd.values(), location="right", shrink=0.8, extend="both"
     )
-    cb.set_label("Relative mean change\n(percent)", fontsize="small")
+    cb.set_label("Relative difference\n(percent)", fontsize="small")
     cb.ax.tick_params(axis="both", labelsize="small")
 
 
