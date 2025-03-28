@@ -8,8 +8,6 @@ set -euo pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-# export DERIVED_DATA=/gws/nopw/j04/bris_climdyn/henrya/bp-backups/
-
 job_id=${RANDOM}
 
 echo ${job_id}

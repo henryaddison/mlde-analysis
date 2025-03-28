@@ -1,0 +1,51 @@
+#!/bin/bash
+# Script for queueing all the notebooks used for CPMGEM_pr paper
+
+set -euo pipefail
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+output_base_dirpath="${SCRIPT_DIR}/../../../mlde-notebooks"
+
+function queue_run_notebook {
+  DERIVED_DATA=/gws/nopw/j04/furflex/henrya/cpmgem-paper-JAMES bin/jasmin/queue-run-notebook -e DERIVED_DATA $@
+}
+
+
+for nb in distribution ai-schematic structure uq eval-at-60km-pretty samples; do
+  echo $nb
+  queue_run_notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
+done
+
+for nb in seasonal-distribution; do
+  echo $nb
+  queue_run_notebook -m 512G nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
+done
+
+# CCS
+
+for nb in ccs-seasonal ccs-threshold; do
+  echo $nb
+  queue_run_notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
+done
+
+## HIGH MEMORY
+
+for nb in ccs-seasonal-domain-mean-bootstrap ccs-seasonal-frac-contrib-bootstraps; do
+  echo $nb
+  queue_run_notebook -m 512G nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
+done
+
+## HIGH TIME & MEMORY
+
+for nb in ccs-annual ccs-seasonal-frac-contrib-bootstraps; do
+  echo $nb
+  queue_run_notebook -m 512G -t 23:00:00 nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper.yml;
+done
+
+# lo data figures
+
+for nb in lo-data-figures; do
+  echo $nb
+  queue_run_notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper-lo-data.yml;
+done

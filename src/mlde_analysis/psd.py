@@ -126,6 +126,6 @@ def plot_psd(target_rapsd, pred_rapsds, ax, legend_kwargs={}):
 
     ax.set_xlabel("Spatial Frequency ($km^{-1}$)")
     ax.set_ylabel("PSD")
-    ax.legend(ncols=2, **legend_kwargs)
+    ax.legend(**(dict(ncols=2, fontsize="x-small") | legend_kwargs))
     ax.tick_params(axis="both", which="minor")
     # ax.set_xlim(1e-3, 1e-1)

@@ -264,7 +264,6 @@ dependencies:
   - nc-time-axis=1.4.1=pyhd8ed1ab_0
   - ncurses=6.3=h27087fc_1
   - nest-asyncio=1.5.6=pyhd8ed1ab_0
-  - netcdf4=1.6.3=nompi_py39h369ccc5_102
   - nettle=3.8.1=hc379101_1
   - nodejs=18.16.1=hf52ce11_0
   - notebook=6.5.4=pyha770c72_0
@@ -437,6 +436,9 @@ dependencies:
   - pip:
       - astunparse==1.6.3
       - cfgv==3.3.1
+      - cmcrameri==1.9
+      - cmweather==0.3.2
+      - compliance-checker==5.1.1
       - distlib==0.3.6
       - exceptiongroup==1.1.1
       - execnb==0.1.5
@@ -444,14 +446,23 @@ dependencies:
       - filelock==3.12.0
       - ghapi==1.0.3
       - identify==2.5.24
-      - mlde-utils==0.2.0
+      - isodate==0.7.2
+      - lxml==5.3.0
+      - mlde-utils==0.2.2
       - nbdev==2.2.10
+      - netcdf4==1.7.2
       - nodeenv==1.8.0
+      - owslib==0.31.0
+      - pendulum==3.0.0
       - pluggy==1.0.0
       - pre-commit==3.3.2
       - properscoring==0.1
+      - pygeoif==1.5.1
       - pytest==7.3.1
       - python-cmethods==1.0.1
+      - regex==2024.11.6
+      - time-machine==2.16.0
+      - validators==0.34.0
       - virtualenv==20.23.0
       - xhistogram==0.3.2
       - xskillscore==0.0.24

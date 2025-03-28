@@ -1,23 +1,15 @@
+import cmweather  # noqa
 import string
 import matplotlib
 import matplotlib.pyplot as plt
-import metpy.plots.ctables
 import numpy as np
 import seaborn as sns
 import xarray as xr
 
 from mlde_utils import cp_model_rotated_pole
 
-# precip_clevs = [0, 1, 2.5, 5, 7.5, 10, 15, 20, 30, 40,
-#      50, 70, 100, 150, 200, 250, 300, 400, 500, 600, 750, 1000]
-# precip_norm, precip_cmap = metpy.plots.ctables.registry.get_with_boundaries('precipitation', precip_clevs)
-precip_clevs = [0, 0.1, 1, 2.5, 5, 7.5, 10, 15, 20, 30, 40, 50, 70, 100, 150, 200]
-precip_cmap = matplotlib.colors.ListedColormap(
-    metpy.plots.ctables.colortables["precipitation"][: len(precip_clevs) - 1],
-    "precipitation",
-)
-precip_norm = matplotlib.colors.BoundaryNorm(precip_clevs, precip_cmap.N)
-accessible_precip_clevs = [
+
+precip_clevs = [
     0.1,
     1,
     2.5,
@@ -32,16 +24,34 @@ accessible_precip_clevs = [
     70,
     100,
     150,
-    200,
 ]
-accessible_precip_cmap = (
-    matplotlib.colormaps.get_cmap("YlGnBu")
-    .resampled(len(accessible_precip_clevs) - 1)
+
+
+def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+    new_cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
+        "trunc({n},{a:.2f},{b:.2f})".format(n=cmap.name, a=minval, b=maxval),
+        cmap(np.linspace(minval, maxval, n)),
+    )
+    return new_cmap
+
+
+chaselow_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("ChaseSpectral"), 0.0, 0.5)
+    .reversed()
+    .resampled(len(precip_clevs) - 1)
     .with_extremes(under="white")
 )
-accessible_precip_norm = matplotlib.colors.BoundaryNorm(
-    accessible_precip_clevs, accessible_precip_cmap.N
+
+chasehigh_precip_cmap = (
+    truncate_colormap(matplotlib.colormaps.get_cmap("ChaseSpectral"), 0.35, 0.9)
+    .resampled(len(precip_clevs) - 1)
+    .with_extremes(under="white")
 )
+
+
+def precip_norm(precip_levs, precip_cmap):
+    return matplotlib.colors.BoundaryNorm(precip_levs, precip_cmap.N)
+
 
 tas_levs = list(
     map(
@@ -119,8 +129,18 @@ hurs_cmap = matplotlib.colormaps.get_cmap("Blues").resampled(20)
 swbgt_cmap = matplotlib.colormaps.get_cmap("coolwarm").resampled(25)
 
 STYLES = {
-    "pr": {"cmap": precip_cmap, "norm": precip_norm},
-    "accessible_pr": {"cmap": accessible_precip_cmap, "norm": accessible_precip_norm},
+    "pr": {
+        "cmap": chasehigh_precip_cmap,
+        "norm": precip_norm(precip_clevs, chasehigh_precip_cmap),
+    },
+    "chaselow_pr": {
+        "cmap": chaselow_precip_cmap,
+        "norm": precip_norm(precip_clevs, chaselow_precip_cmap),
+    },
+    "chasehigh_pr": {
+        "cmap": chasehigh_precip_cmap,
+        "norm": precip_norm(precip_clevs, chasehigh_precip_cmap),
+    },
     "relhum150cm": {"cmap": hurs_cmap, "vmin": 0, "vmax": 100},
     "tmean150cm": {"cmap": tas_cmap, "norm": tas_norm},
     "swbgt": {"cmap": swbgt_cmap, "vmin": -10, "vmax": 40},

@@ -11,14 +11,28 @@ VAR_LABELS = {
 }
 
 
-def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_example=2):
+def pp_plot_examples(
+    ds,
+    em_ts,
+    vars,
+    models,
+    fig,
+    sim_title,
+    examples_sample_idxs=2,
+    inputs=["vorticity850"],
+):
     n_vars = len(vars)
+    if isinstance(examples_sample_idxs, list):
+        n_samples_per_example = len(examples_sample_idxs)
+    else:
+        n_samples_per_example = examples_sample_idxs
+        examples_sample_idxs = range(examples_sample_idxs)
 
     examples = {
         desc: ds.sel(ensemble_member=ts[0]).sel(time=ts[1], method="nearest")
         for desc, ts in em_ts.items()
     }
-    inputs = ["vorticity850"]
+
     input_limits = {
         input_var: {
             "vmin": min(
@@ -65,7 +79,7 @@ def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_exam
             pcms[var] = plot_map(
                 ts_ds.isel(model=0)[f"target_{var}"],
                 ax,
-                style=f"accessible_{var}",
+                style=f"{var}",
                 add_colorbar=False,
             )
             # label column
@@ -95,7 +109,7 @@ def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_exam
                 ts_ds[input_var],
                 ax,
                 style=None,
-                cmap="coolwarm",
+                cmap=matplotlib.colormaps.get_cmap("coolwarm").resampled(11),
                 norm=matplotlib.colors.CenteredNorm(
                     vcenter=0,
                     halfrange=max(
@@ -111,14 +125,14 @@ def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_exam
                 ax.set_title(f"Example coarse\ninput", fontsize="small")
 
         for mi, model in enumerate(stoch_models):
-            for sample_idx in range(n_samples_per_example):
+            for si, sample_idx in enumerate(examples_sample_idxs):
                 for ivar, var in enumerate(vars):
                     icol = (
                         n_vars
                         + bilinear_present * n_vars
                         + len(inputs)
                         + mi * n_samples_per_example * n_vars
-                        + sample_idx * n_vars
+                        + si * n_vars
                         + ivar
                     )
                     ax = axes[tsi][icol]
@@ -127,14 +141,14 @@ def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_exam
                             f"pred_{var}"
                         ],
                         ax,
-                        style=f"accessible_{var}",
+                        style=f"{var}",
                         add_colorbar=False,
                     )
 
                     if tsi == 0 and ivar == 0:
-                        ax.set_title(f"Sample {sample_idx+1}", fontsize="small")
+                        ax.set_title(f"Sample {si+1}", fontsize="small")
 
-                        if sample_idx == 0:
+                        if si == 0:
                             fig.text(
                                 1,
                                 1.35,
@@ -164,7 +178,7 @@ def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_exam
                 plot_map(
                     ts_ds.sel(model=model).isel(sample_id=0)[f"pred_{var}"],
                     ax,
-                    style=f"accessible_{var}",
+                    style=f"{var}",
                     add_colorbar=False,
                 )
                 if tsi == 0:
@@ -178,8 +192,13 @@ def pp_plot_examples(ds, em_ts, vars, models, fig, sim_title, n_samples_per_exam
         shrink=0.5,
         extend="neither",
     )
-    input_cb.ax.tick_params(labelsize="xx-small")
-    input_cb.set_label("Rel. Vort. @ 850hPa", fontsize="x-small")
+    # input_cb.formatter.set_powerlimits((0, 0))
+    input_cb.formatter.set_useMathText(True)
+    input_cb.formatter.set_useOffset(False)
+    input_cb.ax.tick_params(labelsize="x-small")
+    input_cb.ax.ticklabel_format(useOffset=False, useMathText=True)
+    input_cb.set_label("Rel. Vort. @ 850hPa ($s^{-1}$)", fontsize="x-small")
+    input_cb.ax.xaxis.get_offset_text().set_fontsize("x-small")
 
     # if var == "pr":
     for var in vars:

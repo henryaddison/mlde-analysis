@@ -5,28 +5,32 @@ set -euo pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-saccount=furflex
-smem=128G
-spartition=highres
-sqos=highres
-stime=02:00:00
+s_account=furflex
+s_mem=128G
+s_partition=standard
+s_qos=standard
+s_time=02:00:00
+s_export=
 
-while getopts ":a:m:p:q:t:" opt; do
+while getopts ":a:e:m:p:q:t:" opt; do
   case ${opt} in
     a)
-      saccount=${OPTARG}
+      s_account=${OPTARG}
+      ;;
+    e)
+      s_exportfile=${OPTARG}
       ;;
     m)
-      smem=${OPTARG}
+      s_mem=${OPTARG}
       ;;
     p)
-      spartition=${OPTARG}
+      s_partition=${OPTARG}
       ;;
     q)
-      sqos=${OPTARG}
+      s_qos=${OPTARG}
       ;;
     t)
-      stime=${OPTARG}
+      s_time=${OPTARG}
       ;;
     \? )
       # echo "Invalid option: -${OPTARG}" 1>&2
@@ -39,4 +43,4 @@ while getopts ":a:m:p:q:t:" opt; do
 done
 shift "$((OPTIND -1))"
 
-sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --account=${saccount} --partition=${spartition} --qos=${sqos} --time=${stime} --mem=${smem} -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
+sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --account=${s_account} --partition=${s_partition} --qos=${s_qos} --time=${s_time} --mem=${s_mem} $([ -n "$s_export" ] && echo "--export=${s_export}") -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@

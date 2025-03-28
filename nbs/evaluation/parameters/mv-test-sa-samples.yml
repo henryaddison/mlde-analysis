@@ -54,5 +54,5 @@ example_percentiles:
       season: JJA
 example_overrides:
     CPM: {}
-n_samples_per_example: 2
+examples_sample_idxs: 2
 example_inputs: []

@@ -102,4 +102,4 @@ example_percentiles:
 example_overrides:
     CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
     GCM: {}
-n_samples_per_example: 2
+examples_sample_idxs: 2

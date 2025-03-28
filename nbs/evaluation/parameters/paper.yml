@@ -13,7 +13,7 @@ ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "
 samples_per_run: 6
 sample_configs:
     CPM:
-      - label: CPMGEM-cCPM
+      - label: CPMGEM_cCPM
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
@@ -24,7 +24,7 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 11
-      - label: U-Net-cCPM
+      - label: U-Net_cCPM
         sample_specs:
           - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
             checkpoint: epoch_100
@@ -42,10 +42,12 @@ sample_configs:
             dataset: bham64_ccpm-4x_12em_linpr_pr
             variables: [pr]
         deterministic: True
-        color: dimgrey
+        color: tab:grey
         order: 0
+        UQ: False
+        CCS: False
     GCM:
-      - label: CPMGEM-GCM
+      - label: CPMGEM_GCM
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
@@ -54,8 +56,21 @@ sample_configs:
             variables: [pr]
         deterministic: False
         CCS: True
+        UQ: False
         color: tab:green
         order: 20
+sample_configs_at_60km:
+    - label: CPMGEM_GCM@60km
+      sample_specs:
+        - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV/postprocess/gcm-grid
+          checkpoint: epoch_20
+          input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
+          dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+          variables: [pr]
+      deterministic: False
+dataset_configs_at_60km:
+    CPM: bham64_ccpm-60km_12em_pr_pr
+    GCM: bham64_gcm-60km_12em_rawpr_pr
 example_percentiles:
   CPM:
     DJF Wet:
@@ -94,5 +109,5 @@ example_percentiles:
 example_overrides:
     CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
     GCM: {}
-n_samples_per_example: 2
+examples_sample_idxs: [2,5]
 niterations: 30

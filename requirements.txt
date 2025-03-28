@@ -1,3 +1,5 @@
+cmcrameri
+cmweather
 mlde-utils ~=0.2.0
 nbdev ~= 2.2.0
 properscoring ~= 0.1

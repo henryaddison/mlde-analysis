@@ -31,7 +31,7 @@ sample_configs = {
                     "variables": ["pr"],
                 },
             ],
-            "label": "sa-cCPM",
+            "label": "sa_cCPM",
             "deterministic": False,
             "PSD": True,
             "color": "tab:blue",
@@ -48,12 +48,46 @@ sample_configs = {
                     "variables": ["pr"],
                 },
             ],
-            "label": "mv-cCPM",
+            "label": "mv_cCPM",
             "deterministic": False,
             "PSD": True,
             "color": "tab:orange",
             "order": 11,
             "CCS": True,
+        },
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "u-net/bham-4x_12em_pSTV",
+                    "checkpoint": "epoch_100",
+                    "dataset": "demo-ccpm_pr",
+                    "input_xfm": "demo-ccpm_pr-stan",
+                    "variables": ["pr"],
+                },
+            ],
+            "label": "U-Net_cCPM",
+            "deterministic": True,
+            "PSD": True,
+            "color": "tab:red",
+            "order": 5,
+            "CCS": False,
+        },
+        {
+            "label": "cCPM Bilinear",
+            "sample_specs": [
+                {
+                    "fq_model_id": "id-linpr",
+                    "checkpoint": "epoch_0",
+                    "dataset": "demo-ccpm_pr",
+                    "input_xfm": "none",
+                    "variables": ["pr"],
+                },
+            ],
+            "deterministic": True,
+            "color": "tab:grey",
+            "CCS": False,
+            "UQ": False,
+            "order": 1,
         },
     ],
     "GCM": [
@@ -67,7 +101,7 @@ sample_configs = {
                     "variables": ["pr"],
                 },
             ],
-            "label": "sa-GCM",
+            "label": "sa_GCM",
             "deterministic": False,
             "PSD": True,
             "color": "tab:cyan",
@@ -81,19 +115,27 @@ derived_variables_config = {}
 
 example_percentiles = {
     "CPM": {
-        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
         "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
         "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
+        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
+        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
+    },
+    "GCM": {
+        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
+        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
+        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
+        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
     },
 }
 example_overrides = {
     "CPM": {
-        "JJA Convective": ["01", "1993-08-01 12:00:00"],
+        "JJA Wet": ["01", "1993-08-01 12:00:00"],
     },
     "GCM": {},
 }
 example_inputs = ["vorticity850"]
-n_samples_per_example = 1
+examples_sample_idxs = [0, 2]
+
 
 desc = """
 Describe in more detail the models being compared
