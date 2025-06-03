@@ -17,5 +17,6 @@ jobs:
         pixi-version: v0.46.0
         cache: true
         activate-environment: true
+        environments: dev
     - name: Run tests
       run: pixi run test
