@@ -8,7 +8,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 output_base_dirpath="${SCRIPT_DIR}/../../../mlde-notebooks"
 
 function queue_run_notebook {
-  DERIVED_DATA=/gws/nopw/j04/furflex/henrya/lk-pers-paper-BAMS bin/jasmin/queue-run-notebook -e DERIVED_DATA $@
+  DERIVED_DATA=/gws/nopw/j04/furflex/henrya/data/cpmgem-daily/lk-pers-paper-BAMS/derived bin/jasmin/queue-run-notebook -e DERIVED_DATA $@
 }
 
 for nb in perspective-paper-figures perspective-paper-samples; do
