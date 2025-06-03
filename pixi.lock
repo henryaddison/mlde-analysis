@@ -480,13 +480,14 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/43/6a/ca128561b22b60bd5a0c4ea26649e68c8556b82bc70a0c396eebc977fe86/jupyterlab_widgets-3.0.15-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/d0/889e9705107db7b1ec0767b03f15d7b95b4c4f9fdf91928ab1c7e9ffacf6/llvmlite-0.43.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/30/9d/4373e6c09ef24befeeaa33d59d61825878248c8653e1535e257d181ee0e0/mlde_utils-0.2.2-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/cb/c6/77cc132f44ec57d6c0ea24312e190ce4885b95883b1044d66df018387e06/nbdev-2.2.10-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/c2/4a/9da0e166abf2cd9347ab3ead8b1b51c62befef6dbd77ba60bce2b0021af0/nbdev-2.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d2/1d/1b658dbd2b9fa9c4c9f32accbfc0205d532c8c6194dc0f2a4c0428e7128a/nodeenv-1.9.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/54/9b/cd73d3f6617ddc8398a63ef97d8dc9139a9879b9ca8a7ca4b8789056ea46/numba-0.60.0-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/45/30/c3d5d192b97de482b9adfa356724dfbb07e293b54d94c3b98dd2e5f24759/pre_commit-3.3.2-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/0a/ff/51706ba1a029d0f2df0322543793d3bf1383de9dc567d23886144cb21bef/properscoring-0.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/0c/15/5dda75e6c7125be2b72dc7a5248466f3dbf1ecd0cdc641b260832a2c7400/python_cmethods-1.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f3/40/b1c265d4b2b62b58576588510fc4d1fe60a86319c8de99fd8e9fec617d2c/virtualenv-20.31.2-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/ca/51/5447876806d1088a0f8f71e16542bf350918128d0a69437df26047c8e46f/widgetsnbextension-4.0.14-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/18/08/1432dd10193a5d45294bd42042a5631259ee5a12cd2e9075350546d07a03/xhistogram-0.3.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/29/6a/3a977c2fc6e57201cda9c85fd5ee1ee72712ea046f884f566f958e38239a/xskillscore-0.0.24-py3-none-any.whl
@@ -972,7 +973,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/43/6a/ca128561b22b60bd5a0c4ea26649e68c8556b82bc70a0c396eebc977fe86/jupyterlab_widgets-3.0.15-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/d0/889e9705107db7b1ec0767b03f15d7b95b4c4f9fdf91928ab1c7e9ffacf6/llvmlite-0.43.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/30/9d/4373e6c09ef24befeeaa33d59d61825878248c8653e1535e257d181ee0e0/mlde_utils-0.2.2-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/cb/c6/77cc132f44ec57d6c0ea24312e190ce4885b95883b1044d66df018387e06/nbdev-2.2.10-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/c2/4a/9da0e166abf2cd9347ab3ead8b1b51c62befef6dbd77ba60bce2b0021af0/nbdev-2.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d2/1d/1b658dbd2b9fa9c4c9f32accbfc0205d532c8c6194dc0f2a4c0428e7128a/nodeenv-1.9.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/54/9b/cd73d3f6617ddc8398a63ef97d8dc9139a9879b9ca8a7ca4b8789056ea46/numba-0.60.0-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl
@@ -981,6 +982,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/1b/d1/72df649a705af1e3a09ffe14b0c7d3be1fd730da6b98beb4a2ed26b8a023/pytest-7.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/0c/15/5dda75e6c7125be2b72dc7a5248466f3dbf1ecd0cdc641b260832a2c7400/python_cmethods-1.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f3/40/b1c265d4b2b62b58576588510fc4d1fe60a86319c8de99fd8e9fec617d2c/virtualenv-20.31.2-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/ca/51/5447876806d1088a0f8f71e16542bf350918128d0a69437df26047c8e46f/widgetsnbextension-4.0.14-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/18/08/1432dd10193a5d45294bd42042a5631259ee5a12cd2e9075350546d07a03/xhistogram-0.3.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/29/6a/3a977c2fc6e57201cda9c85fd5ee1ee72712ea046f884f566f958e38239a/xskillscore-0.0.24-py3-none-any.whl
@@ -5028,14 +5030,14 @@ packages:
 - pypi: .
   name: mlde-analysis
   version: 0.5.0
-  sha256: 1f70c112d7b37e18ae10d398b95a5300a33f777ffe5f53dc2605704ba0af0a2c
+  sha256: c1ad1ccf2374ee0cdf2c890fb70ec37bbc56809190e8dafa112846eddb42cb6b
   requires_dist:
   - cf-xarray==0.9.4
   - cmcrameri==1.9
   - cmweather==0.3.2
   - ipympl==0.9.7
   - mlde-utils==0.2.2
-  - nbdev==2.2.10
+  - nbdev==2.4.2
   - pre-commit==3.3.2
   - properscoring==0.1
   - python-cmethods==1.0.1
@@ -5171,23 +5173,33 @@ packages:
   - pkg:pypi/nbconvert?source=hash-mapping
   size: 200601
   timestamp: 1738067871724
-- pypi: https://files.pythonhosted.org/packages/cb/c6/77cc132f44ec57d6c0ea24312e190ce4885b95883b1044d66df018387e06/nbdev-2.2.10-py3-none-any.whl
+- pypi: https://files.pythonhosted.org/packages/c2/4a/9da0e166abf2cd9347ab3ead8b1b51c62befef6dbd77ba60bce2b0021af0/nbdev-2.4.2-py3-none-any.whl
   name: nbdev
-  version: 2.2.10
-  sha256: 712c3d7f0b12c24ef06bd2819113a62e2f913f33e03eb77582b4c9fef870577a
+  version: 2.4.2
+  sha256: 1dc173684a87251017b0b7a02aa2f829fb1d6c927296be244274c0e7904e947d
   requires_dist:
-  - fastcore>=1.5.24
-  - execnb>=0.1.2
+  - packaging
+  - fastcore>=1.8.0
+  - execnb>=0.1.12
   - astunparse
-  - ghapi>=1.0.2
+  - ghapi>=1.0.3
+  - watchdog
+  - asttokens
+  - setuptools
   - pyyaml
-  - asttokens ; python_full_version == '3.7.*'
+  - ipywidgets ; extra == 'dev'
   - nbdev-numpy ; extra == 'dev'
   - nbdev-stdlib ; extra == 'dev'
   - pandas ; extra == 'dev'
   - matplotlib ; extra == 'dev'
   - black ; extra == 'dev'
-  requires_python: '>=3.7'
+  - svg-py ; extra == 'dev'
+  - nbclassic ; extra == 'dev'
+  - pysymbol-llm ; extra == 'dev'
+  - llms-txt ; extra == 'dev'
+  - sphinx ; extra == 'dev'
+  - plum-dispatch ; extra == 'dev'
+  requires_python: '>=3.9'
 - conda: https://conda.anaconda.org/conda-forge/noarch/nbformat-5.10.4-pyhd8ed1ab_1.conda
   sha256: 7a5bd30a2e7ddd7b85031a5e2e14f290898098dc85bea5b3a5bf147c25122838
   md5: bbe1963f1e47f594070ffe87cdf612ea
@@ -7094,6 +7106,13 @@ packages:
   - setuptools>=68 ; extra == 'test'
   - time-machine>=2.10 ; platform_python_implementation == 'CPython' and extra == 'test'
   requires_python: '>=3.8'
+- pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
+  name: watchdog
+  version: 6.0.0
+  sha256: 20ffe5b202af80ab4266dcd3e91aae72bf2da48c0d33bdb15c66658e685e94e2
+  requires_dist:
+  - pyyaml>=3.10 ; extra == 'watchmedo'
+  requires_python: '>=3.9'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/wayland-1.23.1-h3e06ad9_1.conda
   sha256: 73d809ec8056c2f08e077f9d779d7f4e4c2b625881cad6af303c33dc1562ea01
   md5: a37843723437ba75f42c9270ffe800b1

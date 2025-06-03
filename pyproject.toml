@@ -22,7 +22,7 @@ dependencies = [
   "cmweather==0.3.2",
   "ipympl==0.9.7",
   "mlde-utils==0.2.2",
-  "nbdev==2.2.10",
+  "nbdev==2.4.2",
   #"netcdf4==1.7.2",
   "pre-commit==3.3.2",
   "properscoring==0.1",
