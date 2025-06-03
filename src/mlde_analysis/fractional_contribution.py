@@ -88,7 +88,7 @@ def plot_fractional_contribution(
 
     ax.set_title(title)
     ax.set_xlabel("Precip (mm/day)")
-    ax.set_ylabel("Fractional contrib.\n(mm/day)")
+    ax.set_ylabel("Fractional contrib.\n(%)")
     ax.tick_params(axis="both", which="major")
     if legend:
         ax.legend(fontsize="x-small", loc="lower left")
