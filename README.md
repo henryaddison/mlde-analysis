@@ -4,29 +4,24 @@ Evalute ML approaches to emulate a CPM and downscale rainfall.
 
 ## Setup
 
-This guide assumes you are using conda (or mamba) to manage packages and python environments.
+Assumes you have [pixi](https://pixi.sh) installed for managing dependencies.
 
-1. Install conda environment:
-  * If you wish to re-use the exact environment: `conda env create --file environment.lock.yml` and activate it: `conda activate mlde-notebooks`
-  * OR install the needed conda and pip packages to your own environment: `conda install --file=environment.txt`
-2. Install this package (including a few pip dependencies which may not have been included in the previous step): `pip install -e .`
+1. Clone repo and cd into it
+2. Install dependencies: `pixi install`
 3. Create .env file: cp .env.example .env and then update to match your needs:
   * `DERIVED_DATA`: path to where derived data such datasets and model artefacts are kept
 
 ### Updating conda environment
 
-To add new packages or update their version, it is recommended to use the `environment.txt` file (for conda packages) and `requirements.txt` file (for pip packages) then run:
+To add new packages or update their version, can update the dependencies in pixi.toml then run
 ```sh
-conda install --file=environment.txt
-pip install -e . # this will implicitly use requirement.txt
-conda env export -f environment.lock.yml
+pixi install
 ```
-then commit any changes (though make sure not to include mlde-notebooks package in the lock file since that is not distributed via PyPI).
-
-To sync environment with the lock file use:
+or add them using:
 ```sh
-conda env update -f environment.lock.yml --prune
+pixi add NEW_DEP
 ```
+then commit any changes to pixi.toml and pixi.lock
 
 ## Configuration
 
@@ -40,6 +35,8 @@ Manage environment variables as you wish though the python-dotenv package is inc
 
 
 ## Usage
+
+It is expected to prepend each command with `pixi run` to ensure getting the expected environment.
 
 ### Running Notebooks
 
@@ -68,4 +65,5 @@ Again there are helper scripts (`queue-job`) in `bin/bp` and `bin/jasmin` respec
 
 ## Development
 
-There are a set of development dependencies if you do more than just tweak a notebook: `pip install -e '.[dev]'`
+There are a set of development dependencies if you do more than just tweak a notebook.
+Use the dev pixi environment (e.g. `pixi run -e dev pytest`).

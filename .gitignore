@@ -143,3 +143,7 @@ dmypy.json
 
 # don't commit local practice notebooks
 nbs/learning
+
+# pixi environments
+.pixi
+*.egg-info

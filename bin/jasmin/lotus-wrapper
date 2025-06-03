@@ -2,10 +2,9 @@
 # Wrapper script around commands for running notebook from LOTUS queue
 
 source ~/.bashrc
-mamba activate mlde-notebooks
 
 set -euo pipefail
 
 set -x
-$@
+pixi run $@
 set +x
