@@ -4013,7 +4013,7 @@ packages:
 - pypi: .
   name: mlde-analysis
   version: 0.5.0
-  sha256: debfa5b5999e0b83f81b46be47b9997465303c5a7c178ccbc3da39a221e9f968
+  sha256: 03e81b87e677bf247346c509101441376b439dd219c1aecd168439c8aca266f5
   requires_dist:
   - cf-xarray==0.9.4
   - cmcrameri==1.9
