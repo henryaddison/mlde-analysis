@@ -15,7 +15,7 @@ sample_configs:
     CPM:
       - label: CPMGEM_cCPM
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+          - fq_model_id: paper/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -35,10 +35,9 @@ sample_configs:
         CCS: True
         color: tab:red
         order: 12
-
       - label: U-Net_cCPM
         sample_specs:
-          - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
+          - fq_model_id: paper/score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
             checkpoint: epoch_100
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -48,7 +47,7 @@ sample_configs:
         order: 1
       - label: cCPM Bilinear
         sample_specs:
-          - fq_model_id: id-linpr
+          - fq_model_id: paper/id-linpr
             checkpoint: epoch_0
             input_xfm: none
             dataset: bham64_ccpm-4x_12em_linpr_pr
@@ -61,7 +60,7 @@ sample_configs:
     GCM:
       - label: CPMGEM_GCM
         sample_specs:
-          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+          - fq_model_id: paper/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
             input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
             dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
@@ -74,7 +73,7 @@ sample_configs:
 sample_configs_at_60km:
     - label: CPMGEM_GCM@60km
       sample_specs:
-        - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV/postprocess/gcm-grid
+        - fq_model_id: paper/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV/postprocess/gcm-grid
           checkpoint: epoch_20
           input_xfm: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-pixelmmsstan
           dataset: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
