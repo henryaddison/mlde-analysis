@@ -485,7 +485,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/58/6a/9166369a2f092bd286d24e6307de555d63616e8ddb373ebad2b5635ca4cd/ipywidgets-8.1.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/43/6a/ca128561b22b60bd5a0c4ea26649e68c8556b82bc70a0c396eebc977fe86/jupyterlab_widgets-3.0.15-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/c4/ab/a67c5f2cadc931993296fd3a68af023ade17cf83420e6bf4b1a4cfb1c175/mlde_utils-0.3.0a6-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/83/da/def5bc49b58275e87ac348bb9efdf1dd117938f4ccc43ee6c90c02cc60ef/mlde_utils-0.3.0a7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c2/4a/9da0e166abf2cd9347ab3ead8b1b51c62befef6dbd77ba60bce2b0021af0/nbdev-2.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d2/1d/1b658dbd2b9fa9c4c9f32accbfc0205d532c8c6194dc0f2a4c0428e7128a/nodeenv-1.9.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/88/74/a88bf1b1efeae488a0c0b7bdf71429c313722d1fc0f377537fbe554e6180/pre_commit-4.2.0-py2.py3-none-any.whl
@@ -984,13 +984,14 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/58/6a/9166369a2f092bd286d24e6307de555d63616e8ddb373ebad2b5635ca4cd/ipywidgets-8.1.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/43/6a/ca128561b22b60bd5a0c4ea26649e68c8556b82bc70a0c396eebc977fe86/jupyterlab_widgets-3.0.15-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/c4/ab/a67c5f2cadc931993296fd3a68af023ade17cf83420e6bf4b1a4cfb1c175/mlde_utils-0.3.0a6-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/83/da/def5bc49b58275e87ac348bb9efdf1dd117938f4ccc43ee6c90c02cc60ef/mlde_utils-0.3.0a7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c2/4a/9da0e166abf2cd9347ab3ead8b1b51c62befef6dbd77ba60bce2b0021af0/nbdev-2.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d2/1d/1b658dbd2b9fa9c4c9f32accbfc0205d532c8c6194dc0f2a4c0428e7128a/nodeenv-1.9.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/88/74/a88bf1b1efeae488a0c0b7bdf71429c313722d1fc0f377537fbe554e6180/pre_commit-4.2.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/0a/ff/51706ba1a029d0f2df0322543793d3bf1383de9dc567d23886144cb21bef/properscoring-0.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2f/de/afa024cbe022b1b318a3d224125aa24939e99b4ff6f22e0ba639a2eaee47/pytest-8.4.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/de/b8/87cfb16045c9d4092cfcf526135d73b88101aac83bc1adcf82dfb5fd3833/pytest_env-1.1.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/db/10/979cc0da93644c260d379debb1e9ec396396a6aad05cfbe9056558903137/python_cmethods-2.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f3/40/b1c265d4b2b62b58576588510fc4d1fe60a86319c8de99fd8e9fec617d2c/virtualenv-20.31.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
@@ -5144,13 +5145,13 @@ packages:
 - pypi: ./
   name: mlde-analysis
   version: 0.5.0
-  sha256: 071b6c7ad98c3a329366fe6bf7177a9e5675329147eac472bd614c2fabd2620f
+  sha256: 551c0c57abc9bbac72536a5f014882a15a7529bc6af40007dbb89200592cb01b
   requires_dist:
   - cf-xarray
   - cmcrameri
   - cmweather
   - ipympl
-  - mlde-utils==0.3.0a6
+  - mlde-utils==0.3.0a7
   - nbdev
   - pre-commit
   - properscoring
@@ -5159,10 +5160,10 @@ packages:
   - xskillscore
   requires_python: '>=3.12'
   editable: true
-- pypi: https://files.pythonhosted.org/packages/c4/ab/a67c5f2cadc931993296fd3a68af023ade17cf83420e6bf4b1a4cfb1c175/mlde_utils-0.3.0a6-py3-none-any.whl
+- pypi: https://files.pythonhosted.org/packages/83/da/def5bc49b58275e87ac348bb9efdf1dd117938f4ccc43ee6c90c02cc60ef/mlde_utils-0.3.0a7-py3-none-any.whl
   name: mlde-utils
-  version: 0.3.0a6
-  sha256: df9eea735cac4896cccc5d0ca3b4243667fe87e0269a87a96d8d9d7a752ff6e9
+  version: 0.3.0a7
+  sha256: 20ad5ff30ae65f2a47f1c9e4c73be72e7b777605e729e343b42f405787b128a6
   requires_dist:
   - cartopy
   - cdo
@@ -6277,6 +6278,17 @@ packages:
   - setuptools ; extra == 'dev'
   - xmlschema ; extra == 'dev'
   requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/de/b8/87cfb16045c9d4092cfcf526135d73b88101aac83bc1adcf82dfb5fd3833/pytest_env-1.1.5-py3-none-any.whl
+  name: pytest-env
+  version: 1.1.5
+  sha256: ce90cf8772878515c24b31cd97c7fa1f4481cd68d588419fd45f10ecaee6bc30
+  requires_dist:
+  - pytest>=8.3.3
+  - tomli>=2.0.1 ; python_full_version < '3.11'
+  - covdefaults>=2.3 ; extra == 'testing'
+  - coverage>=7.6.1 ; extra == 'testing'
+  - pytest-mock>=3.14 ; extra == 'testing'
+  requires_python: '>=3.8'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/python-3.12.11-h9e4cc4f_0_cpython.conda
   sha256: 6cca004806ceceea9585d4d655059e951152fc774a471593d4f5138e6a54c81d
   md5: 94206474a5608243a10c92cefbe0908f

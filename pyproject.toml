@@ -21,7 +21,7 @@ dependencies = [
   "cmcrameri",
   "cmweather",
   "ipympl",
-  "mlde-utils==v0.3.0a6",
+  "mlde-utils==v0.3.0a7",
   "nbdev",
   #"netcdf4==1.7.2",
   "pre-commit",
@@ -32,7 +32,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-test = ["pytest"]
+test = ["pytest", "pytest-env"]
 dev = [{include-group = "test"}]
 
 [project.urls]
@@ -83,3 +83,7 @@ test = "pytest"
 
 [tool.black]
 extend-exclude = '^/nbs/'
+
+[tool.pytest_env]
+DERIVED_DATA="/path/to/data/derived"
+WORKDIRS_PATH="/path/to/test/workdirs"
