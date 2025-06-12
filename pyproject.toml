@@ -80,6 +80,7 @@ mlde_analysis = { path = ".", editable = true }
 
 [tool.pixi.feature.dev.tasks]
 test = "pytest"
+lint = "black . && flake8 ."
 
 [tool.black]
 extend-exclude = '^/nbs/'
