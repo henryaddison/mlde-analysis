@@ -47,7 +47,7 @@ def plot_fss(
             ds, threshold, fss_windows, grid_box_size=grid_box_size
         )
 
-        for group_label, group_da in fss_scores.groupby("model", squeeze=True):
+        for group_label, group_da in fss_scores.groupby("model"):
             group_da.plot.line(
                 x="fss_window",
                 ax=ax,
