@@ -80,10 +80,11 @@ mlde_analysis = { path = ".", editable = true }
 
 [tool.pixi.feature.dev.tasks]
 test = "pytest"
-lint = "black . && flake8 ."
+lint = "black .; flake8 ."
 
 [tool.black]
 extend-exclude = '^/nbs/'
+target-version = ["py312"]
 
 [tool.pytest_env]
 DERIVED_DATA="/path/to/data/derived"
