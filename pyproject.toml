@@ -10,29 +10,29 @@ authors = [
 ]
 description = "A package for notebooks evaluating approaches to emulate a CPM and downscale precipitation"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "cf-xarray==0.9.4",
-  "cmcrameri==1.9",
-  "cmweather==0.3.2",
-  "ipympl==0.9.7",
-  "mlde-utils==0.2.2",
-  "nbdev==2.4.2",
+  "cf-xarray",
+  "cmcrameri",
+  "cmweather",
+  "ipympl",
+  "mlde-utils==v0.3.0a8",
+  "nbdev",
   #"netcdf4==1.7.2",
-  "pre-commit==3.3.2",
-  "properscoring==0.1",
-  "python-cmethods==1.0.1",
-  "xhistogram==0.3.2",
-  "xskillscore==0.0.24",
+  "pre-commit",
+  "properscoring",
+  "python-cmethods",
+  "xhistogram",
+  "xskillscore",
 ]
 
 [dependency-groups]
-test = ["pytest==7.3.1"]
+test = ["pytest", "pytest-env"]
 dev = [{include-group = "test"}]
 
 [project.urls]
@@ -54,33 +54,38 @@ dev = {features = ["dev"], solve-group = "default"}
 
 
 [tool.pixi.dependencies]
-black = { version = "==22.10.0" }
-bottleneck = { version = "==1.3.7" }
-dask = { version = "==2023.5.1" }
+black = { version = "~=25.1.0" }
+bottleneck = { version = "*" }
+dask = { version = "*" }
 flake8 = { version = "==6.0.0" }
-iris = { version = "==3.6.0" }
-jupyterlab = { version = "==4.0.2" }
-metpy = { version = "==1.5.0" }
+iris = { version = "*" }
+jupyterlab = { version = "*" }
+metpy = { version = "*" }
 nc-time-axis = { version = "==1.4.1" }
-numpy = { version = "==1.23.4" }
-papermill = { version = "==2.3.4" }
-pint = { version = "==0.21" }
-pip = { version = "==23.1.2" }
-pysteps = { version = "==1.7.1" }
-python = { version = "==3.9.15" }
-python-cdo = { version = "==1.6.0" }
-python-dotenv = { version = "==1.0.0" }
-scikit-learn = { version = "==1.2.2" }
-scipy = { version = "==1.13.1" }
-seaborn = { version = "==0.12.2" }
-typer = { version = "==0.9.0" }
-xarray = { version = "==2023.5.0" }
+numpy = { version = "*" }
+papermill = { version = "*" }
+pint = { version = "*" }
+pysteps = { version = "*" }
+python = { version = "~=3.12.0" }
+python-cdo = { version = "*" }
+python-dotenv = { version = "*" }
+scikit-learn = { version = "*" }
+scipy = { version = "*" }
+seaborn = { version = "*" }
+typer = { version = "*" }
+xarray = { version = "*" }
 
 [tool.pixi.pypi-dependencies]
 mlde_analysis = { path = ".", editable = true }
 
 [tool.pixi.feature.dev.tasks]
 test = "pytest"
+lint = "black .; flake8 ."
 
 [tool.black]
 extend-exclude = '^/nbs/'
+target-version = ["py312"]
+
+[tool.pytest_env]
+DERIVED_DATA="/path/to/data/derived"
+WORKDIRS_PATH="/path/to/test/workdirs"

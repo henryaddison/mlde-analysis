@@ -161,7 +161,7 @@ def _plot_example(
         or ts_ds["time"].data.item() != ts[1]
     ):
         print(
-            f"{desc} sample actually  for EM{ts_ds['ensemble_member'].data.item()} on {ts_ds['time'].data.item()}"
+            f"{desc} sample actually for EM{ts_ds['ensemble_member'].data.item()} on {ts_ds['time'].data.item()}"
         )
 
     pcms = _plot_sim_example(

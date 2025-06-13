@@ -235,19 +235,19 @@ def freq_density_plot(
     ax.tick_params(axis="both", which="major")
     if diagnostics:
         text = f"""
-        # Timestamps: {pred_pr["time"].count().values}
-        # Samples: {pred_pr.count().values}
-        # Targets: {target_pr.count().values}
-        % Samples == 0: {(((pred_pr == 0).sum()/pred_pr.count()).values*100).round()}
-        % Targets == 0: {(((target_pr == 0).sum()/target_pr.count()).values*100).round()}
-        % Samples < 1e-5: {(((pred_pr < 1e-5).sum()/pred_pr.count()).values*100).round()}
-        % Targets < 1e-5: {(((target_pr < 1e-5).sum()/target_pr.count()).values*100).round()}
-        % Samples < 0.1: {(((pred_pr < 0.1).sum()/pred_pr.count()).values*100).round()}
-        % Targets < 0.1: {(((target_pr < 0.1).sum()/target_pr.count()).values*100).round()}
-        % Samples < 1: {(((pred_pr < 1).sum()/pred_pr.count()).values*100).round()}
-        % Targets < 1: {(((target_pr < 1).sum()/target_pr.count()).values*100).round()}
-        Sample max: {pred_pr.max().values.round()}
-        Target max: {target_pr.max().values.round()}
+# Timestamps: {pred_pr["time"].count().values}
+# Samples: {pred_pr.count().values}
+# Targets: {target_pr.count().values}
+% Samples == 0: {(((pred_pr == 0).sum()/pred_pr.count()).values*100).round()}
+% Targets == 0: {(((target_pr == 0).sum()/target_pr.count()).values*100).round()}
+% Samples < 1e-5: {(((pred_pr < 1e-5).sum()/pred_pr.count()).values*100).round()}
+% Targets < 1e-5: {(((target_pr < 1e-5).sum()/target_pr.count()).values*100).round()}
+% Samples < 0.1: {(((pred_pr < 0.1).sum()/pred_pr.count()).values*100).round()}
+% Targets < 0.1: {(((target_pr < 0.1).sum()/target_pr.count()).values*100).round()}
+% Samples < 1: {(((pred_pr < 1).sum()/pred_pr.count()).values*100).round()}
+% Targets < 1: {(((target_pr < 1).sum()/target_pr.count()).values*100).round()}
+Sample max: {pred_pr.max().values.round()}
+Target max: {target_pr.max().values.round()}
         """
         ax.text(0.7, 0.5, text, fontsize=8, transform=ax.transAxes)
     ax.legend()
@@ -497,8 +497,8 @@ def plot_mean_bias(ds, target_pr):
             -0.05,
             "\n".join(
                 [
-                    f"global bias={global_mean_bias_ratio.values:.1%}",
-                    f"bias mae={bias_ratio_mae.values:.1f}%",
+                    f"global bias={global_mean_bias_ratio.values:.1%}",  # noqa: E231
+                    f"bias mae={bias_ratio_mae.values:.1f}%",  # noqa: E231
                 ]
             ),
             transform=ax.transAxes,
