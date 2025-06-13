@@ -26,7 +26,7 @@ sample_configs:
         order: 11
       - label: CPMGEM_cCPM-pt1.13.1
         sample_specs:
-          - fq_model_id: pt1131/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/cpmgem-daily-pixi-cu117
+          - fq_model_id: pt1131/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/cpmgem-daily-pixi-pt1-13-1
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
