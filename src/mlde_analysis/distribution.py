@@ -91,7 +91,7 @@ def xr_hist(da, bins, **kwargs):
 def hist_dist(hist_da, target_hist_da):
     return xr.apply_ufunc(
         scipy.spatial.distance.jensenshannon,
-        hist_da,
+        hist_da.squeeze("model", drop=True),
         target_hist_da,
         input_core_dims=[["bins"], ["bins"]],  # list with one entry per arg
         # vectorize=True,
@@ -134,11 +134,10 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
 
     bins = np.histogram_bin_edges(cpm_da, bins=50)
     target_hist_da = xr_hist(cpm_da, bins=bins)
-
     model_hist_dist = (
         da.groupby("model", squeeze=False)
         .map(xr_hist, bins=bins)
-        .groupby("model")
+        .groupby("model", squeeze=False)
         .map(hist_dist, target_hist_da=target_hist_da)
         .rename("J-S distance")
     )
@@ -217,7 +216,7 @@ def plot_freq_density(
 
     if target_da is not None:
         if yscale == "log":
-            min_density = 1 / np.product(target_da.shape)
+            min_density = 1 / np.prod(target_da.shape)
             ymin = 10 ** (math.floor(math.log10(min_density))) / 2
         elif yscale == "linear":
             ymin = 0
@@ -427,7 +426,7 @@ def plot_distribution_figure(
             )
         bins = np.histogram_bin_edges([], bins=50, range=hrange)
         true_counts, bins = np.histogram(cpm_da, bins=bins, range=hrange, density=True)
-        mindensity = 1 / (np.product(cpm_da.shape))
+        mindensity = 1 / (np.prod(cpm_da.shape))
         print(mindensity)
         ymin = 10 ** (math.floor(math.log10(mindensity))) / 2
         print(ymin)

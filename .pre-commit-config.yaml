@@ -6,10 +6,10 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 25.1.0
     hooks:
       - id: black
-        language_version: python3.9
+        language_version: python3.12
         exclude: ^nbs/
   - repo: https://github.com/pycqa/flake8
     rev: '6.0.0'  # pick a git hash / tag to point to

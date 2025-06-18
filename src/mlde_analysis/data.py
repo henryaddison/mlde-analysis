@@ -4,10 +4,8 @@ import xarray as xr
 
 from mlde_utils import (
     TIME_PERIODS,
-    dataset_split_path,
-    workdir_path,
-    samples_path,
-    samples_glob,
+    DatasetMetadata,
+    EmulatorOutputMetadata,
 )
 
 from . import display
@@ -107,18 +105,25 @@ def open_samples_ds(
     num_samples,
     deterministic,
 ):
-
+    eo_meta = EmulatorOutputMetadata(fq_run_id=run_name)
     per_em_datasets = []
     for ensemble_member in ensemble_members:
-        samples_dir = samples_path(
-            workdir=workdir_path(run_name),
+        samples_dir = eo_meta.samples_path(
             checkpoint=checkpoint_id,
             input_xfm=input_xfm_key,
             dataset=dataset_name,
             split=split,
             ensemble_member=ensemble_member,
         )
-        sample_files_list = list(samples_glob(samples_dir))
+        sample_files_list = list(
+            eo_meta.samples_glob(
+                checkpoint=checkpoint_id,
+                input_xfm=input_xfm_key,
+                dataset=dataset_name,
+                split=split,
+                ensemble_member=ensemble_member,
+            )
+        )
         if len(sample_files_list) == 0:
             raise RuntimeError(f"{samples_dir} has no sample files")
 
@@ -149,9 +154,9 @@ def open_samples_ds(
 
 def open_dataset_split(dataset_name, split, ensemble_members="all"):
     if ensemble_members == "all":
-        ds = xr.open_dataset(dataset_split_path(dataset_name, split))
+        ds = xr.open_dataset(DatasetMetadata(dataset_name).split_path(split))
     else:
-        ds = xr.open_dataset(dataset_split_path(dataset_name, split)).sel(
+        ds = xr.open_dataset(DatasetMetadata(dataset_name).split_path(split)).sel(
             ensemble_member=ensemble_members
         )
     if "target_pr" in ds.data_vars:
