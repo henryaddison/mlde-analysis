@@ -21,8 +21,8 @@ EOF
 
 set -euo pipefail
 
-export WORKDIRS_PATH=/gws/nopw/j04/furflex/henrya/workdirs/cpmgem-daily
-export DERIVED_DATA=/gws/nopw/j04/bris_climdyn/henrya/bp-backups
+export WORKDIRS_PATH=/gws/nopw/j04/furflex/henrya/data/cpmgem-daily/cpmgem-paper-JAMES/workdirs/
+export DERIVED_DATA=/gws/nopw/j04/furflex/henrya/data/cpmgem-daily/cpmgem-paper-JAMES/
 
 while getopts ':h' option; do
   case "$option" in
