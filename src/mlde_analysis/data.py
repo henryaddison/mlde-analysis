@@ -104,6 +104,7 @@ def open_samples_ds(
     ensemble_members,
     num_samples,
     deterministic,
+    config_hash=None,
 ):
     eo_meta = EmulatorOutputMetadata(fq_run_id=run_name)
     per_em_datasets = []
@@ -114,6 +115,7 @@ def open_samples_ds(
             dataset=dataset_name,
             split=split,
             ensemble_member=ensemble_member,
+            config_hash=config_hash,
         )
         sample_files_list = list(
             eo_meta.samples_glob(
@@ -122,6 +124,7 @@ def open_samples_ds(
                 dataset=dataset_name,
                 split=split,
                 ensemble_member=ensemble_member,
+                config_hash=config_hash,
             )
         )
         if len(sample_files_list) == 0:
@@ -174,6 +177,9 @@ def open_concat_sample_datasets(sample_runs, split, ensemble_members, samples_pe
                 checkpoint_id=sample_src["checkpoint"],
                 dataset_name=sample_src["dataset"],
                 input_xfm_key=sample_src["input_xfm"],
+                config_hash=sample_src.get(
+                    "config_hash", None
+                ),  # Optional config hash for older samples
                 split=split,
                 ensemble_members=ensemble_members,
                 num_samples=samples_per_run,
