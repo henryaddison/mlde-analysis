@@ -9,8 +9,8 @@ dataset_configs:
     CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
     GCM: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
 split: test
-ensemble_members: ["01"] #, "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
-samples_per_run: 6
+ensemble_members: ["01", "04", "05", "06", "07", "08", "09"] # , "10", "11", "12", "13", "15"]
+samples_per_run: 1 # 6
 sample_configs:
     CPM:
       - label: CPMGEM_cCPM
@@ -34,8 +34,32 @@ sample_configs:
             variables: [pr]
         deterministic: False
         CCS: True
-        color: tab:blue
-        order: 11
+        color: tab:red
+        order: 12
+      # - label: 100-steps
+      #   sample_specs:
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+      #       checkpoint: epoch_20
+      #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+      #       config_hash: XXXX
+      #       variables: [pr]
+      #   deterministic: False
+      #   CCS: True
+      #   color: tab:purple
+      #   order: 11
+      - label: 300-steps
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+            checkpoint: epoch_20
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            config_hash: XXXX
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        color: tab:olive
+        order: 13
       - label: U-Net_cCPM
         sample_specs:
           - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
