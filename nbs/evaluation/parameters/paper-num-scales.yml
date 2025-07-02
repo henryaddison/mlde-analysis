@@ -54,7 +54,7 @@ sample_configs:
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-            config_hash: XXXX
+            config_hash: d9a0cd92359edb29
             variables: [pr]
         deterministic: False
         CCS: True
