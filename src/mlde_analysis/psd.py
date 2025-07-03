@@ -108,8 +108,8 @@ def pysteps_rapsd(pr_da, pixel_size):
 
 
 def plot_psd(target_rapsd, pred_rapsds, ax, legend_kwargs={}):
-    ax.loglog(
-        target_rapsd["freq"].data,
+    ax.plot(
+        1 / target_rapsd["freq"].data,
         target_rapsd.data,
         label="CPM",
         color="black",
@@ -120,12 +120,17 @@ def plot_psd(target_rapsd, pred_rapsds, ax, legend_kwargs={}):
 
     for pred_psd in pred_rapsds:
         da = pred_psd["data"]
-        ax.loglog(
-            da["freq"].data, da.data, label=pred_psd["label"], color=pred_psd["color"]
+        ax.plot(
+            1 / da["freq"].data,
+            da.data,
+            label=pred_psd["label"],
+            color=pred_psd["color"],
         )
 
-    ax.set_xlabel("Spatial Frequency ($km^{-1}$)")
+    ax.set_xlabel("Wavelength (km)")
     ax.set_ylabel("PSD")
+    ax.set_yscale("log")
+    # with log scale x-axis, need to override the default x-ticks
+    # ax.set_xscale("log")
+    # ax.set_xticks([0.002, 0.004, 0.008, 0.016, 0.032, 0.064])
     ax.legend(**(dict(ncols=2, fontsize="x-small") | legend_kwargs))
-    ax.tick_params(axis="both", which="minor")
-    # ax.set_xlim(1e-3, 1e-1)
