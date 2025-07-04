@@ -258,13 +258,13 @@ def plot_freq_density(
         )
 
     ax.set_yscale(yscale)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel("Freq. density")
+    ax.set_xlabel(xlabel, fontsize="small")
+    ax.set_ylabel("Freq. density", fontsize="small")
     ax.set_ylim(ymin, None)
-    ax.tick_params(axis="both", which="major")
+    ax.tick_params(axis="both", which="major", labelsize="small")
     if legend:
         ax.legend(fontsize="small")
-    ax.set_title(title)
+    ax.set_title(title, fontsize="small")
 
 
 def plot_mean_biases(mean_biases, axd, colorbar=False, **plot_map_kwargs):
@@ -339,7 +339,7 @@ def plot_biases(biases, axes, fig, colorbar=True, **plot_map_kwargs):
             add_colorbar=False,
             **(dict(style="prBias") | plot_map_kwargs),
         )
-        ax.set_title(label, fontsize="medium")
+        ax.set_title(label, fontsize="small")
 
         ax.text(
             0.99,
@@ -366,7 +366,8 @@ def plot_biases(biases, axes, fig, colorbar=True, **plot_map_kwargs):
             extend="both",
             aspect=40,
         )
-        cb.set_label(bias_da.name)
+        cb.set_label(bias_da.name, fontsize="small")
+        cb.ax.tick_params(labelsize="small")
 
 
 def plot_distribution_figure(
@@ -419,7 +420,7 @@ def plot_distribution_figure(
     spec = np.concatenate([dist_spec, meanb_spec, stddevb_spec], axis=0)
     axd = fig.subplot_mosaic(
         spec,
-        gridspec_kw=dict(height_ratios=[3, 2, 2]),
+        gridspec_kw=dict(height_ratios=[4, 2, 2]),
         per_subplot_kw={
             ak: {"projection": cp_model_rotated_pole}
             for ak in meanb_axes_keys + stddevb_axes_keys
