@@ -25,10 +25,12 @@ def pretty_table(
 ) -> None:
     df = da.to_dataframe(dim_order=dim_order)
     style = df.style
-    style = style.format(precision=round)
     style = style.set_table_attributes("style='display:inline'")
+    style = style.format(str(f"{{:.{round}g}}").format)
     if caption is not None:
         style = style.set_caption(caption)
+
     if render:
         IPython.display.display_html(style.to_html(), raw=True)
+
     return style.to_html()
