@@ -49,3 +49,13 @@ for nb in lo-data-figures; do
   echo $nb
   queue_run_notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper-lo-data.yml;
 done
+
+# supplementary work
+
+# number of diffusion steps in sampling
+
+
+for nb in distribution; do
+  echo $nb
+  queue_run_notebook nbs/evaluation/${nb}.ipynb ${output_base_dirpath} nbs/evaluation/parameters/paper-num-scales.yml;
+done
