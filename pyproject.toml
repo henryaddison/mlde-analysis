@@ -57,7 +57,7 @@ dev = {features = ["dev"], solve-group = "default"}
 black = { version = "~=25.1.0" }
 bottleneck = { version = "*" }
 dask = { version = "*" }
-flake8 = { version = "==6.0.0" }
+flake8 = { version = "==6.1.0" }
 iris = { version = "*" }
 jupyterlab = { version = "*" }
 metpy = { version = "*" }

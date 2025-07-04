@@ -90,7 +90,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/ffmpeg-7.1.1-gpl_h127656b_906.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/fftw-3.3.10-nompi_hf1063bd_110.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/findlibs-0.0.5-pyhd8ed1ab_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/flake8-6.0.0-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/flake8-6.1.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexcache-0.3-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexparser-0.4-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2
@@ -350,9 +350,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/py-opencv-4.11.0-qt6_py312hcbe996b_607.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-20.0.0-py312h7900ff3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-core-20.0.0-py312h01725c0_0_cpu.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pycodestyle-2.10.0-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/pycodestyle-2.11.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pycparser-2.22-pyh29332c3_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pyflakes-3.0.1-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/pyflakes-3.1.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pygments-2.19.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.2.3-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pyproj-3.7.1-py312he630544_0.conda
@@ -588,7 +588,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/ffmpeg-7.1.1-gpl_h127656b_906.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/fftw-3.3.10-nompi_hf1063bd_110.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/findlibs-0.0.5-pyhd8ed1ab_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/flake8-6.0.0-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/flake8-6.1.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexcache-0.3-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexparser-0.4-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2
@@ -848,9 +848,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/py-opencv-4.11.0-qt6_py312hcbe996b_607.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-20.0.0-py312h7900ff3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-core-20.0.0-py312h01725c0_0_cpu.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pycodestyle-2.10.0-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/pycodestyle-2.11.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pycparser-2.22-pyh29332c3_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pyflakes-3.0.1-pyhd8ed1ab_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/pyflakes-3.1.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pygments-2.19.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.2.3-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pyproj-3.7.1-py312he630544_0.conda
@@ -2306,20 +2306,20 @@ packages:
   - pkg:pypi/findlibs?source=hash-mapping
   size: 12567
   timestamp: 1682424047103
-- conda: https://conda.anaconda.org/conda-forge/noarch/flake8-6.0.0-pyhd8ed1ab_0.conda
-  sha256: 4a988f1b1bb9c58b1ee58220e880aa30f346ca193e3fb0d48607f3d961bb5e20
-  md5: e9345ba05d71742412b8aa6992ad9457
+- conda: https://conda.anaconda.org/conda-forge/noarch/flake8-6.1.0-pyhd8ed1ab_0.conda
+  sha256: 2269c9a35b72bed36e38b2669c2d32778563bc489af4b6fa6530884affb24cee
+  md5: b9392b56db13d759ccb4962f2ff337c0
   depends:
   - mccabe >=0.7.0,<0.8.0
-  - pycodestyle >=2.10.0,<2.11.0
-  - pyflakes >=3.0.0,<3.1.0
+  - pycodestyle >=2.11.0,<2.12.0
+  - pyflakes >=3.1.0,<3.2.0
   - python >=3.8.1
   license: MIT
   license_family: MIT
   purls:
   - pkg:pypi/flake8?source=hash-mapping
-  size: 109426
-  timestamp: 1669396799974
+  size: 111824
+  timestamp: 1690833752801
 - conda: https://conda.anaconda.org/conda-forge/noarch/flexcache-0.3-pyhd8ed1ab_1.conda
   sha256: acdb7b73d84268773fcc8192965994554411edc488ec3447925a62154e9d3baa
   md5: f1e618f2f783427019071b14a111b30d
@@ -5145,7 +5145,7 @@ packages:
 - pypi: ./
   name: mlde-analysis
   version: 0.5.0
-  sha256: 0f6ce4d6c58485c4ccf10945e254c777b71b11ab47e8931b651e72205c7b53c8
+  sha256: e47cbd6e693212ebfd4091263268d329f1da8a8c738d21cdf8c5d77cd4a6fa30
   requires_dist:
   - cf-xarray
   - cmcrameri
@@ -6117,17 +6117,17 @@ packages:
   - pkg:pypi/pyarrow?source=hash-mapping
   size: 4658639
   timestamp: 1746000738593
-- conda: https://conda.anaconda.org/conda-forge/noarch/pycodestyle-2.10.0-pyhd8ed1ab_0.conda
-  sha256: 045624129b3a1cb288527353398af14479a58bee29d42498dc23a9b047f8d042
-  md5: 89843e4cc99c6a3fe5f4c86994cc8410
+- conda: https://conda.anaconda.org/conda-forge/noarch/pycodestyle-2.11.1-pyhd8ed1ab_0.conda
+  sha256: 1bd1199c16514cfbc92c0fdc143a00fc55a3deaf800a62a09ac79294606e567e
+  md5: 29ff12b36df16bb66fdccd4206aaebfb
   depends:
-  - python >=3.6
+  - python >=3.8
   license: MIT
   license_family: MIT
   purls:
   - pkg:pypi/pycodestyle?source=hash-mapping
-  size: 42519
-  timestamp: 1669306964956
+  size: 34318
+  timestamp: 1697203012487
 - conda: https://conda.anaconda.org/conda-forge/noarch/pycparser-2.22-pyh29332c3_1.conda
   sha256: 79db7928d13fab2d892592223d7570f5061c192f27b9febd1a418427b719acc6
   md5: 12c566707c80111f9799308d9e265aef
@@ -6139,17 +6139,17 @@ packages:
   purls: []
   size: 110100
   timestamp: 1733195786147
-- conda: https://conda.anaconda.org/conda-forge/noarch/pyflakes-3.0.1-pyhd8ed1ab_0.conda
-  sha256: 1a6fd59626b360ef498d8cd61b4a8a3ef771a385f97c6f574fccaa100a8bb99e
-  md5: 44b7d77d96560c93e0e11437a3c35254
+- conda: https://conda.anaconda.org/conda-forge/noarch/pyflakes-3.1.0-pyhd8ed1ab_0.conda
+  sha256: 1a362a6abceeb1d0f5a807f22bd115135641a79c2b2bd1c52718a73c5bfe67e1
+  md5: 43e1b132792d08247fa00ba7ba471403
   depends:
   - python ==2.7.*|>=3.5
   license: MIT
   license_family: MIT
   purls:
   - pkg:pypi/pyflakes?source=hash-mapping
-  size: 57427
-  timestamp: 1669320032089
+  size: 58478
+  timestamp: 1690656458418
 - conda: https://conda.anaconda.org/conda-forge/noarch/pygments-2.19.1-pyhd8ed1ab_0.conda
   sha256: 28a3e3161390a9d23bc02b4419448f8d27679d9e2c250e29849e37749c8de86b
   md5: 232fb4577b6687b2d503ef8e254270c9
