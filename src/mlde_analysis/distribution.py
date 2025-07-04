@@ -341,6 +341,22 @@ def plot_biases(biases, axes, colorbar=True, **plot_map_kwargs):
         )
         ax.set_title(label, fontsize="medium")
 
+        ax.text(
+            0.99,
+            0.99,
+            f"{rms(bias_da).values.item():.1f}",
+            fontsize="x-small",
+            ha="right",
+            va="top",
+            transform=ax.transAxes,
+            bbox=dict(
+                facecolor="white",
+                alpha=0.75,
+                edgecolor="none",
+                boxstyle="round,pad=0.1",
+            ),
+        )
+
     if colorbar:
         cb = plt.colorbar(
             pcm,
