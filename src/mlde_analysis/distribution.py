@@ -12,6 +12,15 @@ from mlde_analysis import plot_map
 
 QUANTILES = 1 - np.power(10.0, np.arange(-2, -10, -1))
 PER_GRIDBOX_QUANTILES = 1 - np.power(10.0, np.arange(-2, -4, -1))
+DIST_THRESHOLDS = defaultdict(
+    list,
+    {
+        "pr": [0.1, 25, 75, 125],
+        "relhum150cm": [35, 100],
+        "tmean150cm": [273, 300],
+        "swbgt": [5, 25],
+    },
+)
 
 
 def mean_bias(sample_da, cpm_da, normalize=False):
@@ -58,12 +67,19 @@ def std_bias(sample_da, cpm_da, normalize=False):
         )
 
 
+def rms(da: xr.DataArray) -> xr.DataArray:
+    """
+    Compute the root mean square of a DataArray.
+    """
+    return np.sqrt(np.mean(da**2))
+
+
 def rms_mean_bias(sample_da, cpm_da, normalize=False):
-    return np.sqrt((mean_bias(sample_da, cpm_da, normalize=normalize) ** 2).mean())
+    return rms(mean_bias(sample_da, cpm_da, normalize=normalize))
 
 
 def rms_std_bias(sample_da, cpm_da, normalize=False):
-    return np.sqrt((std_bias(sample_da, cpm_da, normalize=normalize) ** 2).mean())
+    return rms(std_bias(sample_da, cpm_da, normalize=normalize))
 
 
 def normalized_mean_bias(sample_da, cpm_da):
@@ -96,17 +112,6 @@ def hist_dist(hist_da, target_hist_da):
         input_core_dims=[["bins"], ["bins"]],  # list with one entry per arg
         # vectorize=True,
     ).rename("JS_distance")
-
-
-DIST_THRESHOLDS = defaultdict(
-    list,
-    {
-        "pr": [0.1, 25, 75, 125],
-        "relhum150cm": [35, 100],
-        "tmean150cm": [273, 300],
-        "swbgt": [5, 25],
-    },
-)
 
 
 def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
@@ -370,7 +375,6 @@ def plot_distribution_figure(
     dist_spec = np.array(["Density"] * meanb_spec.shape[1]).reshape(1, -1)
 
     spec = np.concatenate([dist_spec, meanb_spec, stddevb_spec], axis=0)
-    print(spec)
     axd = fig.subplot_mosaic(
         spec,
         gridspec_kw=dict(height_ratios=[3, 2, 2]),
