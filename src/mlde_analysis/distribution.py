@@ -327,6 +327,32 @@ def plot_std_biases(std_biases, axd, colorbar=True, **plot_map_kwargs):
     return stddevb_axes
 
 
+def plot_biases(biases, axes, colorbar=True, **plot_map_kwargs):
+    for i, bias in enumerate(biases):
+        label = bias["label"]
+        bias_da = bias["data"]
+        ax = axes[i]
+        pcm = plot_map(
+            bias_da,
+            ax,
+            title=f"{label}",
+            add_colorbar=False,
+            **(dict(style="prBias") | plot_map_kwargs),
+        )
+        ax.set_title(label, fontsize="medium")
+
+    if colorbar:
+        cb = plt.colorbar(
+            pcm,
+            ax=axes,
+            location="bottom",
+            shrink=0.8,
+            extend="both",
+            aspect=40,
+        )
+        cb.set_label(bias_da.name)
+
+
 def plot_distribution_figure(
     fig,
     hist_das,
@@ -397,8 +423,9 @@ def plot_distribution_figure(
         va="bottom",
     )
 
-    axes = plot_mean_biases(mean_biases, axd, **bias_kwargs)
-    axes[0].annotate(
+    meanb_axes = [axd[f'meanb {bias["label"]}'] for bias in mean_biases]
+    plot_biases(mean_biases, meanb_axes, **bias_kwargs)
+    meanb_axes[0].annotate(
         "b.",
         xy=(0.04, 1.0),
         xycoords=("figure fraction", "axes fraction"),
@@ -407,8 +434,9 @@ def plot_distribution_figure(
         va="bottom",
     )
 
-    axes = plot_std_biases(std_biases, axd, **bias_kwargs)
-    axes[0].annotate(
+    stdb_axes = [axd[f'stddevb {bias["label"]}'] for bias in std_biases]
+    plot_biases(std_biases, stdb_axes, **bias_kwargs)
+    stdb_axes[0].annotate(
         "c.",
         xy=(0.04, 1.0),
         xycoords=("figure fraction", "axes fraction"),
