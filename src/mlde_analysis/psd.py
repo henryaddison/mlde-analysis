@@ -130,7 +130,8 @@ def plot_psd(target_rapsd, pred_rapsds, ax, legend_kwargs={}):
     ax.set_xlabel("Wavelength (km)")
     ax.set_ylabel("PSD")
     ax.set_yscale("log")
-    # with log scale x-axis, need to override the default x-ticks
     # ax.set_xscale("log")
+    # with log scale, spatial freqency  x-axis, need to override the default x-ticks
+    # ax.set_xlabel("Spatial Frequency ($km^{-1}$)")
     # ax.set_xticks([0.002, 0.004, 0.008, 0.016, 0.032, 0.064])
     ax.legend(**(dict(ncols=2, fontsize="x-small") | legend_kwargs))
