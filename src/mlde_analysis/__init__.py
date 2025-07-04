@@ -167,12 +167,14 @@ SUBREGIONS = {
 }
 
 
-def create_map_fig(grid_spec, width=None, height=None):
+def create_map_fig(
+    grid_spec, width=None, height=None, projection=cp_model_rotated_pole
+):
     if width is None:
         width = len(grid_spec[0]) * 3.5
     if height is None:
         height = len(grid_spec) * 3.5
-    subplot_kw = dict(projection=cp_model_rotated_pole)
+    subplot_kw = dict(projection=projection)
     return plt.subplot_mosaic(
         grid_spec,
         figsize=(width, height),
