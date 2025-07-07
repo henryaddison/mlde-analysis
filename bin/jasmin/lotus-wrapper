@@ -3,6 +3,9 @@
 
 source ~/.bashrc
 
+hostname
+free -m
+
 set -euo pipefail
 
 set -x
