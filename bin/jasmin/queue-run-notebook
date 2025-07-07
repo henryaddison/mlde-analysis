@@ -5,42 +5,4 @@ set -euo pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-s_account=furflex
-s_mem=128G
-s_partition=standard
-s_qos=standard
-s_time=02:00:00
-s_export=
-
-while getopts ":a:e:m:p:q:t:" opt; do
-  case ${opt} in
-    a)
-      s_account=${OPTARG}
-      ;;
-    e)
-      s_export=${OPTARG}
-      ;;
-    m)
-      s_mem=${OPTARG}
-      ;;
-    p)
-      s_partition=${OPTARG}
-      ;;
-    q)
-      s_qos=${OPTARG}
-      ;;
-    t)
-      s_time=${OPTARG}
-      ;;
-    \? )
-      # echo "Invalid option: -${OPTARG}" 1>&2
-     ;;
-    : )
-      echo "Invalid option: $OPTARG requires an argument" 1>&2
-      exit 1
-      ;;
-  esac
-done
-shift "$((OPTIND -1))"
-
-sbatch --parsable --chdir=/home/users/vf20964/code/mlde-analysis --account=${s_account} --partition=${s_partition} --qos=${s_qos} --time=${s_time} --mem=${s_mem} $([ -n "$s_export" ] && echo "--export=${s_export}") -- ${SCRIPT_DIR}/lotus-wrapper sh bin/run-notebook $@
+${SCRIPT_DIR}/queue-job sh bin/run-notebook $@
