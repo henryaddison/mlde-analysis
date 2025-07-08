@@ -9,8 +9,8 @@ dataset_configs:
     CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
     # GCM: bham64_gcm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
 split: test
-ensemble_members: ["01"] #, "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
-samples_per_run: 1
+ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
+samples_per_run: 6
 sample_configs:
     CPM:
       - label: CPMGEM_cCPM
@@ -24,17 +24,17 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 11
-      - label: 10-steps
+      - label: 300-steps
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-            config_hash: eb4e386f56700146
+            config_hash: d9a0cd92359edb29
             variables: [pr]
         deterministic: False
         CCS: True
-        color: tab:red
+        color: tab:olive
         order: 12
       - label: 100-steps
         sample_specs:
@@ -47,19 +47,19 @@ sample_configs:
         deterministic: False
         CCS: True
         color: tab:purple
-        order: 11
-      - label: 300-steps
+        order: 13
+      - label: 10-steps
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-            config_hash: d9a0cd92359edb29
+            config_hash: eb4e386f56700146
             variables: [pr]
         deterministic: False
         CCS: True
-        color: tab:olive
-        order: 13
+        color: tab:red
+        order: 14
 sample_configs_at_60km:
     - label: CPMGEM_GCM@60km
       sample_specs:
@@ -110,5 +110,5 @@ example_percentiles:
 example_overrides:
     CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
     # GCM: {}
-examples_sample_idxs: 1
+examples_sample_idxs: [2,5]
 niterations: 30
