@@ -1,3 +1,4 @@
+import cf_xarray as cfxr  # noqa: F401
 import cmweather  # noqa
 import string
 import matplotlib
@@ -348,12 +349,8 @@ def qq_plot(
 
 
 def sorted_em_time_by_mean(da):
-    em_time_da = da.stack(em_time=["ensemble_member", "time"])
-    # std = em_time_ds["target_pr"].groupby("em_time").std(...)
-    # std = seasonal_ds["target_pr"].std(dim=["grid_longitude", "grid_latitude"])#/merged_ds.sel(source="CPM")["target_pr"].mean(dim=["grid_longitude", "grid_latitude"])
-    # std_sorted_em_time = std.sortby(-std)["em_time"].values
-    mean = em_time_da.groupby("em_time").mean(...)
-    return mean.sortby(-mean)["em_time"].values
+    mean = da.cf.mean(["X", "Y"]).stack(em_time=["ensemble_member", "time"])
+    return mean["em_time"].sortby(-mean).values
 
 
 def distribution_figure(
