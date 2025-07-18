@@ -39,7 +39,7 @@ sample_configs:
         CCS: False
       - label: cCPM BCSDv1-ws3-per-tp
         sample_specs:
-          - fq_model_id: bcsd-v1/ukcp_local_pr_12em bham64_ccpm-4x_12em_linpr_pr-ws3
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
             checkpoint: epoch-0
             input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
             dataset: bham64_ccpm-4x_12em_linpr_pr
@@ -51,7 +51,7 @@ sample_configs:
         CCS: False
       - label: cCPM BCSDv2-ws3-per-tp
         sample_specs:
-          - fq_model_id: bcsd-v2/ukcp_local_pr_12em bham64_ccpm-4x_12em_linpr_pr-ws3
+          - fq_model_id: bcsd-v2/ukcp_local_pr_12em-ws3
             checkpoint: epoch-0
             input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
             dataset: bham64_ccpm-4x_12em_linpr_pr
