@@ -115,6 +115,9 @@ def hist_dist(hist_da, target_hist_da):
 
 
 def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
+    nan_count = (
+        np.isnan(da).groupby("model", squeeze=False).sum(...).rename(f"NaN Count")
+    )
     rms_mean_biases = (
         da.groupby("model", squeeze=False)
         .map(rms_mean_bias, cpm_da=cpm_da, normalize=False)
@@ -172,6 +175,7 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
 
     metrics_ds = xr.merge(
         [
+            nan_count,
             rms_mean_biases.round(2),
             rms_std_biases.round(2),
             relative_rms_mean_biases.round(2),
