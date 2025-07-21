@@ -173,7 +173,8 @@ def _plot_example(
         tsi == 0,
         style_prefix=style_prefix,
     )
-
+    # ensure that input_pcm as returned is defined even if no inputs are plotted
+    input_pcm = None
     for input_idx, input_var in enumerate(inputs):
         ax = axes[tsi][n_vars + bilinear_present + input_idx]
         input_pcm = _plot_input(ax, ts_ds[input_var], input_limits[input_var], tsi == 0)
