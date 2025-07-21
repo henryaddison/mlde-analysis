@@ -49,18 +49,18 @@ sample_configs:
         order: 1
         UQ: False
         CCS: False
-      # - label: cCPM BCSDv2-ws3-per-tp
-      #   sample_specs:
-      #     - fq_model_id: bcsd-v2/ukcp_local_pr_12em-ws3
-      #       checkpoint: epoch-0
-      #       input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
-      #       dataset: bham64_ccpm-4x_12em_linpr_pr
-      #       variables: [pr]
-      #   deterministic: True
-      #   color: tab:brown
-      #   order: 1
-      #   UQ: False
-      #   CCS: False
+      - label: cCPM BCSDv2-ws3-per-tp
+        sample_specs:
+          - fq_model_id: bcsd-v2/ukcp_local_pr_12em-ws3
+            checkpoint: epoch-0
+            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+            dataset: bham64_ccpm-4x_12em_linpr_pr
+            variables: [pr]
+        deterministic: True
+        color: tab:brown
+        order: 1
+        UQ: False
+        CCS: False
 sample_configs_at_60km: []
 dataset_configs_at_60km:
     CPM: bham64_ccpm-60km_12em_pr_pr
