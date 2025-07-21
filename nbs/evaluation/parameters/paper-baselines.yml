@@ -46,9 +46,9 @@ sample_configs:
         order: 0
         UQ: False
         CCS: False
-      - label: cCPM BCSD
+      - label: cCPM BCSDv1-per-tp
         sample_specs:
-          - fq_model_id: bcsd/ukcp_local_pr_12em
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
             checkpoint: epoch-0
             input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
             dataset: bham64_ccpm-4x_12em_linpr_pr
