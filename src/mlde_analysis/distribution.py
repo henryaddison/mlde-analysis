@@ -176,11 +176,11 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
     metrics_ds = xr.merge(
         [
             nan_count,
-            rms_mean_biases.round(2),
-            rms_std_biases.round(2),
-            relative_rms_mean_biases.round(2),
-            relative_rms_std_biases.round(2),
-            model_hist_dist.round(4),
+            rms_mean_biases,
+            rms_std_biases,
+            relative_rms_mean_biases,
+            relative_rms_std_biases,
+            model_hist_dist,
         ]
     )
 
