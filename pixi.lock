@@ -5145,7 +5145,7 @@ packages:
 - pypi: ./
   name: mlde-analysis
   version: 0.5.0
-  sha256: e47cbd6e693212ebfd4091263268d329f1da8a8c738d21cdf8c5d77cd4a6fa30
+  sha256: 55fae022684a1f32959b9000fa6bf6e24962fb49b0a055e712f1fdfca282feb1
   requires_dist:
   - cf-xarray
   - cmcrameri
@@ -5158,6 +5158,7 @@ packages:
   - python-cmethods
   - xhistogram
   - xskillscore
+  - statsmodels
   requires_python: '>=3.12'
   editable: true
 - pypi: https://files.pythonhosted.org/packages/3c/bb/23032921661edc76562c411654a76f84635abf138100f14bfa9937794ae9/mlde_utils-0.3.0a9-py3-none-any.whl

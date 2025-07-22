@@ -28,7 +28,7 @@ dependencies = [
   "properscoring",
   "python-cmethods",
   "xhistogram",
-  "xskillscore",
+  "xskillscore", "statsmodels",
 ]
 
 [dependency-groups]
