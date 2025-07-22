@@ -13,7 +13,7 @@ ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "
 samples_per_run: 6
 sample_configs:
     CPM:
-      - label: CPMGEM_cCPM
+      - label: 1000-steps
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
@@ -111,4 +111,5 @@ example_overrides:
     CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
     # GCM: {}
 examples_sample_idxs: [2,5]
+example_inputs: []
 niterations: 30
