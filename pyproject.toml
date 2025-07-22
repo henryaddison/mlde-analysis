@@ -34,6 +34,7 @@ dependencies = [
 [dependency-groups]
 test = ["pytest", "pytest-env"]
 dev = [{include-group = "test"}]
+slurm = ["simple_slurm"]
 
 [project.urls]
 "Homepage" = "https://github.com/henryaddison/mlde-analysis"
@@ -49,6 +50,7 @@ platforms = ["linux-64"]
 [tool.pixi.environments]
 default = {features = [], solve-group = "default"}
 dev = {features = ["dev"], solve-group = "default"}
+slurm = {features = ["slurm"], solve-group = "default"}
 # Create a custom environment which only has the `lint` feature
 # lint = {features = ["lint"], no-default-feature = true}
 
