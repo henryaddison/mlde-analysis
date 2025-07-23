@@ -12,6 +12,17 @@ dataset_configs:
     CPM: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr
 sample_configs:
     CPM:
+      - label: CPMGEM_cCPM 12em 3TP
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+            checkpoint: epoch_20
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        color: tab:blue
+        order: 10
       # - label: CPMGEM_cCPM 1em 3TP
       #   sample_specs:
       #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV
