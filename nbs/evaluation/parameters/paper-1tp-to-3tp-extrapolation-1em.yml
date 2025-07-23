@@ -1,0 +1,36 @@
+desc: |
+    Comparison of diffusion models trained on just 1 ensemble member and one time period vs 1 ensemble member and three time periods
+    Test split
+    12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
+    Compare techniques: diffusion, u-net, bilinear
+
+    Evaluated on all 3 time periods but just 1 ensemble member
+split: test
+ensemble_members: ["01"]
+samples_per_run: 6
+dataset_configs:
+    CPM: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr
+sample_configs:
+    CPM:
+      # - label: CPMGEM_cCPM 1em 3TP
+      #   sample_specs:
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV
+      #       checkpoint: epoch_160
+      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+      #       input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-stan
+      #       variables: [pr]
+      #   deterministic: False
+      #   Samples: True
+      #   color: tab:orange
+      #   order: 20
+      - label: CPMGEM_ld_cCPM 1em 1tp
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+            checkpoint: epoch_300
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
+            variables: [pr]
+        deterministic: False
+        Samples: True
+        color: tab:red
+        order: 15
