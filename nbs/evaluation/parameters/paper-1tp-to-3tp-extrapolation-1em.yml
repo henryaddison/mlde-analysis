@@ -18,6 +18,7 @@ sample_configs:
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
             checkpoint: epoch_300
+            config_hash: 36f1d4f988b7e2c0
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
             input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
             variables: [pr]
@@ -29,6 +30,7 @@ sample_configs:
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV
             checkpoint: epoch_120
+            config_hash: 8a88ee169ecf997e
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
             input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-stan
             variables: [pr]
