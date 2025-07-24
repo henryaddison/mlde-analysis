@@ -16,7 +16,18 @@ ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "
 samples_per_run: 1 # 6
 sample_configs:
     CPM:
-      - label: CPMGEM_cCPM 12em 3TP
+      - label: cCPM 1em 3TP
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV
+            checkpoint: epoch_160
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-stan
+            variables: [pr]
+        deterministic: False
+        Samples: True
+        color: tab:orange
+        order: 10
+      - label: cCPM 12em 3TP
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
             checkpoint: epoch_20
@@ -26,19 +37,8 @@ sample_configs:
         deterministic: False
         CCS: True
         color: tab:blue
-        order: 10
-      # - label: CPMGEM_cCPM 1em 3TP
-      #   sample_specs:
-      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV
-      #       checkpoint: epoch_160
-      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-      #       input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-stan
-      #       variables: [pr]
-      #   deterministic: False
-      #   Samples: True
-      #   color: tab:orange
-      #   order: 15
-      - label: CPMGEM_ld_cCPM 1em 1TP
+        order: 15
+      - label: cCPM 1em 1TP
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
             checkpoint: epoch_300
