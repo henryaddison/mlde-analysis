@@ -5,8 +5,6 @@ desc: |
     Compare techniques: diffusion, u-net, bilinear
 
     Evaluated on all 3 time periods but just 1 ensemble member
-
-    <span style="color:red">!!!!NB single sample per emulator!!!!</span>
 split: test
 ensemble_members: ["01"]
 samples_per_run: 6
