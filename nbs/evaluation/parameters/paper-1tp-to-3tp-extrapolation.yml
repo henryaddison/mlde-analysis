@@ -4,7 +4,7 @@ desc: |
     12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
     Compare techniques: diffusion, u-net, bilinear
 
-    Evaluated on all 3 time periods but just 1 ensemble member
+    Evaluated on all 3 time periods and all 12 ensemble members
 
     <span style="color:red">!!!!NB single sample per emulator!!!!</span>
 split: test
@@ -14,17 +14,18 @@ dataset_configs:
     CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
 sample_configs:
     CPM:
-      # - label: cCPM 12em 1TP # TODO: train this model
-      #   sample_specs:
-      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV-historic
-      #       checkpoint: epoch_XXX
-      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-      #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan-historic
-      #       variables: [pr]
-      #   deterministic: False
-      #   Samples: True
-      #   color: tab:green
-      #   order: 10
+      - label: cCPM 12em 1TP
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV-historic
+            checkpoint: epoch_60
+            config_hash: 80e58ae81850e3a9
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan-historic
+            variables: [pr]
+        deterministic: False
+        Samples: True
+        color: tab:green
+        order: 10
       - label: cCPM 12em 3TP
         sample_specs:
           - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV

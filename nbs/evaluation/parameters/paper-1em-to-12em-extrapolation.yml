@@ -37,18 +37,18 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 15
-      - label: cCPM 1em 1TP
-        sample_specs:
-          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
-            checkpoint: epoch_300
-            config_hash: 36f1d4f988b7e2c0
-            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-            input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
-            variables: [pr]
-        deterministic: False
-        Samples: True
-        color: tab:red
-        order: 20
+      # - label: cCPM 1em 1TP
+      #   sample_specs:
+      #     - fq_model_id: score-sde/subvpsde/ukcp_local_pr_1em_cncsnpp_continuous/bham-4x_1em_pSTV_lowdata
+      #       checkpoint: epoch_300
+      #       config_hash: 36f1d4f988b7e2c0
+      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+      #       input_xfm: bham64_ccpm-4x_1em_psl-sphum4th-temp4th-vort4th_pr-historic-stan
+      #       variables: [pr]
+      #   deterministic: False
+      #   Samples: True
+      #   color: tab:red
+      #   order: 20
 example_percentiles:
   CPM:
     DJF Wet:
