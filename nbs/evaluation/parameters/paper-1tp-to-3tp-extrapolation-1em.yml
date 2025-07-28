@@ -22,6 +22,7 @@ sample_configs:
             variables: [pr]
         deterministic: False
         Samples: True
+        CCS: True
         color: tab:red
         order: 10
       - label: cCPM 1em 3TP
@@ -34,6 +35,7 @@ sample_configs:
             variables: [pr]
         deterministic: False
         Samples: True
+        CCS: True
         color: tab:orange
         order: 15
       - label: cCPM 12em 3TP
