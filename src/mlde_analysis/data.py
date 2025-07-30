@@ -1,4 +1,5 @@
 import importlib
+import numpy as np
 import pandas as pd
 import xarray as xr
 
@@ -17,6 +18,7 @@ def prep_eval_data(
     derived_var_configs,
     eval_vars,
     split,
+    exclude_days,
     ensemble_members,
     samples_per_run,
 ):
@@ -59,7 +61,18 @@ def prep_eval_data(
         ds = attach_eval_coords(ds)
 
         ds = attach_derived_variables(ds, derived_var_configs)
-
+        if exclude_days > 0:
+            # WARNING: this exclusion logic is designed for random season split strategy
+            # TODO: make this exclusion depend on the split strategy
+            # Exclude the first n days of each season to avoid risks of data
+            # leakage from training set via autocorrelation
+            doy_whitelist = np.concat(
+                [
+                    (np.arange(60 + i * 90 + exclude_days, 60 + i * 90 + 90) % 360) + 1
+                    for i in range(4)
+                ]
+            )
+            ds = ds.where(ds["time.dayofyear"].isin(doy_whitelist), drop=True)
         merged_ds[source] = ds
 
     return merged_ds, models

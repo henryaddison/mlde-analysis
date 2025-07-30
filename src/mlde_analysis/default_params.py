@@ -3,6 +3,7 @@ dataset_configs = {
     "CPM": "demo-ccpm_pr",
     "GCM": "demo-gcm_pr",
 }
+exclude_days = 0  # Number of days to exclude from each start of each season
 split = "val"
 ensemble_members = [
     "01",
