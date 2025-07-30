@@ -374,6 +374,26 @@ def plot_biases(biases, axes, fig, colorbar=True, **plot_map_kwargs):
         cb.ax.tick_params(labelsize="small")
 
 
+def plot_freq_density_figure(pred_da, cpm_da, modellabel2spec, fig):
+    hist_data = sorted(
+        map(
+            lambda modelgp: dict(
+                data=modelgp[1].squeeze("model"),
+                label=modelgp[0],
+                color=modellabel2spec[modelgp[0]]["color"],
+            ),
+            pred_da.groupby("model", squeeze=False),
+        ),
+        key=lambda x: modellabel2spec[x["label"]]["order"],
+    )
+
+    axd = fig.subplot_mosaic([["Density"]])
+    ax = axd["Density"]
+    plot_freq_density(hist_data, ax=ax, target_da=cpm_da, linewidth=1, yscale="log")
+
+    return ax
+
+
 def plot_distribution_figure(
     fig,
     hist_das,
