@@ -21,17 +21,11 @@ class LoadEvalData(Magics):
             samples_per_run=self.shell.user_ns["samples_per_run"],
         )
 
-        cpm_das = {
-            var: eval_ds["CPM"][f"target_{var}"].rename(f"cpm_{var}")
-            for var in eval_vars
-        }
+        cpm_das = {var: eval_ds["CPM"][f"target_{var}"] for var in eval_vars}
 
         pred_das = {
             var: xr.concat(
-                [
-                    eval_ds[source][f"pred_{var}"]
-                    for source, source_models in models.items()
-                ],
+                [ds[f"pred_{var}"] for ds in eval_ds.values()],
                 dim="model",
             )
             for var in eval_vars
@@ -43,7 +37,7 @@ class LoadEvalData(Magics):
             model_label: {"source": source} | model_spec
             for source, source_models in models.items()
             for model_label, model_spec in source_models.items()
-        }
+        } | {"CPM": {"source": "CPM", "color": "black"}}
 
         return eval_ds, models, cpm_das, pred_das, var_das, modellabel2spec
 
