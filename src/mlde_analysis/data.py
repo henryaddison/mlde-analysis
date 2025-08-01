@@ -72,7 +72,7 @@ def prep_eval_data(
                     for i in range(4)
                 ]
             )
-            ds = ds.where(ds["time.dayofyear"].isin(doy_whitelist), drop=True).load()
+            ds = ds.sel(time=ds.time.dt.dayofyear.isin(doy_whitelist))
         merged_ds[source] = ds
 
     return merged_ds, models
