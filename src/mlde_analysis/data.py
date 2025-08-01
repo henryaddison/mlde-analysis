@@ -68,11 +68,11 @@ def prep_eval_data(
             # leakage from training set via autocorrelation
             doy_whitelist = np.concat(
                 [
-                    (np.arange(60 + i * 90 + exclude_days, 60 + i * 90 + 90) % 360) + 1
+                    (np.arange(60 + i * 90 + exclude_days, 60 + (i + 1) * 90) % 360) + 1
                     for i in range(4)
                 ]
             )
-            ds = ds.where(ds["time.dayofyear"].isin(doy_whitelist), drop=True)
+            ds = ds.where(ds["time.dayofyear"].isin(doy_whitelist), drop=True).load()
         merged_ds[source] = ds
 
     return merged_ds, models
