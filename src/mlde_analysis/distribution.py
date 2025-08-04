@@ -24,34 +24,26 @@ DIST_THRESHOLDS = defaultdict(
 
 
 def mean_bias(sample_da, cpm_da, normalize=False):
-    sample_dims = set(["ensemble_member", "sample_id", "time"]) & set(sample_da.dims)
-
-    sample_summary = sample_da.mean(dim=sample_dims)
-
-    truth_dims = set(["ensemble_member", "sample_id", "time"]) & set(cpm_da.dims)
-
-    cpm_summary = cpm_da.mean(dim=truth_dims)
-
-    raw_bias = sample_summary - cpm_summary
-
-    if normalize:
-        return (
-            (100 * raw_bias / cpm_summary)
-            .rename("Relative bias [%]")
-            .assign_attrs({"long_name": "Bias", "units": cpm_da.attrs["units"]})
-        )
-    else:
-        return raw_bias.rename(f"Bias [{cpm_da.attrs['units']}]").assign_attrs(
-            {"long_name": "Bias", "units": cpm_da.attrs["units"]}
-        )
+    return stat_bias(sample_da, cpm_da, xr.DataArray.mean, normalize=normalize)
 
 
 def std_bias(sample_da, cpm_da, normalize=False):
+    return stat_bias(sample_da, cpm_da, xr.DataArray.std, normalize=normalize)
+
+
+def stat_bias(
+    sample_da,
+    cpm_da,
+    stat_func,
+    normalize=False,
+):
     sample_dims = set(["ensemble_member", "sample_id", "time"]) & set(sample_da.dims)
-    sample_summary = sample_da.std(dim=sample_dims)
+
+    sample_summary = stat_func(sample_da, dim=sample_dims)
 
     truth_dims = set(["ensemble_member", "sample_id", "time"]) & set(cpm_da.dims)
-    cpm_summary = cpm_da.std(dim=truth_dims)
+
+    cpm_summary = stat_func(cpm_da, dim=truth_dims)
 
     raw_bias = sample_summary - cpm_summary
 
@@ -59,7 +51,7 @@ def std_bias(sample_da, cpm_da, normalize=False):
         return (
             (100 * raw_bias / cpm_summary)
             .rename("Relative bias [%]")
-            .assign_attrs({"long_name": "Bias", "units": cpm_da.attrs["units"]})
+            .assign_attrs({"long_name": "Bias", "units": "%"})
         )
     else:
         return raw_bias.rename(f"Bias [{cpm_da.attrs['units']}]").assign_attrs(
