@@ -7,7 +7,7 @@ import numpy as np
 import seaborn as sns
 import xarray as xr
 
-from mlde_utils import cp_model_rotated_pole
+from mlde_utils import cp_model_rotated_pole, platecarree
 
 
 precip_clevs = [
@@ -165,6 +165,19 @@ VAR_LABELS = {
 SUBREGIONS = {
     "SE": dict(grid_latitude=slice(10, 26), grid_longitude=slice(38, 54)),
     "NW": dict(grid_latitude=slice(44, 60), grid_longitude=slice(18, 34)),
+}
+
+BOX_LOCATIONS = {
+    label: cp_model_rotated_pole.transform_point(pt[0], pt[1], src_crs=platecarree)
+    + np.array([360, 0])
+    for label, pt in {
+        "London": (-0.118092, 51.509865),
+        "Birmingham": (-1.898575, 52.489471),
+        "Manchester": (
+            -2.244644,
+            53.483959,
+        ),
+    }.items()
 }
 
 
