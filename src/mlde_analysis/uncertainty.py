@@ -90,14 +90,37 @@ def compute_rmss_rmse_bins(pred_pr, target_pr, nbins=100):
 
     assert (abinnumbers == bbinnumbers).all()
 
-    return spread_binned_rmss, spread_binned_rmse
+    bin_counts = (
+        bbinnumbers
+        == np.meshgrid(
+            np.arange(len(bbinnumbers)), np.arange(len(spread_binned_variance) + 1)
+        )[1]
+    ).sum(axis=1)[
+        1:
+    ]  # [1:] as binnumbers start at 1
+    ssrel = (np.abs(spread_binned_rmse - spread_binned_rmss) * bin_counts).sum() / len(
+        ensemble_variance
+    )
+
+    ssrat = np.sqrt(ensemble_variance.mean()) / np.sqrt(squared_error.mean())
+
+    return spread_binned_rmss, spread_binned_rmse, ssrel, ssrat
 
 
 def plot_spread_error(pred_da, target_da, ax, line_props):
 
+    ssrels = []
+    ssrats = []
+    models = []
+
     for model, model_pred_da in pred_da.groupby("model"):
 
-        binned_rmss, binned_rmse = compute_rmss_rmse_bins(model_pred_da, target_da)
+        binned_rmss, binned_rmse, ssrel, ssrat = compute_rmss_rmse_bins(
+            model_pred_da, target_da
+        )
+        ssrels.append(ssrel)
+        ssrats.append(ssrat)
+        models.append(model)
 
         ax.plot(
             binned_rmss,
@@ -131,3 +154,13 @@ def plot_spread_error(pred_da, target_da, ax, line_props):
     ax.set_xlabel(f"RMSS {target_da.attrs.get('units', '')}", fontsize="small")
     ax.set_ylabel(f"RMSE {target_da.attrs.get('units', '')}", fontsize="small")
     ax.set_title("CPM Diffusion\nSpread-Error", fontsize="medium")
+
+    return xr.Dataset(
+        {
+            "ssrat": (["model"], ssrats),
+            "ssrel": (["model"], ssrels),
+        },
+        coords={
+            "model": models,
+        },
+    )
