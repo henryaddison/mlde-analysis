@@ -98,6 +98,8 @@ def compute_rmss_rmse_bins(pred_pr, target_pr, nbins=100):
     ).sum(axis=1)[
         1:
     ]  # [1:] as binnumbers start at 1
+    assert bin_counts.sum() == len(ensemble_variance)
+
     ssrel = (np.abs(spread_binned_rmse - spread_binned_rmss) * bin_counts).sum() / len(
         ensemble_variance
     )
