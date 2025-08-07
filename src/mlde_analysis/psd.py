@@ -130,5 +130,6 @@ def plot_psd(target_rapsd, pred_rapsds, ax, legend_kwargs={}):
     ax.set_xlabel("Wavelength (km)")
     ax.set_ylabel("PSD")
     ax.set_yscale("log")
-    ax.set_xscale("log", base=2)
+    ax.set_xscale("log")
+    ax.set_xlim(10, 1000)
     ax.legend(**(dict(ncols=2, fontsize="x-small") | legend_kwargs))
