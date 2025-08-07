@@ -22,7 +22,6 @@ def return_times(da, thresholds, var):
         ),
         dim=var,
     ).assign_coords({var: thresholds})
-    rt_da = (rt_da / 360).assign_attrs({"long_name": "Return time", "units": "Year"})
     rt_da[var] = rt_da[var].assign_attrs(da.attrs)
 
     return rt_da
