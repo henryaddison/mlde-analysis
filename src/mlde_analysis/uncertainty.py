@@ -49,9 +49,9 @@ def plot_domain_means(pred_da, target_da, ax, line_props, alpha=0.05):
     )
 
 
-def _corrected_ensemble_variance(pred_da):
+def _corrected_ensemble_spread(pred_da):
     """
-    Corrects the ensemble variance for the finite ensemble size
+    Corrects the ensemble spread for the finite ensemble size
     """
     # Need to correct for the finite ensemble (or num samples runs) size of samples
     # Equation 7 from # Leutbecher, M., & Palmer, T. N. (2008). Ensemble forecasting. Journal of Computational Physics, 227(7), 3515-3539. doi:10.1016/j.jcp.2007.02.014
@@ -59,9 +59,10 @@ def _corrected_ensemble_variance(pred_da):
     ensemble_size = len(pred_da["sample_id"])
     variance_correction_term = (ensemble_size + 1) / (ensemble_size - 1)
 
-    return variance_correction_term * np.power(
-        pred_da - pred_da.mean(dim="sample_id"), 2
-    ).mean(dim="sample_id")
+    return np.sqrt(
+        variance_correction_term
+        * np.power(pred_da - pred_da.mean(dim="sample_id"), 2).mean(dim="sample_id")
+    )
 
 
 def se_bins(pred_da, target_da, nbins=100):
@@ -70,8 +71,8 @@ def se_bins(pred_da, target_da, nbins=100):
     this computes bins for spread and error over the whole dataset
     with the aim of re-using common bins for subsets of the data
     """
-    ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
-    bins = np.quantile(ensemble_variance, np.linspace(0, 1, nbins + 1))
+    ensemble_spread = _corrected_ensemble_spread(pred_da).values.flatten()
+    bins = np.quantile(ensemble_spread, np.linspace(0, 1, nbins + 1))
     # remove bin edges too near each other
     bins = np.delete(bins, np.argwhere(np.ediff1d(bins) <= 1e-6) + 1)
 
@@ -93,32 +94,31 @@ def compute_rmss_rmse_bins(pred_da, target_da, bins):
     squared_error = np.power(
         pred_da.mean(dim=["sample_id"]) - target_da, 2
     ).values.flatten()
-    ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
+    ensemble_spread = _corrected_ensemble_spread(pred_da).values.flatten()
 
     if isinstance(bins, int):
         bins = se_bins(pred_da, target_da, nbins=bins)
 
     spread_binned_mse, _, abinnumbers = scipy.stats.binned_statistic(
-        ensemble_variance, squared_error, statistic="mean", bins=bins
+        ensemble_spread, squared_error, statistic="mean", bins=bins
     )
     spread_binned_rmse = np.sqrt(spread_binned_mse)
 
-    spread_binned_variance, _, bbinnumbers = scipy.stats.binned_statistic(
-        ensemble_variance, ensemble_variance, statistic="mean", bins=bins
+    spread_binned_rmss, _, bbinnumbers = scipy.stats.binned_statistic(
+        ensemble_spread, ensemble_spread, statistic="mean", bins=bins
     )
-    spread_binned_rmss = np.sqrt(spread_binned_variance)
 
     assert (abinnumbers == bbinnumbers).all()
 
     bin_counts = np.bincount(bbinnumbers)[1:]  # [1:] as binnumbers start at 1
 
-    assert bin_counts.sum() == len(ensemble_variance)
+    assert bin_counts.sum() == len(ensemble_spread)
 
     ssrel = (np.abs(spread_binned_rmse - spread_binned_rmss) * bin_counts).sum() / len(
-        ensemble_variance
+        ensemble_spread
     )
 
-    ssrat = np.sqrt(ensemble_variance.mean()) / np.sqrt(squared_error.mean())
+    ssrat = ensemble_spread.mean() / np.sqrt(squared_error.mean())
     # import pdb; pdb.set_trace()
     return xr.Dataset(
         {
@@ -145,18 +145,43 @@ def compute_rmss_rmse_bins(pred_da, target_da, bins):
     )
 
 
-def plot_spread_error(spread_error_ds, ax, line_props):
+def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None):
     for model, model_spread_error_ds in spread_error_ds.groupby("model"):
-        ax.plot(
-            model_spread_error_ds["spread_binned_rmss"],
-            model_spread_error_ds["spread_binned_rmse"],
-            label=f"{model}",
-            color=line_props[model]["color"],
-            marker=".",
-            alpha=0.25,
-            markersize=3,
-            linewidth=0,
-        )
+        model_spread_error_ds = model_spread_error_ds.squeeze("model")
+        if bs_dim is None:
+            ax.plot(
+                model_spread_error_ds["spread_binned_rmss"],
+                model_spread_error_ds["spread_binned_rmse"],
+                label=f"{model}",
+                color=line_props[model]["color"],
+                marker=".",
+                alpha=0.25,
+                markersize=3,
+                linewidth=0,
+            )
+        else:
+            ax.plot(
+                model_spread_error_ds["spread_binned_rmss"].mean(dim=bs_dim),
+                model_spread_error_ds["spread_binned_rmse"].mean(dim=bs_dim),
+                label=f"{model}",
+                color=line_props[model]["color"],
+                marker=".",
+                alpha=0.25,
+                markersize=3,
+                linewidth=0,
+            )
+
+            ax.fill_between(
+                model_spread_error_ds["spread_binned_rmss"].mean(dim=bs_dim),
+                model_spread_error_ds["spread_binned_rmse"].quantile(
+                    dim=bs_dim, q=0.05
+                ),
+                model_spread_error_ds["spread_binned_rmse"].quantile(
+                    dim=bs_dim, q=0.95
+                ),
+                color=line_props[model]["color"],
+                alpha=0.1,
+            )
 
     lims = [
         np.min([ax.get_xlim(), ax.get_ylim()]),
