@@ -49,7 +49,36 @@ def plot_domain_means(pred_da, target_da, ax, line_props, alpha=0.05):
     )
 
 
-def compute_rmss_rmse_bins(pred_pr, target_pr, nbins=100):
+def _corrected_ensemble_variance(pred_da):
+    """
+    Corrects the ensemble variance for the finite ensemble size
+    """
+    # Need to correct for the finite ensemble (or num samples runs) size of samples
+    # Equation 7 from # Leutbecher, M., & Palmer, T. N. (2008). Ensemble forecasting. Journal of Computational Physics, 227(7), 3515-3539. doi:10.1016/j.jcp.2007.02.014
+
+    ensemble_size = len(pred_da["sample_id"])
+    variance_correction_term = (ensemble_size + 1) / (ensemble_size - 1)
+
+    return variance_correction_term * np.power(
+        pred_da - pred_da.mean(dim="sample_id"), 2
+    ).mean(dim="sample_id")
+
+
+def se_bins(pred_da, target_da, nbins=100):
+    """
+    For an "ensemble" of predicted rainfall and the corresponding "truth" value,
+    this computes bins for spread and error over the whole dataset
+    with the aim of re-using common bins for subsets of the data
+    """
+    ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
+    bins = np.quantile(ensemble_variance, np.linspace(0, 1, nbins + 1))
+    # remove bin edges too near each other
+    bins = np.delete(bins, np.argwhere(np.ediff1d(bins) <= 1e-6) + 1)
+
+    return bins
+
+
+def compute_rmss_rmse_bins(pred_da, target_da, bins):
     """
     For an "ensemble" of predicted rainfall and the coresponding "truth" value,
     this computes bins for spread and error for a spread-error plot
@@ -61,30 +90,21 @@ def compute_rmss_rmse_bins(pred_pr, target_pr, nbins=100):
     * https://www.sciencedirect.com/science/article/pii/S0021999107000812
     """
 
-    # Need to correct for the finite ensemble (or num samples runs) size of samples
-    # Equation 7 from # Leutbecher, M., & Palmer, T. N. (2008). Ensemble forecasting. Journal of Computational Physics, 227(7), 3515-3539. doi:10.1016/j.jcp.2007.02.014
-    ensemble_size = len(pred_pr["sample_id"])
-    variance_correction_term = (ensemble_size + 1) / (ensemble_size - 1)
+    squared_error = np.power(
+        pred_da.mean(dim=["sample_id"]) - target_da, 2
+    ).values.flatten()
+    ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
 
-    ensemble_mean = pred_pr.mean(dim=["sample_id"])
-    ensemble_variance = (
-        variance_correction_term
-        * np.power(pred_pr - ensemble_mean, 2).mean(dim="sample_id").values.flatten()
-    )
-
-    squared_error = np.power(ensemble_mean - target_pr, 2).values.flatten()
-
-    bin_edges = np.quantile(ensemble_variance, np.linspace(0, 1, nbins + 1))
-    # remove bin edges too near each other
-    bin_edges = np.delete(bin_edges, np.argwhere(np.ediff1d(bin_edges) <= 1e-6) + 1)
+    if isinstance(bins, int):
+        bins = se_bins(pred_da, target_da, nbins=bins)
 
     spread_binned_mse, _, abinnumbers = scipy.stats.binned_statistic(
-        ensemble_variance, squared_error, statistic="mean", bins=bin_edges
+        ensemble_variance, squared_error, statistic="mean", bins=bins
     )
     spread_binned_rmse = np.sqrt(spread_binned_mse)
 
     spread_binned_variance, _, bbinnumbers = scipy.stats.binned_statistic(
-        ensemble_variance, ensemble_variance, statistic="mean", bins=bin_edges
+        ensemble_variance, ensemble_variance, statistic="mean", bins=bins
     )
     spread_binned_rmss = np.sqrt(spread_binned_variance)
 
@@ -99,28 +119,37 @@ def compute_rmss_rmse_bins(pred_pr, target_pr, nbins=100):
     )
 
     ssrat = np.sqrt(ensemble_variance.mean()) / np.sqrt(squared_error.mean())
+    # import pdb; pdb.set_trace()
+    return xr.Dataset(
+        {
+            "spread_binned_rmss": (
+                ["bin"],
+                spread_binned_rmss,
+                {"units": target_da.attrs.get("units", "")},
+            ),
+            "spread_binned_rmse": (
+                ["bin"],
+                spread_binned_rmse,
+                {"units": target_da.attrs.get("units", "")},
+            ),
+            "ssrel": ([], ssrel),
+            "ssrat": ([], ssrat),
+            "bin_edges": (
+                ["bin", "bnds"],
+                np.concatenate(
+                    (bins[:-1].reshape(-1, 1), bins[1:].reshape(-1, 1)), axis=1
+                ),
+            ),
+        },
+        coords={"bin": bins[1:]},
+    )
 
-    return spread_binned_rmss, spread_binned_rmse, ssrel, ssrat
 
-
-def plot_spread_error(pred_da, target_da, ax, line_props):
-
-    ssrels = []
-    ssrats = []
-    models = []
-
-    for model, model_pred_da in pred_da.groupby("model"):
-
-        binned_rmss, binned_rmse, ssrel, ssrat = compute_rmss_rmse_bins(
-            model_pred_da, target_da
-        )
-        ssrels.append(ssrel)
-        ssrats.append(ssrat)
-        models.append(model)
-
+def plot_spread_error(spread_error_ds, ax, line_props):
+    for model, model_spread_error_ds in spread_error_ds.groupby("model"):
         ax.plot(
-            binned_rmss,
-            binned_rmse,
+            model_spread_error_ds["spread_binned_rmss"],
+            model_spread_error_ds["spread_binned_rmse"],
             label=f"{model}",
             color=line_props[model]["color"],
             marker=".",
@@ -147,16 +176,12 @@ def plot_spread_error(pred_da, target_da, ax, line_props):
     )
     # ax.legend()
 
-    ax.set_xlabel(f"RMSS {target_da.attrs.get('units', '')}", fontsize="small")
-    ax.set_ylabel(f"RMSE {target_da.attrs.get('units', '')}", fontsize="small")
-    ax.set_title("CPM Diffusion\nSpread-Error", fontsize="medium")
-
-    return xr.Dataset(
-        {
-            "ssrat": (["model"], ssrats),
-            "ssrel": (["model"], ssrels),
-        },
-        coords={
-            "model": models,
-        },
+    ax.set_xlabel(
+        f"RMSS {spread_error_ds["spread_binned_rmss"].attrs.get('units', '')}",
+        fontsize="small",
     )
+    ax.set_ylabel(
+        f"RMSE {spread_error_ds["spread_binned_rmse"].attrs.get('units', '')}",
+        fontsize="small",
+    )
+    ax.set_title("CPM Diffusion\nSpread-Error", fontsize="medium")
