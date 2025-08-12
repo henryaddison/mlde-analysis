@@ -157,8 +157,8 @@ def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None):
             x = model_spread_error_ds["spread_binned_rmss"]
             y = model_spread_error_ds["spread_binned_rmse"]
             ax.plot(
-                x=x,
-                y=y,
+                x,
+                y,
                 label=f"{model}",
                 color=line_props[model]["color"],
                 marker=".",
