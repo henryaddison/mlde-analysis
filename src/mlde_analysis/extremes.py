@@ -48,33 +48,55 @@ def return_time_amounts(da, n_days_per_year=360):
     # Make axis for return times; nt = number of time points; n_days_per_year is no. of days in year (the no. in one season if considering just winter or summer etc.)
     da = da.stack(example=["time", "ensemble_member"])
     nt = len(da["example"])
-    return_times_axis = float(nt) / n_days_per_year / (np.arange(nt)[::-1] + 1)
+    return_times_axis = xr.DataArray(
+        data=float(nt) / n_days_per_year / (np.arange(nt)[::-1] + 1),
+        dims=["rp"],
+        attrs={"long_name": "Return period", "units": "Year"},
+    )
 
-    rt_da = xr.DataArray(
-        data=(np.ma.sort(da.values, axis=None)),
+    return xr.DataArray(
+        data=np.ma.sort(np.squeeze(da.values), axis=None),
         dims=["rp"],
         coords={"rp": return_times_axis},
         attrs=da.attrs,
     )
 
-    rt_da["rp"] = rt_da["rp"].assign_attrs(
-        {"long_name": "Return time", "units": "Year"}
+
+def _plot(data, *args, **kwargs):
+    return data.plot.scatter(**kwargs)
+
+
+def plot_return_time_amounts(pred_rt_da, cpm_rt_da, row=None):
+
+    g = pred_rt_da.plot(
+        x="rp", col="model", row=row, hue="sample_id", marker="+", alpha=0.5
     )
 
-    return rt_da
+    if row:
+        for lidx, (location, row_cpm_rt_da) in enumerate(cpm_rt_da.groupby(row)):
+            for ax in g.axs[lidx]:
+                ax.plot(
+                    row_cpm_rt_da["rp"],
+                    row_cpm_rt_da.squeeze(row),
+                    label="cpm",
+                    color="k",
+                    linestyle="--",
+                    marker="x",
+                    zorder=-100,
+                )
+    else:
+        for ax in g.axs.flat:
+            ax.plot(
+                cpm_rt_da["rp"],
+                cpm_rt_da.squeeze(row),
+                label="cpm",
+                color="k",
+                linestyle="--",
+                marker="x",
+                zorder=-100,
+            )
 
-
-def plot_return_time_amounts(pred_rt_da, cpm_rt_da):
-    g = pred_rt_da.plot(x="rp", col="model", hue="sample_id", marker="+")
     for ax in g.axs.flat:
-        ax.plot(
-            cpm_rt_da["rp"],
-            cpm_rt_da,
-            label="cpm",
-            color="k",
-            linestyle="--",
-            marker="x",
-        )
         ax.set_xscale("log")
         if cpm_rt_da["rp"].max() > 100:
             ax.set_xlim((1, None))

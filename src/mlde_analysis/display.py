@@ -22,8 +22,11 @@ def pretty_table(
     caption: str = None,
     dim_order: bool = None,
     render: bool = True,
+    pivot_table: dict = None,
 ) -> None:
     df = da.to_dataframe(dim_order=dim_order)
+    if pivot_table:
+        df = df.pivot_table(**pivot_table)
     style = df.style
     style = style.set_table_attributes("style='display:inline'")
     style = style.format(str(f"{{:.{round}g}}").format)
