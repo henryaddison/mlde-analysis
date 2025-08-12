@@ -71,7 +71,7 @@ def se_bins(pred_da, target_da, nbins=100):
     with the aim of re-using common bins for subsets of the data
     """
     ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
-    bins = np.quantile(ensemble_variance, np.linspace(0, 1, nbins + 1))
+    bins = np.nanquantile(ensemble_variance, np.linspace(0, 1, nbins + 1))
     # remove bin edges too near each other
     bins = np.delete(bins, np.argwhere(np.ediff1d(bins) <= 1e-6) + 1)
 
@@ -94,6 +94,11 @@ def compute_rmss_rmse_bins(pred_da, target_da, bins):
         pred_da.mean(dim=["sample_id"]) - target_da, 2
     ).values.flatten()
     ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
+
+    # remove NaNs
+    not_nans = ~np.isnan(squared_error)
+    squared_error = squared_error[not_nans]
+    ensemble_variance = ensemble_variance[not_nans]
 
     if isinstance(bins, int):
         bins = se_bins(pred_da, target_da, nbins=bins)
@@ -149,9 +154,11 @@ def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None):
     for model, model_spread_error_ds in spread_error_ds.groupby("model"):
         model_spread_error_ds = model_spread_error_ds.squeeze("model")
         if bs_dim is None:
+            x = model_spread_error_ds["spread_binned_rmss"]
+            y = model_spread_error_ds["spread_binned_rmse"]
             ax.plot(
-                model_spread_error_ds["spread_binned_rmss"],
-                model_spread_error_ds["spread_binned_rmse"],
+                x=x,
+                y=y,
                 label=f"{model}",
                 color=line_props[model]["color"],
                 marker=".",
@@ -160,27 +167,38 @@ def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None):
                 linewidth=0,
             )
         else:
-            ax.plot(
-                model_spread_error_ds["spread_binned_rmss"].mean(dim=bs_dim),
-                model_spread_error_ds["spread_binned_rmse"].mean(dim=bs_dim),
+            x = model_spread_error_ds["spread_binned_rmss"].mean(dim=bs_dim)
+            y = model_spread_error_ds["spread_binned_rmse"].mean(dim=bs_dim)
+            xerr = (
+                x
+                - model_spread_error_ds["spread_binned_rmss"].quantile(
+                    dim=bs_dim, q=0.05
+                ),
+                model_spread_error_ds["spread_binned_rmss"].quantile(dim=bs_dim, q=0.95)
+                - x,
+            )
+            yerr = (
+                y
+                - model_spread_error_ds["spread_binned_rmse"].quantile(
+                    dim=bs_dim, q=0.05
+                ),
+                model_spread_error_ds["spread_binned_rmse"].quantile(dim=bs_dim, q=0.95)
+                - y,
+            )
+
+            ax.errorbar(
+                x=x,
+                y=y,
+                xerr=xerr,
+                yerr=yerr,
                 label=f"{model}",
                 color=line_props[model]["color"],
                 marker=".",
                 alpha=0.25,
                 markersize=3,
                 linewidth=0,
-            )
-
-            ax.fill_between(
-                model_spread_error_ds["spread_binned_rmss"].mean(dim=bs_dim),
-                model_spread_error_ds["spread_binned_rmse"].quantile(
-                    dim=bs_dim, q=0.05
-                ),
-                model_spread_error_ds["spread_binned_rmse"].quantile(
-                    dim=bs_dim, q=0.95
-                ),
-                color=line_props[model]["color"],
-                alpha=0.1,
+                elinewidth=0.5,
+                ecolor="k",
             )
 
     lims = [

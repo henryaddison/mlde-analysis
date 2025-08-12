@@ -144,3 +144,8 @@ Describe in more detail the models being compared
 
 # bootstrapping
 niterations = 5
+bootstrap_configs = {
+    "niterations": {
+        "spread-error": 10,
+    }
+}

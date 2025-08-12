@@ -101,3 +101,6 @@ example_overrides:
 examples_sample_idxs: 1 # [2,5]
 example_inputs: []
 niterations: 30
+bootstrap_configs:
+    niterations:
+      spread-error: 100
