@@ -168,11 +168,16 @@ SUBREGIONS = {
 }
 
 BOX_LOCATIONS = {
-    label: cp_model_rotated_pole.transform_point(pt[0], pt[1], src_crs=platecarree)
-    + np.array([360, 0])
+    label: dict(
+        zip(
+            ["X", "Y"],
+            cp_model_rotated_pole.transform_point(pt[0], pt[1], src_crs=platecarree)
+            + np.array([360, 0]),
+        )
+    )
     for label, pt in {
         "London": (-0.118092, 51.509865),
-        "Birmingham": (-1.898575, 52.489471),
+        # "Birmingham": (-1.898575, 52.489471),
         "Manchester": (
             -2.244644,
             53.483959,

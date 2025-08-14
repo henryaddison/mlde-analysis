@@ -25,7 +25,6 @@ def pred_and_target_return_times(ds, var, n_days_per_year=360):
     return xr.merge(
         [
             ds[f"pred_{var}"]
-            .max(dim=["grid_longitude", "grid_latitude"], keep_attrs=True)
             .groupby("sample_id")
             .map(
                 lambda da: da.groupby("model").map(
@@ -34,9 +33,7 @@ def pred_and_target_return_times(ds, var, n_days_per_year=360):
             )
             .rename(f"pred_{var}_return_level"),
             return_time_amounts(
-                ds[f"target_{var}"].max(
-                    dim=["grid_longitude", "grid_latitude"], keep_attrs=True
-                ),
+                ds[f"target_{var}"],
                 n_days_per_year=n_days_per_year,
             ).rename(f"target_{var}_return_level"),
         ]
