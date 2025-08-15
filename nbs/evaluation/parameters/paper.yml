@@ -113,4 +113,4 @@ examples_sample_idxs: [2,5]
 niterations: 30
 bootstrap_configs:
     niterations:
-      spread-error: 100
+      spread-error: 50
