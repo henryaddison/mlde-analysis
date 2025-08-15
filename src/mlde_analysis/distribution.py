@@ -1,4 +1,5 @@
 from collections import defaultdict
+import functools
 import math
 from matplotlib import pyplot as plt
 import numpy as np
@@ -74,6 +75,17 @@ def rms_std_bias(sample_da, cpm_da, normalize=False):
     return rms(std_bias(sample_da, cpm_da, normalize=normalize))
 
 
+def rms_stat_bias(stat_bias_func, sample_da, cpm_da, normalize=False):
+    return rms(stat_bias_func(sample_da, cpm_da, normalize=normalize))
+
+
+def rms_q999_bias(sample_da, cpm_da, normalize=False):
+    f_q999_bias = functools.partial(
+        stat_bias, stat_func=functools.partial(xr.DataArray.quantile, q=0.999)
+    )
+    return rms_stat_bias(f_q999_bias, sample_da, cpm_da, normalize=normalize)
+
+
 def normalized_mean_bias(sample_da, cpm_da):
     return mean_bias(sample_da, cpm_da, normalize=True)
 
@@ -121,6 +133,12 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
         .rename(f"RMS Std Dev Bias ({cpm_da.attrs['units']})")
     )
 
+    rms_q999_biases = (
+        da.groupby("model", squeeze=False)
+        .map(rms_q999_bias, cpm_da=cpm_da, normalize=False)
+        .rename(f"RMS Q999 Bias ({cpm_da.attrs['units']})")
+    )
+
     relative_rms_mean_biases = (
         da.groupby("model", squeeze=False)
         .map(rms_mean_bias, cpm_da=cpm_da, normalize=True)
@@ -130,6 +148,11 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
         da.groupby("model", squeeze=False)
         .map(rms_std_bias, cpm_da=cpm_da, normalize=True)
         .rename("Relative RMS Std Dev Bias (%)")
+    )
+    relative_rms_q999_biases = (
+        da.groupby("model", squeeze=False)
+        .map(rms_q999_bias, cpm_da=cpm_da, normalize=True)
+        .rename(f"Relative RMS Q999 Bias (%)")
     )
 
     bins = np.histogram_bin_edges(cpm_da, bins=50)
@@ -170,8 +193,10 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
             nan_count,
             rms_mean_biases,
             rms_std_biases,
+            rms_q999_biases,
             relative_rms_mean_biases,
             relative_rms_std_biases,
+            relative_rms_q999_biases,
             model_hist_dist,
         ]
     )
@@ -392,6 +417,7 @@ def plot_distribution_figure(
     cpm_da,
     mean_bias_das,
     std_bias_das,
+    q999_bias_das,
     modellabel2spec,
     error_ax=None,
     hrange=None,
@@ -424,6 +450,13 @@ def plot_distribution_figure(
         ),
         key=lambda x: modellabel2spec[x["label"]]["order"],
     )
+    q999_biases = sorted(
+        map(
+            lambda modelgp: dict(data=modelgp[1].squeeze("model"), label=modelgp[0]),
+            q999_bias_das.groupby("model", squeeze=False),
+        ),
+        key=lambda x: modellabel2spec[x["label"]]["order"],
+    )
 
     meanb_axes_keys = [f"meanb {x['label']}" for x in mean_biases]
     meanb_spec = np.array(meanb_axes_keys).reshape(1, -1)
@@ -431,15 +464,18 @@ def plot_distribution_figure(
     stddevb_axes_keys = [f"stddevb {x['label']}" for x in std_biases]
     stddevb_spec = np.array(stddevb_axes_keys).reshape(1, -1)
 
+    q999b_axes_keys = [f"q999b {x['label']}" for x in q999_biases]
+    q999b_spec = np.array(q999b_axes_keys).reshape(1, -1)
+
     dist_spec = np.array(["Density"] * meanb_spec.shape[1]).reshape(1, -1)
 
-    spec = np.concatenate([dist_spec, meanb_spec, stddevb_spec], axis=0)
+    spec = np.concatenate([dist_spec, meanb_spec, stddevb_spec, q999b_spec], axis=0)
     axd = fig.subplot_mosaic(
         spec,
-        gridspec_kw=dict(height_ratios=[4, 2, 2]),
+        gridspec_kw=dict(height_ratios=[4, 2, 2, 2]),
         per_subplot_kw={
             ak: {"projection": cp_model_rotated_pole}
-            for ak in meanb_axes_keys + stddevb_axes_keys
+            for ak in meanb_axes_keys + stddevb_axes_keys + q999b_axes_keys
         },
     )
 
@@ -468,9 +504,20 @@ def plot_distribution_figure(
     )
 
     stdb_axes = [axd[f'stddevb {bias["label"]}'] for bias in std_biases]
-    plot_biases(std_biases, stdb_axes, fig, **bias_kwargs)
+    plot_biases(std_biases, stdb_axes, fig, colorbar=False, **bias_kwargs)
     stdb_axes[0].annotate(
         "c.",
+        xy=(0.04, 1.0),
+        xycoords=("figure fraction", "axes fraction"),
+        weight="bold",
+        ha="left",
+        va="bottom",
+    )
+
+    q999b_axes = [axd[f'q999b {bias["label"]}'] for bias in q999_biases]
+    plot_biases(q999_biases, q999b_axes, fig, **bias_kwargs)
+    q999b_axes[0].annotate(
+        "d.",
         xy=(0.04, 1.0),
         xycoords=("figure fraction", "axes fraction"),
         weight="bold",
