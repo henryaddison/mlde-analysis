@@ -178,10 +178,11 @@ BOX_LOCATIONS = {
     for label, pt in {
         "London": (-0.118092, 51.509865),
         # "Birmingham": (-1.898575, 52.489471),
-        "Manchester": (
-            -2.244644,
-            53.483959,
-        ),
+        "Lancaster": (-2.801000, 54.047001),
+        # "Manchester": (
+        #     -2.244644,
+        #     53.483959,
+        # ),
     }.items()
 }
 
