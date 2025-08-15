@@ -1,24 +1,24 @@
 import numpy as np
 import scipy
+from textwrap import wrap
 import xarray as xr
 
 
-def plot_domain_means(pred_da, target_da, ax, line_props, alpha=0.05):
-    pred_mean_da = pred_da.mean(dim=["grid_latitude", "grid_longitude"]).assign_attrs(
-        pred_da.attrs
+def plot_scatter(pred_da, target_da, ax, line_props, alpha=0.05, **kwargs):
+    scatter_kwargs = (
+        dict(
+            alpha=alpha,
+            marker=".",
+            markersize=3,
+            linewidth=0,
+        )
+        | kwargs
     )
-    target_mean_da = target_da.mean(
-        dim=["grid_latitude", "grid_longitude"]
-    ).assign_attrs(target_da.attrs)
-
     ax.plot(
-        target_mean_da.broadcast_like(pred_mean_da).values.flat,
-        pred_mean_da.values.flat,  # .squeeze("model"),
-        alpha=alpha,
+        target_da.broadcast_like(pred_da).values.flat,
+        pred_da.values.flat,  # .squeeze("model"),
         color=line_props["color"],
-        marker=".",
-        markersize=3,
-        linewidth=0,
+        **scatter_kwargs,
     )
 
     lims = [
@@ -39,14 +39,11 @@ def plot_domain_means(pred_da, target_da, ax, line_props, alpha=0.05):
     )
 
     ax.set_title(line_props["label"], fontsize="medium")
-    ax.set_xlabel(
-        f"CPM mean\n{xr.plot.utils.label_from_attrs(da=target_mean_da)}",
-        fontsize="small",
-    )
-    ax.set_ylabel(
-        f"ML mean\n{xr.plot.utils.label_from_attrs(da=pred_mean_da)}",
-        fontsize="small",
-    )
+
+    xlabel = "\n".join(wrap(xr.plot.utils.label_from_attrs(da=target_da), 15))
+    ylabel = "\n".join(wrap(xr.plot.utils.label_from_attrs(da=pred_da), 15))
+    ax.set_xlabel(xlabel, fontsize="small")
+    ax.set_ylabel(ylabel, fontsize="small")
 
 
 def _corrected_ensemble_variance(pred_da):
@@ -62,6 +59,10 @@ def _corrected_ensemble_variance(pred_da):
     return variance_correction_term * np.power(
         pred_da - pred_da.mean(dim="sample_id"), 2
     ).mean(dim="sample_id")
+
+
+def _squared_error(pred_da, target_da):
+    return np.power(pred_da.mean(dim=["sample_id"]) - target_da, 2)
 
 
 def se_bins(pred_da, target_da, nbins=100):
@@ -90,9 +91,7 @@ def compute_rmss_rmse_bins(pred_da, target_da, bins):
     * https://www.sciencedirect.com/science/article/pii/S0021999107000812
     """
 
-    squared_error = np.power(
-        pred_da.mean(dim=["sample_id"]) - target_da, 2
-    ).values.flatten()
+    squared_error = _squared_error(pred_da, target_da).values.flatten()
     ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
 
     # remove NaNs
@@ -123,8 +122,6 @@ def compute_rmss_rmse_bins(pred_da, target_da, bins):
         ensemble_variance
     )
 
-    serat = np.sqrt(ensemble_variance.mean()) / np.sqrt(squared_error.mean())
-    # import pdb; pdb.set_trace()
     return xr.Dataset(
         {
             "spread_binned_rmss": (
@@ -137,8 +134,12 @@ def compute_rmss_rmse_bins(pred_da, target_da, bins):
                 spread_binned_rmse,
                 {"units": target_da.attrs.get("units", "")},
             ),
+            "bin_counts": (
+                ["bin"],
+                bin_counts,
+                {"units": ""},
+            ),
             "ssrel": ([], ssrel),
-            "serat": ([], serat),
             "bin_edges": (
                 ["bin", "bnds"],
                 np.concatenate(
@@ -150,7 +151,45 @@ def compute_rmss_rmse_bins(pred_da, target_da, bins):
     )
 
 
-def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None):
+def serat(pred_da, target_da, spread_range=None):
+    squared_error = _squared_error(pred_da, target_da).values.flatten()
+    ensemble_variance = _corrected_ensemble_variance(pred_da).values.flatten()
+
+    if spread_range is not None:
+        lower, upper = spread_range
+        spread_mask = np.ones_like(ensemble_variance, dtype=bool)
+        if lower is not None:
+            spread_mask = spread_mask * (np.sqrt(ensemble_variance) >= lower)
+        if upper is not None:
+            spread_mask = spread_mask * (np.sqrt(ensemble_variance) <= upper)
+
+        ensemble_variance = ensemble_variance[spread_mask]
+        squared_error = squared_error[spread_mask]
+
+    # remove NaNs
+    not_nans = ~np.isnan(squared_error)
+    squared_error = squared_error[not_nans]
+    ensemble_variance = ensemble_variance[not_nans]
+
+    value = np.sqrt(ensemble_variance.mean()) / np.sqrt(squared_error.mean())
+    return xr.Dataset(
+        {
+            "serat": ([], value),
+            "count": ([], len(ensemble_variance)),
+        }
+    )
+
+
+def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None, **kwargs):
+    plot_kwargs = (
+        dict(
+            marker=".",
+            alpha=0.25,
+            markersize=3,
+            linewidth=0,
+        )
+        | kwargs
+    )
     for model, model_spread_error_ds in spread_error_ds.groupby("model"):
         model_spread_error_ds = model_spread_error_ds.squeeze("model")
         if bs_dim is None:
@@ -161,10 +200,7 @@ def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None):
                 y,
                 label=f"{model}",
                 color=line_props[model]["color"],
-                marker=".",
-                alpha=0.25,
-                markersize=3,
-                linewidth=0,
+                **plot_kwargs,
             )
         else:
             x = model_spread_error_ds["spread_binned_rmss"].mean(dim=bs_dim)
@@ -193,10 +229,7 @@ def plot_spread_error(spread_error_ds, ax, line_props, bs_dim=None):
                 yerr=yerr,
                 label=f"{model}",
                 color=line_props[model]["color"],
-                marker=".",
-                alpha=0.25,
-                markersize=3,
-                linewidth=0,
+                **plot_kwargs,
                 elinewidth=0.5,
                 ecolor="k",
             )
