@@ -45,14 +45,15 @@ def plot_return_time_amounts(pred_rt_da, cpm_rt_da, row=None):
     g = pred_rt_da.plot(
         x="rp", col="model", row=row, hue="sample_id", marker="+", alpha=0.5
     )
-
     if row:
-        for lidx, (location, row_cpm_rt_da) in enumerate(cpm_rt_da.groupby(row)):
-            for ax in g.axs[lidx]:
+        for d, ax in zip(g.name_dicts.flat, g.axs.flat, strict=True):
+            # None is the sentinel value
+            if d is not None:
+                row_cpm_rt_da = cpm_rt_da.sel({row: d[row]})
                 ax.plot(
                     row_cpm_rt_da["rp"],
-                    row_cpm_rt_da.squeeze(row),
-                    label="cpm",
+                    row_cpm_rt_da,
+                    label="CPM",
                     color="k",
                     linestyle="--",
                     marker="x",
@@ -63,7 +64,7 @@ def plot_return_time_amounts(pred_rt_da, cpm_rt_da, row=None):
             ax.plot(
                 cpm_rt_da["rp"],
                 cpm_rt_da.squeeze(row),
-                label="cpm",
+                label="CPM",
                 color="k",
                 linestyle="--",
                 marker="x",
