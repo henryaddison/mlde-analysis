@@ -46,8 +46,8 @@ sample_configs:
         deterministic: True
         color: tab:purple
         order: 1
-        UQ: False
-        CCS: False
+        UQ: True
+        CCS: True
     GCM:
       - label: CPMGEM_GCM
         sample_specs:
