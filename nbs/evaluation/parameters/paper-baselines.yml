@@ -61,6 +61,18 @@ sample_configs:
         UQ: False
         color: tab:green
         order: 20
+      - label: GCM BCSD
+        sample_specs:
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+            checkpoint: epoch-0
+            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+            dataset: bham64_gcm-4x_12em_linpr_pr
+            variables: [pr]
+        deterministic: True
+        color: tab:purple
+        order: 21
+        UQ: True
+        CCS: True
 sample_configs_at_60km:
     - label: CPMGEM_GCM@60km
       sample_specs:
