@@ -47,18 +47,31 @@ sample_configs:
         deterministic: True
         color: tab:blue
         order: 1
-        UQ: False
+        UQ: True
         CCS: False
-      - label: cCPM BCSDv2-ws3-per-tp
+      # - label: cCPM BCSDv2-ws3-per-tp
+      #   sample_specs:
+      #     - fq_model_id: bcsd-v2/ukcp_local_pr_12em-ws3
+      #       checkpoint: epoch-0
+      #       input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+      #       dataset: bham64_ccpm-4x_12em_linpr_pr
+      #       variables: [pr]
+      #   deterministic: True
+      #   color: tab:brown
+      #   order: 1
+      #   UQ: False
+      #   CCS: False
+    GCM:
+      - label: GCM BCSDv1-ws3-per-tp
         sample_specs:
-          - fq_model_id: bcsd-v2/ukcp_local_pr_12em-ws3
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
             checkpoint: epoch-0
-            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
-            dataset: bham64_ccpm-4x_12em_linpr_pr
+            input_xfm: bham64_gcm-4x_12em_linpr_pr-bham64_ccpm-4x_12em_linpr_pr-bcsd
+            dataset: bham64_gcm-4x_12em_linpr_pr
             variables: [pr]
         deterministic: True
-        color: tab:brown
-        order: 1
+        color: tab:green
+        order: 10
         UQ: False
         CCS: False
 sample_configs_at_60km: []
@@ -83,9 +96,26 @@ example_percentiles:
       percentile: 1
       variable: pr
       season: JJA
+  GCM:
+    DJF Wet:
+      percentile:  0.8
+      variable: pr
+      season: DJF
+    DJF Wettest:
+      percentile: 1
+      variable: pr
+      season: DJF
+    JJA Wet:
+      percentile:  0.8
+      variable: pr
+      season: JJA
+    JJA Wettest:
+      percentile: 1
+      variable: pr
+      season: JJA
 example_overrides:
     CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
     GCM: {}
-examples_sample_idxs: [2,5]
+examples_sample_idxs: 1
 example_inputs: []
 niterations: 30
