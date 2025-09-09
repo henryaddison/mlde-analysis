@@ -61,30 +61,30 @@ sample_configs:
         UQ: False
         color: tab:green
         order: 20
-      - label: GCM BCSD GCM
-        sample_specs:
-          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
-            checkpoint: epoch-0
-            input_xfm: bham64_gcm-4x_12em_linpr_pr-bham64_ccpm-4x_12em_linpr_pr-bcsd
-            dataset: bham64_gcm-4x_12em_linpr_pr
-            variables: [pr]
-        deterministic: True
-        color: tab:pink
-        order: 3
-        UQ: True
-        CCS: True
-      - label: cCPM BCSD GCM
-        sample_specs:
-          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
-            checkpoint: epoch-0
-            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
-            dataset: bham64_gcm-4x_12em_linpr_pr
-            variables: [pr]
-        deterministic: True
-        color: tab:red
-        order: 2
-        UQ: True
-        CCS: True
+    #   - label: GCM BCSD GCM
+    #     sample_specs:
+    #       - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+    #         checkpoint: epoch-0
+    #         input_xfm: bham64_gcm-4x_12em_linpr_pr-bham64_ccpm-4x_12em_linpr_pr-bcsd
+    #         dataset: bham64_gcm-4x_12em_linpr_pr
+    #         variables: [pr]
+    #     deterministic: True
+    #     color: tab:pink
+    #     order: 3
+    #     UQ: True
+    #     CCS: True
+    #   - label: cCPM BCSD GCM
+    #     sample_specs:
+    #       - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+    #         checkpoint: epoch-0
+    #         input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+    #         dataset: bham64_gcm-4x_12em_linpr_pr
+    #         variables: [pr]
+    #     deterministic: True
+    #     color: tab:red
+    #     order: 2
+    #     UQ: True
+    #     CCS: True
 sample_configs_at_60km:
     - label: CPMGEM_GCM@60km
       sample_specs:
