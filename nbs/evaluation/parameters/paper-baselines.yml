@@ -24,18 +24,18 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 11
-      - label: cCPM Bilinear
-        sample_specs:
-          - fq_model_id: id-linpr
-            checkpoint: epoch_0
-            input_xfm: none
-            dataset: bham64_ccpm-4x_12em_linpr_pr
-            variables: [pr]
-        deterministic: True
-        color: tab:grey
-        order: 0
-        UQ: False
-        CCS: False
+      # - label: cCPM Bilinear
+      #   sample_specs:
+      #     - fq_model_id: id-linpr
+      #       checkpoint: epoch_0
+      #       input_xfm: none
+      #       dataset: bham64_ccpm-4x_12em_linpr_pr
+      #       variables: [pr]
+      #   deterministic: True
+      #   color: tab:grey
+      #   order: 0
+      #   UQ: False
+      #   CCS: False
       - label: cCPM BCSD
         sample_specs:
           - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
