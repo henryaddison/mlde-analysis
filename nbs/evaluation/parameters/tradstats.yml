@@ -25,19 +25,19 @@ sample_configs:
         order: 0
         UQ: False
         CCS: False
-      - label: cCPM BCSDv1-ws3-notp
-        sample_specs:
-          - fq_model_id: bcsd/ukcp_local_pr_12em
-            checkpoint: epoch-0
-            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
-            dataset: bham64_ccpm-4x_12em_linpr_pr
-            variables: [pr]
-        deterministic: True
-        color: tab:red
-        order: 1
-        UQ: False
-        CCS: False
-      - label: cCPM BCSDv1-ws3-per-tp
+      # - label: cCPM BCSDv1-ws3-notp
+      #   sample_specs:
+      #     - fq_model_id: bcsd/ukcp_local_pr_12em
+      #       checkpoint: epoch-0
+      #       input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+      #       dataset: bham64_ccpm-4x_12em_linpr_pr
+      #       variables: [pr]
+      #   deterministic: True
+      #   color: tab:red
+      #   order: 1
+      #   UQ: False
+      #   CCS: False
+      - label: cCPM BCSD cCPM
         sample_specs:
           - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
             checkpoint: epoch-0
@@ -62,7 +62,7 @@ sample_configs:
       #   UQ: False
       #   CCS: False
     GCM:
-      - label: GCM BCSDv1-ws3-per-tp
+      - label: GCM BCSD GCM
         sample_specs:
           - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
             checkpoint: epoch-0
@@ -70,10 +70,22 @@ sample_configs:
             dataset: bham64_gcm-4x_12em_linpr_pr
             variables: [pr]
         deterministic: True
-        color: tab:green
-        order: 10
-        UQ: False
-        CCS: False
+        color: tab:pink
+        order: 3
+        UQ: True
+        CCS: True
+      - label: cCPM BCSD GCM
+        sample_specs:
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+            checkpoint: epoch-0
+            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+            dataset: bham64_gcm-4x_12em_linpr_pr
+            variables: [pr]
+        deterministic: True
+        color: tab:red
+        order: 2
+        UQ: True
+        CCS: True
 sample_configs_at_60km: []
 dataset_configs_at_60km:
     CPM: bham64_ccpm-60km_12em_pr_pr
