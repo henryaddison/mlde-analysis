@@ -95,6 +95,7 @@ sample_configs_at_60km:
           dataset: bham64_gcm-4x_12em_linpr_pr
           variables: [pr]
       deterministic: True
+      color: "tab:blue"
     - label: GCM BCSD GCM@60km
       sample_specs:
         - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3/postprocess/gcm-grid
@@ -103,6 +104,7 @@ sample_configs_at_60km:
           dataset: bham64_gcm-4x_12em_linpr_pr
           variables: [pr]
       deterministic: True
+      color: "tab:pink"
 dataset_configs_at_60km:
     CPM: bham64_ccpm-60km_12em_pr_pr
     GCM: bham64_gcm-60km_12em_rawpr_pr
