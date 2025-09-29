@@ -86,7 +86,23 @@ sample_configs:
         order: 2
         UQ: True
         CCS: True
-sample_configs_at_60km: []
+sample_configs_at_60km:
+    - label: cCPM BCSD GCM@60km
+      sample_specs:
+        - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3/postprocess/gcm-grid
+          checkpoint: epoch-0
+          input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+          dataset: bham64_gcm-4x_12em_linpr_pr
+          variables: [pr]
+      deterministic: True
+    - label: GCM BCSD GCM@60km
+      sample_specs:
+        - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3/postprocess/gcm-grid
+          checkpoint: epoch-0
+          input_xfm: bham64_gcm-4x_12em_linpr_pr-bham64_ccpm-4x_12em_linpr_pr-bcsd
+          dataset: bham64_gcm-4x_12em_linpr_pr
+          variables: [pr]
+      deterministic: True
 dataset_configs_at_60km:
     CPM: bham64_ccpm-60km_12em_pr_pr
     GCM: bham64_gcm-60km_12em_rawpr_pr
