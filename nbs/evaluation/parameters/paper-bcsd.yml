@@ -34,7 +34,7 @@ sample_configs:
         deterministic: True
         color: tab:orange
         order: 2
-      - label: cCPM BCSD
+      - label: BCSD_cCPM
         sample_specs:
           - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
             checkpoint: epoch-0
