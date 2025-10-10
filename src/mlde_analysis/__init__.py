@@ -3,12 +3,16 @@ import cmweather  # noqa
 import string
 import matplotlib
 import matplotlib.pyplot as plt
+import os
 import numpy as np
+from pathlib import Path
 import seaborn as sns
 import xarray as xr
 
 from mlde_utils import cp_model_rotated_pole, platecarree
 
+DATA_PATH = Path(os.getenv("DATA_PATH"))
+DERIVED_DATA = Path(os.getenv("DERIVED_DATA", DATA_PATH / "derived"))
 
 precip_clevs = [
     0.1,

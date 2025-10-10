@@ -127,6 +127,17 @@ def si_to_mmday(da: xr.DataArray) -> xr.DataArray:
     return (da * 3600 * 24).assign_attrs(attrs)
 
 
+def si_to_mmhour(da: xr.DataArray) -> xr.DataArray:
+    # convert from kg m-2 s-1 (i.e. mm s-1) to mm hour-1
+    attrs = {
+        "units": "mm/hr",
+        "grid_mapping": da.attrs.get("grid_mapping", "rotated_latitude_longitude"),
+        "standard_name": "precipitation_flux",
+        "long_name": f"Precip.",
+    }
+    return (da * 3600).assign_attrs(attrs)
+
+
 def open_samples_ds(
     run_name,
     checkpoint_id,
