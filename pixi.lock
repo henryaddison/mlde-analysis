@@ -5145,7 +5145,7 @@ packages:
 - pypi: ./
   name: mlde-analysis
   version: 0.5.0
-  sha256: 55fae022684a1f32959b9000fa6bf6e24962fb49b0a055e712f1fdfca282feb1
+  sha256: fa261849da3b6431d77688e6937f8c768b7aa5527acceba6915c7fd7284bdabf
   requires_dist:
   - cf-xarray
   - cmcrameri

@@ -87,5 +87,6 @@ extend-exclude = '^/nbs/'
 target-version = ["py312"]
 
 [tool.pytest_env]
-DERIVED_DATA="/path/to/data/derived"
+DATA_PATH="/path/to/data"
+DERIVED_DATA= {value = "{DATA_PATH}/derived", transform = true}
 WORKDIRS_PATH="/path/to/test/workdirs"
