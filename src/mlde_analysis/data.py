@@ -76,14 +76,20 @@ def prep_eval_data(
 
 def _exclude_days(ds, exclude_days):
     """
-    Exclude the first n days of each season to avoid risks of data leakage from training set via autocorrelation.
+    Exclude a margin of n days at the start and end of each season to avoid risks of data leakage from training set via autocorrelation.
     """
     if exclude_days > 0:
         # WARNING: this exclusion logic is designed for random season split strategy
         # TODO: make this exclusion depend on the split strategy
         doy_whitelist = np.concat(
             [
-                (np.arange(60 + i * 90 + exclude_days, 60 + (i + 1) * 90) % 360) + 1
+                (
+                    np.arange(
+                        60 + i * 90 + exclude_days, 60 + (i + 1) * 90 - exclude_days
+                    )
+                    % 360
+                )
+                + 1
                 for i in range(4)
             ]
         )
