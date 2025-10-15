@@ -34,19 +34,19 @@ sample_configs:
             variables: [pr]
         deterministic: True
         color: tab:orange
-        order: 1
-      - label: cCPM Bilinear
+        order: 2
+      - label: BCSD_cCPM
         sample_specs:
-          - fq_model_id: id-linpr
-            checkpoint: epoch_0
-            input_xfm: none
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+            checkpoint: epoch-0
+            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
             dataset: bham64_ccpm-4x_12em_linpr_pr
             variables: [pr]
         deterministic: True
-        color: tab:grey
-        order: 0
-        UQ: False
-        CCS: False
+        color: tab:red
+        order: 1
+        UQ: True
+        CCS: True
     GCM:
       - label: CPMGEM_GCM
         sample_specs:
@@ -60,6 +60,30 @@ sample_configs:
         UQ: False
         color: tab:green
         order: 20
+      # - label: GCM BCSD GCM
+      #   sample_specs:
+      #     - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+      #       checkpoint: epoch-0
+      #       input_xfm: bham64_gcm-4x_12em_linpr_pr-bham64_ccpm-4x_12em_linpr_pr-bcsd
+      #       dataset: bham64_gcm-4x_12em_linpr_pr
+      #       variables: [pr]
+      #   deterministic: True
+      #   color: tab:pink
+      #   order: 3
+      #   UQ: True
+      #   CCS: True
+      # - label: cCPM BCSD GCM
+      #   sample_specs:
+      #     - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+      #       checkpoint: epoch-0
+      #       input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+      #       dataset: bham64_gcm-4x_12em_linpr_pr
+      #       variables: [pr]
+      #   deterministic: True
+      #   color: tab:blue
+      #   order: 2
+      #   UQ: True
+      #   CCS: True
 sample_configs_at_60km:
     - label: CPMGEM_GCM@60km
       sample_specs:
@@ -114,4 +138,4 @@ examples_sample_idxs: [2,5]
 niterations: 30
 bootstrap_configs:
     niterations:
-      spread-error: 100
+      spread-error: 50
