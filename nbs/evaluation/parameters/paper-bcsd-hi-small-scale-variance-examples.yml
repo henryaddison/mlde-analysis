@@ -23,28 +23,28 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 11
-      # - label: U-Net_cCPM
-      #   sample_specs:
-      #     - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
-      #       checkpoint: epoch_100
-      #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
-      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-      #       variables: [pr]
-      #   deterministic: True
-      #   color: tab:orange
-      #   order: 2
-      # - label: BCSD_cCPM
-      #   sample_specs:
-      #     - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
-      #       checkpoint: epoch-0
-      #       input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
-      #       dataset: bham64_ccpm-4x_12em_linpr_pr
-      #       variables: [pr]
-      #   deterministic: True
-      #   color: tab:red
-      #   order: 1
-      #   UQ: True
-      #   CCS: True
+      - label: U-Net_cCPM
+        sample_specs:
+          - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
+            checkpoint: epoch_100
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
+        deterministic: True
+        color: tab:orange
+        order: 2
+      - label: BCSD_cCPM
+        sample_specs:
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+            checkpoint: epoch-0
+            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+            dataset: bham64_ccpm-4x_12em_linpr_pr
+            variables: [pr]
+        deterministic: True
+        color: tab:red
+        order: 1
+        UQ: True
+        CCS: True
 example_percentiles:
   CPM: {}
 example_overrides:
@@ -53,4 +53,4 @@ example_overrides:
       "2": ["07", "2075-07-15 12:00:00"]
       "3": ["09", "2072-09-02 12:00:00"]
       "4": ["04", "2036-08-08 12:00:00"]
-examples_sample_idxs: 6
+examples_sample_idxs: [2,4]
