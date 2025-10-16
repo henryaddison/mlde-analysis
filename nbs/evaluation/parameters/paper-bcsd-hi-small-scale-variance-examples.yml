@@ -45,6 +45,7 @@ sample_configs:
         order: 1
         UQ: True
         CCS: True
+example_inputs: []
 example_percentiles:
   CPM: {}
 example_overrides:
