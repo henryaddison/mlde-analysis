@@ -1,10 +1,9 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=80", "setuptools-scm[simple]>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlde_analysis"
-version = "0.5.0"
 authors = [
   { name="Henry Addison", email="henry.addison@bristol.ac.uk" },
 ]
@@ -30,6 +29,7 @@ dependencies = [
   "xhistogram",
   "xskillscore", "statsmodels",
 ]
+dynamic = ["version"]
 
 [dependency-groups]
 test = ["pytest", "pytest-env"]

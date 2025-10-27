@@ -5144,8 +5144,8 @@ packages:
   timestamp: 1742402716323
 - pypi: ./
   name: mlde-analysis
-  version: 0.5.0
-  sha256: fa261849da3b6431d77688e6937f8c768b7aa5527acceba6915c7fd7284bdabf
+  version: 0.5.1.dev205+gcde65ab92.d20251027
+  sha256: 670fa47df67685d8f9bf116c5ed21cff4a694e339e8152847d8199b16b43c76b
   requires_dist:
   - cf-xarray
   - cmcrameri
