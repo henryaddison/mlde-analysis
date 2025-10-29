@@ -1,3 +1,4 @@
+import cf_xarray as cfxr  # noqa: F401
 import cmweather  # noqa
 import string
 import matplotlib
@@ -6,7 +7,7 @@ import numpy as np
 import seaborn as sns
 import xarray as xr
 
-from mlde_utils import cp_model_rotated_pole
+from mlde_utils import cp_model_rotated_pole, platecarree
 
 
 precip_clevs = [
@@ -166,13 +167,34 @@ SUBREGIONS = {
     "NW": dict(grid_latitude=slice(44, 60), grid_longitude=slice(18, 34)),
 }
 
+BOX_LOCATIONS = {
+    label: dict(
+        zip(
+            ["X", "Y"],
+            cp_model_rotated_pole.transform_point(pt[0], pt[1], src_crs=platecarree)
+            + np.array([360, 0]),
+        )
+    )
+    for label, pt in {
+        "London": (-0.118092, 51.509865),
+        # "Birmingham": (-1.898575, 52.489471),
+        "Lancaster": (-2.801000, 54.047001),
+        # "Manchester": (
+        #     -2.244644,
+        #     53.483959,
+        # ),
+    }.items()
+}
 
-def create_map_fig(grid_spec, width=None, height=None):
+
+def create_map_fig(
+    grid_spec, width=None, height=None, projection=cp_model_rotated_pole
+):
     if width is None:
         width = len(grid_spec[0]) * 3.5
     if height is None:
         height = len(grid_spec) * 3.5
-    subplot_kw = dict(projection=cp_model_rotated_pole)
+    subplot_kw = dict(projection=projection)
     return plt.subplot_mosaic(
         grid_spec,
         figsize=(width, height),
@@ -235,19 +257,19 @@ def freq_density_plot(
     ax.tick_params(axis="both", which="major")
     if diagnostics:
         text = f"""
-        # Timestamps: {pred_pr["time"].count().values}
-        # Samples: {pred_pr.count().values}
-        # Targets: {target_pr.count().values}
-        % Samples == 0: {(((pred_pr == 0).sum()/pred_pr.count()).values*100).round()}
-        % Targets == 0: {(((target_pr == 0).sum()/target_pr.count()).values*100).round()}
-        % Samples < 1e-5: {(((pred_pr < 1e-5).sum()/pred_pr.count()).values*100).round()}
-        % Targets < 1e-5: {(((target_pr < 1e-5).sum()/target_pr.count()).values*100).round()}
-        % Samples < 0.1: {(((pred_pr < 0.1).sum()/pred_pr.count()).values*100).round()}
-        % Targets < 0.1: {(((target_pr < 0.1).sum()/target_pr.count()).values*100).round()}
-        % Samples < 1: {(((pred_pr < 1).sum()/pred_pr.count()).values*100).round()}
-        % Targets < 1: {(((target_pr < 1).sum()/target_pr.count()).values*100).round()}
-        Sample max: {pred_pr.max().values.round()}
-        Target max: {target_pr.max().values.round()}
+# Timestamps: {pred_pr["time"].count().values}
+# Samples: {pred_pr.count().values}
+# Targets: {target_pr.count().values}
+% Samples == 0: {(((pred_pr == 0).sum()/pred_pr.count()).values*100).round()}
+% Targets == 0: {(((target_pr == 0).sum()/target_pr.count()).values*100).round()}
+% Samples < 1e-5: {(((pred_pr < 1e-5).sum()/pred_pr.count()).values*100).round()}
+% Targets < 1e-5: {(((target_pr < 1e-5).sum()/target_pr.count()).values*100).round()}
+% Samples < 0.1: {(((pred_pr < 0.1).sum()/pred_pr.count()).values*100).round()}
+% Targets < 0.1: {(((target_pr < 0.1).sum()/target_pr.count()).values*100).round()}
+% Samples < 1: {(((pred_pr < 1).sum()/pred_pr.count()).values*100).round()}
+% Targets < 1: {(((target_pr < 1).sum()/target_pr.count()).values*100).round()}
+Sample max: {pred_pr.max().values.round()}
+Target max: {target_pr.max().values.round()}
         """
         ax.text(0.7, 0.5, text, fontsize=8, transform=ax.transAxes)
     ax.legend()
@@ -346,12 +368,8 @@ def qq_plot(
 
 
 def sorted_em_time_by_mean(da):
-    em_time_da = da.stack(em_time=["ensemble_member", "time"])
-    # std = em_time_ds["target_pr"].groupby("em_time").std(...)
-    # std = seasonal_ds["target_pr"].std(dim=["grid_longitude", "grid_latitude"])#/merged_ds.sel(source="CPM")["target_pr"].mean(dim=["grid_longitude", "grid_latitude"])
-    # std_sorted_em_time = std.sortby(-std)["em_time"].values
-    mean = em_time_da.groupby("em_time").mean(...)
-    return mean.sortby(-mean)["em_time"].values
+    mean = da.cf.mean(["X", "Y"]).stack(em_time=["ensemble_member", "time"])
+    return mean["em_time"].sortby(-mean).values
 
 
 def distribution_figure(
@@ -497,8 +515,8 @@ def plot_mean_bias(ds, target_pr):
             -0.05,
             "\n".join(
                 [
-                    f"global bias={global_mean_bias_ratio.values:.1%}",
-                    f"bias mae={bias_ratio_mae.values:.1f}%",
+                    f"global bias={global_mean_bias_ratio.values:.1%}",  # noqa: E231
+                    f"bias mae={bias_ratio_mae.values:.1f}%",  # noqa: E231
                 ]
             ),
             transform=ax.transAxes,

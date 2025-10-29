@@ -45,7 +45,9 @@ def grid_longitude():
 
 @pytest.fixture
 def ensemble_member():
-    return xr.Variable(["ensemble_member"], np.array([f"{i:02}" for i in range(3)]))
+    return xr.Variable(
+        ["ensemble_member"], np.array([f"{i:02}" for i in range(3)])  # noqa: E231
+    )  # noqa: E231
 
 
 @pytest.fixture

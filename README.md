@@ -31,7 +31,8 @@ Manage environment variables as you wish though the python-dotenv package is inc
 
 | Name | Description |
 |------|-------------|
-|`DERIVED_DATA`| The common path to where datasets and emulator artefacts (including samples) are to be found |
+|`DERIVED_DATA`| The base path to where datasets are to be found |
+|`WORKDIRS_PATH`| The common path to where emulator artefacts (including samples) are to be found |
 
 
 ## Usage

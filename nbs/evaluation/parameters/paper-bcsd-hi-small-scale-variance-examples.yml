@@ -1,0 +1,57 @@
+desc: |
+    Params for plotting predictions during some extra examples of convective events in UKCP Local
+    Test split
+    12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
+    Compare techniques: diffusion, u-net, BCSD
+eval_vars: [pr]
+derived_variables_config: {}
+dataset_configs:
+    CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+split: test
+ensemble_members: ["01", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
+samples_per_run: 6
+sample_configs:
+    CPM:
+      - label: CPMGEM_cCPM
+        sample_specs:
+          - fq_model_id: score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+            checkpoint: epoch_20
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        color: tab:blue
+        order: 11
+      - label: U-Net_cCPM
+        sample_specs:
+          - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
+            checkpoint: epoch_100
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
+        deterministic: True
+        color: tab:orange
+        order: 2
+      - label: BCSD_cCPM
+        sample_specs:
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+            checkpoint: epoch-0
+            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
+            dataset: bham64_ccpm-4x_12em_linpr_pr
+            variables: [pr]
+        deterministic: True
+        color: tab:red
+        order: 1
+        UQ: True
+        CCS: True
+example_inputs: []
+example_percentiles:
+  CPM: {}
+example_overrides:
+    CPM:
+      "1": ["12", "2073-08-01 12:00:00"]
+      "2": ["07", "2075-07-15 12:00:00"]
+      "3": ["09", "2072-09-02 12:00:00"]
+      "4": ["04", "2036-08-08 12:00:00"]
+examples_sample_idxs: [2,4]

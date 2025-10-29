@@ -3,6 +3,7 @@ dataset_configs = {
     "CPM": "demo-ccpm_pr",
     "GCM": "demo-gcm_pr",
 }
+exclude_days = 0  # Number of days to exclude from each start of each season
 split = "val"
 ensemble_members = [
     "01",
@@ -143,3 +144,32 @@ Describe in more detail the models being compared
 
 # bootstrapping
 niterations = 5
+bootstrap_configs = {
+    "niterations": {
+        "spread-error": 10,
+    }
+}
+
+# eval@60km
+
+sample_configs_at_60km = [
+    {
+        "label": "CPMGEM_GCM@60km",
+        "sample_specs": [
+            {
+                "fq_model_id": "score-sde/demo-cpmgem-pr/postprocess/gcm-grid",
+                "checkpoint": "epoch_20",
+                "input_xfm": "demo-gcm_pr-pixelmmsstan",
+                "label": "CPMGEM-GCM@60km",
+                "dataset": "demo-gcm_pr",
+                "variables": ["pr"],
+            }
+        ],
+        "deterministic": False,
+    },
+]
+
+dataset_configs_at_60km = {
+    "CPM": "demo-ccpm-60km_pr",
+    "GCM": "demo-gcm-60km_pr",
+}

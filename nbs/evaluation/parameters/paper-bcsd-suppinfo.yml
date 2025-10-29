@@ -24,28 +24,18 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 11
-      - label: U-Net_cCPM
+      - label: cCPM BCSD
         sample_specs:
-          - fq_model_id: score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
-            checkpoint: epoch_100
-            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
-            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-            variables: [pr]
-        deterministic: True
-        color: tab:orange
-        order: 1
-      - label: cCPM Bilinear
-        sample_specs:
-          - fq_model_id: id-linpr
-            checkpoint: epoch_0
-            input_xfm: none
+          - fq_model_id: bcsd-v1/ukcp_local_pr_12em-ws3
+            checkpoint: epoch-0
+            input_xfm: bham64_ccpm-4x_12em_linpr_pr-bcsd
             dataset: bham64_ccpm-4x_12em_linpr_pr
             variables: [pr]
         deterministic: True
-        color: tab:grey
-        order: 0
-        UQ: False
-        CCS: False
+        color: tab:red
+        order: 1
+        UQ: True
+        CCS: True
     GCM:
       - label: CPMGEM_GCM
         sample_specs:
@@ -109,8 +99,9 @@ example_percentiles:
 example_overrides:
     CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
     GCM: {}
-examples_sample_idxs: [2,5]
+examples_sample_idxs: [2]
+example_inputs: []
 niterations: 30
 bootstrap_configs:
     niterations:
-      spread-error: 50
+      spread-error: 3

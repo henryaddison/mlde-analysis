@@ -1,13 +1,12 @@
 import importlib
+import numpy as np
 import pandas as pd
 import xarray as xr
 
 from mlde_utils import (
     TIME_PERIODS,
-    dataset_split_path,
-    workdir_path,
-    samples_path,
-    samples_glob,
+    DatasetMetadata,
+    EmulatorOutputMetadata,
 )
 
 from . import display
@@ -19,6 +18,7 @@ def prep_eval_data(
     derived_var_configs,
     eval_vars,
     split,
+    exclude_days,
     ensemble_members,
     samples_per_run,
 ):
@@ -52,12 +52,19 @@ def prep_eval_data(
         dataset_ds = open_dataset_split(
             dataset_configs[source], split, ensemble_members
         )
+        dataset_ds = _exclude_days(dataset_ds, exclude_days)
+
         for var, attrs in display.ATTRS.items():
             tvarname = f"target_{var}"
             if tvarname in dataset_ds.data_vars:
                 dataset_ds[tvarname] = dataset_ds[tvarname].assign_attrs(attrs)
 
         ds = xr.merge([samples_ds, dataset_ds], join="inner", compat="override")
+        assert len(dataset_ds["time"]) == len(ds["time"]), (
+            f"Different time length for dataset before and after merging with samples: "
+            f"{len(ds['time'])} != {len(dataset_ds['time'])}. "
+            "Perhaps samples do not cover the time period of the dataset."
+        )
         ds = attach_eval_coords(ds)
 
         ds = attach_derived_variables(ds, derived_var_configs)
@@ -65,6 +72,29 @@ def prep_eval_data(
         merged_ds[source] = ds
 
     return merged_ds, models
+
+
+def _exclude_days(ds, exclude_days):
+    """
+    Exclude a margin of n days at the start and end of each season to avoid risks of data leakage from training set via autocorrelation.
+    """
+    if exclude_days > 0:
+        # WARNING: this exclusion logic is designed for random season split strategy
+        # TODO: make this exclusion depend on the split strategy
+        doy_whitelist = np.concat(
+            [
+                (
+                    np.arange(
+                        60 + i * 90 + exclude_days, 60 + (i + 1) * 90 - exclude_days
+                    )
+                    % 360
+                )
+                + 1
+                for i in range(4)
+            ]
+        )
+        ds = ds.sel(time=ds.time.dt.dayofyear.isin(doy_whitelist))
+    return ds
 
 
 def attach_derived_variables(ds, conf, prefixes=["target", "pred"]):
@@ -106,19 +136,29 @@ def open_samples_ds(
     ensemble_members,
     num_samples,
     deterministic,
+    config_hash=None,
 ):
-
+    eo_meta = EmulatorOutputMetadata(fq_run_id=run_name)
     per_em_datasets = []
     for ensemble_member in ensemble_members:
-        samples_dir = samples_path(
-            workdir=workdir_path(run_name),
+        samples_dir = eo_meta.samples_path(
             checkpoint=checkpoint_id,
             input_xfm=input_xfm_key,
             dataset=dataset_name,
             split=split,
             ensemble_member=ensemble_member,
+            config_hash=config_hash,
         )
-        sample_files_list = list(samples_glob(samples_dir))
+        sample_files_list = list(
+            eo_meta.samples_glob(
+                checkpoint=checkpoint_id,
+                input_xfm=input_xfm_key,
+                dataset=dataset_name,
+                split=split,
+                ensemble_member=ensemble_member,
+                config_hash=config_hash,
+            )
+        )
         if len(sample_files_list) == 0:
             raise RuntimeError(f"{samples_dir} has no sample files")
 
@@ -149,9 +189,9 @@ def open_samples_ds(
 
 def open_dataset_split(dataset_name, split, ensemble_members="all"):
     if ensemble_members == "all":
-        ds = xr.open_dataset(dataset_split_path(dataset_name, split))
+        ds = xr.open_dataset(DatasetMetadata(dataset_name).split_path(split))
     else:
-        ds = xr.open_dataset(dataset_split_path(dataset_name, split)).sel(
+        ds = xr.open_dataset(DatasetMetadata(dataset_name).split_path(split)).sel(
             ensemble_member=ensemble_members
         )
     if "target_pr" in ds.data_vars:
@@ -169,6 +209,9 @@ def open_concat_sample_datasets(sample_runs, split, ensemble_members, samples_pe
                 checkpoint_id=sample_src["checkpoint"],
                 dataset_name=sample_src["dataset"],
                 input_xfm_key=sample_src["input_xfm"],
+                config_hash=sample_src.get(
+                    "config_hash", None
+                ),  # Optional config hash for older samples
                 split=split,
                 ensemble_members=ensemble_members,
                 num_samples=samples_per_run,

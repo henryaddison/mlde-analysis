@@ -47,14 +47,16 @@ def plot_fss(
             ds, threshold, fss_windows, grid_box_size=grid_box_size
         )
 
-        for group_label, group_da in fss_scores.groupby("model", squeeze=True):
+        for group_label, group_da in fss_scores.groupby("model"):
             group_da.plot.line(
                 x="fss_window",
                 ax=ax,
                 label=f"{group_label}",
                 add_legend=False,
             )
-        ax.set_title(f"Threshold: {threshold:.2f}mm/day", fontsize="small")
+        ax.set_title(
+            f"Threshold: {threshold:.2f}mm/day", fontsize="small"  # noqa: E231
+        )  # noqa: E231
         ax.set_ylabel("FSS")
         ax.set_xlabel("FSS window (km)")
         if i == 0:
