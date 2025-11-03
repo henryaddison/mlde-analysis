@@ -1,5 +1,5 @@
 desc: |
-    Comparison of upgrade to cu117/PyTorch1.13 for diffusion model for CPMGEM-pr
+    Comparison of samples from PT1.12 pr models using PT1.12 code and PT2.9 code for U-Net and CPMGEM
     Val split
     12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
     Compare techniques: diffusion, u-net, bilinear
@@ -7,11 +7,34 @@ eval_vars: [pr]
 derived_variables_config: {}
 dataset_configs:
     CPM: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-split: test # test
+split: val # test
 ensemble_members: ["01" , "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "15"]
 samples_per_run: 3 # 6
 sample_configs:
     CPM:
+      - label: CPMGEM_cCPM
+        sample_specs:
+          - fq_model_id: pt1121/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+            checkpoint: epoch_20
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
+        deterministic: False
+        CCS: True
+        color: tab:blue
+        order: 11
+      # - label: CPMGEM_cCPM-pt29samples
+      #   sample_specs:
+      #     - fq_model_id: pt1121/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+      #       checkpoint: epoch_20
+      #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+      #       variables: [pr]
+      #       config_hash: a74a90bd941cc17d-pt29resample
+      #   deterministic: False
+      #   CCS: True
+      #   color: tab:green
+      #   order: 12
       - label: U-Net_cCPM
         sample_specs:
           - fq_model_id: pt1121/score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch/
@@ -30,7 +53,7 @@ sample_configs:
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
             variables: [pr]
-            config_hash: 47d264ca06d95d86
+            config_hash: 47d264ca06d95d86-pt29resample
         deterministic: True
         CCS: True
         color: tab:olive
