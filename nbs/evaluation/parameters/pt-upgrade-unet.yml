@@ -23,17 +23,18 @@ sample_configs:
         CCS: True
         color: tab:orange
         order: 15
-      # - label: U-Net_cCPM-pt29
-      #   sample_specs:
-      #     - fq_model_id: pt29/score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch/
-      #       checkpoint: epoch_100
-      #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
-      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-      #       variables: [pr]
-      #   deterministic: True
-      #   CCS: True
-      #   color: tab:red
-      #   order: 16
+      - label: U-Net_cCPM-pt29
+        sample_specs:
+          - fq_model_id: pt29/score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch/
+            checkpoint: epoch_100
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
+            config_hash: a74a90bd941cc17d-pt29resample
+        deterministic: True
+        CCS: True
+        color: tab:red
+        order: 16
 sample_configs_at_60km: []
 dataset_configs_at_60km:
     CPM: bham64_ccpm-60km_12em_pr_pr
