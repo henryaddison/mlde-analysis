@@ -23,18 +23,18 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 11
-      # - label: CPMGEM_cCPM-pt29samples
-      #   sample_specs:
-      #     - fq_model_id: pt1121/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
-      #       checkpoint: epoch_20
-      #       input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
-      #       dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
-      #       variables: [pr]
-      #       config_hash: a74a90bd941cc17d-pt29resample
-      #   deterministic: False
-      #   CCS: True
-      #   color: tab:green
-      #   order: 12
+      - label: CPMGEM_cCPM-pt29samples
+        sample_specs:
+          - fq_model_id: pt1121/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/bham-4x_12em_pSTV
+            checkpoint: epoch_20
+            input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
+            dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
+            variables: [pr]
+            config_hash: 2a1eccf56771ce91-pt29resample
+        deterministic: False
+        CCS: True
+        color: tab:green
+        order: 12
       - label: U-Net_cCPM
         sample_specs:
           - fq_model_id: pt1121/score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch/
