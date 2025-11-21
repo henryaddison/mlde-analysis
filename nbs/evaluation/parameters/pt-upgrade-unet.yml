@@ -57,6 +57,8 @@ example_percentiles:
       variable: pr
       season: JJA
   GCM: {}
-example_overrides: {}
+example_overrides: {
+  CPM: {} # {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
+}
 examples_sample_idxs: 2
 niterations: 30
