@@ -1,5 +1,5 @@
 desc: |
-    Comparison of upgrade to cu117 for diffusion model for CPMGEM-pr
+    Comparison of upgrade to cu12.8/PyTorch2.9 (via pt1.13) for diffusion model for CPMGEM-pr
     Val split
     12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
     Compare techniques: diffusion, u-net, bilinear
@@ -35,28 +35,18 @@ sample_configs:
         CCS: True
         color: tab:red
         order: 12
-      - label: U-Net_cCPM
+      - label: CPMGEM_cCPM-pt2.9.0
         sample_specs:
-          - fq_model_id: pt1121/score-sde/deterministic/ukcp_local_pr_12em_plain_unet/bham_pSTV-ema-gradcl-256-batch
-            checkpoint: epoch_100
+          - fq_model_id: pt29/score-sde/subvpsde/ukcp_local_pr_12em_cncsnpp_continuous/cpmgem-daily-pt2-9
+            checkpoint: epoch_20
             input_xfm: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr-stan
             dataset: bham64_ccpm-4x_12em_psl-sphum4th-temp4th-vort4th_pr
             variables: [pr]
-        deterministic: True
-        color: tab:orange
-        order: 1
-      - label: cCPM Bilinear
-        sample_specs:
-          - fq_model_id: pt1121/id-linpr
-            checkpoint: epoch_0
-            input_xfm: none
-            dataset: bham64_ccpm-4x_12em_linpr_pr
-            variables: [pr]
-        deterministic: True
-        color: tab:grey
-        order: 0
-        UQ: False
-        CCS: False
+            config_hash: bfd0e1e588477dba
+        deterministic: False
+        CCS: True
+        color: tab:pink
+        order: 13
     GCM:
       - label: CPMGEM_GCM
         sample_specs:
@@ -118,7 +108,7 @@ example_percentiles:
       variable: pr
       season: JJA
 example_overrides:
-    CPM: {"JJA Wet": ["01", "1993-08-01 12:00:00"]}
+    CPM: {} # "JJA Wet": ["01", "1993-08-01 12:00:00"]
     GCM: {}
-examples_sample_idxs: [2,5]
+examples_sample_idxs: 2
 niterations: 30

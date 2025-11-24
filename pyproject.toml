@@ -68,7 +68,7 @@ pint = { version = "*" }
 pysteps = { version = "*" }
 python = { version = "~=3.12.0" }
 python-cdo = { version = "*" }
-python-dotenv = { version = "*" }
+python-dotenv = { version = "~=1.2.0" }
 scikit-learn = { version = "*" }
 scipy = { version = "*" }
 seaborn = { version = "*" }
