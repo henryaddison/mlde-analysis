@@ -1,5 +1,5 @@
 desc: |
-    Comparison of upgrade to cu117/PyTorch1.13 for diffusion model for CPMGEM-pr
+    Comparison of upgrade to cu12.8/PyTorch2.9 (via pt1.13) for diffusion model for CPMGEM-pr
     Val split
     12em dataset and models, 60km inputs -> 8.8km outputs, pSTV input variable set
     Compare techniques: diffusion, u-net, bilinear
