@@ -32,24 +32,6 @@ sample_configs = {
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem",
-                    "checkpoint": "epoch_100",
-                    "dataset": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect",
-                    "input_xfm": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan",
-                    "variables": ["pr"],
-                    "config_hash": "cfb4519edcc06af1",
-                },
-            ],
-            "label": "ALPS-RCMGEM 100",
-            "deterministic": False,
-            "PSD": True,
-            "color": "tab:blue",
-            "order": 11,
-            "CCS": True,
-        },
-        {
-            "sample_specs": [
-                {
                     "fq_model_id": "mlde/deterministic/cordex_ml_mv_hist_fut_alps_unet/no_static_rcmgem",
                     "checkpoint": "epoch_200",
                     "dataset": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect",
