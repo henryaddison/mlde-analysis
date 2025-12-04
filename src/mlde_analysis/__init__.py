@@ -208,7 +208,7 @@ def plot_map(
 ):
     if style is not None:
         kwargs = STYLES[style] | kwargs
-    pcm = da.plot.pcolormesh(ax=ax, add_colorbar=add_colorbar, **kwargs)
+    pcm = da.plot.pcolormesh(ax=ax, x="lon", y="lat", add_colorbar=add_colorbar, **kwargs)
     ax.set_title(title)
     ax.coastlines(**({"resolution": "10m", "linewidth": 0.3} | (cl_kwargs or {})))
     # ax.gridlines(draw_labels={"bottom": "x", "left": "y"}, x_inline=False, y_inline=False)#, xlabel_style=dict(fontsize=24), ylabel_style=dict(fontsize=24))

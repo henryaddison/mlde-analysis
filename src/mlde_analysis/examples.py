@@ -1,7 +1,7 @@
 import cftime
 import math
 import numpy as np
-from mlde_utils import cp_model_rotated_pole
+from mlde_utils import cp_model_rotated_pole, platecarree
 
 from . import (
     plot_map,
@@ -289,7 +289,7 @@ def plot_examples(
         nrows=len(em_ts),
         ncols=n_vars * (1 + len(det_models) + len(stoch_models) * n_samples_per_example)
         + len(inputs),
-        subplot_kw={"projection": cp_model_rotated_pole},
+        subplot_kw={"projection": platecarree},
     )
     if len(axes.shape) == 1:
         axes = axes.reshape(1, -1)

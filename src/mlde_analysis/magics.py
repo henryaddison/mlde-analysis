@@ -21,7 +21,9 @@ class LoadEvalData(Magics):
             samples_per_run=self.shell.user_ns["samples_per_run"],
         )
 
-        cpm_das = {var: eval_ds["CPM"][f"target_{var}"] for var in eval_vars}
+        target_sim_key = self.shell.user_ns["target_sim_key"]
+
+        target_sim_das = {var: eval_ds[target_sim_key][f"target_{var}"] for var in eval_vars}
 
         pred_das = {
             var: xr.concat(
@@ -31,15 +33,15 @@ class LoadEvalData(Magics):
             for var in eval_vars
         }
 
-        var_das = {var: xr.merge([pred_das[var], cpm_das[var]]) for var in eval_vars}
+        var_das = {var: xr.merge([pred_das[var], target_sim_das[var]]) for var in eval_vars}
 
         modellabel2spec = {
             model_label: {"source": source} | model_spec
             for source, source_models in models.items()
             for model_label, model_spec in source_models.items()
-        } | {"CPM": {"source": "CPM", "color": "black"}}
+        } | {target_sim_key: {"source": target_sim_key, "color": "black"}}
 
-        return eval_ds, models, cpm_das, pred_das, var_das, modellabel2spec
+        return eval_ds, models, target_sim_das, pred_das, var_das, modellabel2spec
 
 
 def load_ipython_extension(ipython: InteractiveShellApp):
