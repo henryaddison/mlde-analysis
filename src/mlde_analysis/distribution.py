@@ -85,11 +85,14 @@ def rms_q999_bias(sample_da, target_da, normalize=False):
     )
     return rms_stat_bias(f_q999_bias, sample_da, target_da, normalize=normalize)
 
+
 def normalized_mean_bias(sample_da, target_da):
     return mean_bias(sample_da, target_da, normalize=True)
 
+
 def normalized_std_bias(sample_da, target_da):
     return std_bias(sample_da, target_da, normalize=True)
+
 
 def xr_hist(da, bins, **kwargs):
     def _np_hist(da, bins, **kwargs):
@@ -403,7 +406,9 @@ def plot_freq_density_figure(pred_da, target_label, modellabel2spec, fig):
 
     axd = fig.subplot_mosaic([["Density"]])
     ax = axd["Density"]
-    plot_freq_density(hist_data, ax=ax, target_da=target_label, linewidth=1, yscale="log")
+    plot_freq_density(
+        hist_data, ax=ax, target_da=target_label, linewidth=1, yscale="log"
+    )
 
     return ax
 
@@ -527,14 +532,18 @@ def plot_distribution_figure(
         if hrange is None:
             hrange = (
                 min(
-                    [d["data"].min().values for d in hist_data] + [target_da.min().values]
+                    [d["data"].min().values for d in hist_data]
+                    + [target_da.min().values]
                 ),
                 max(
-                    [d["data"].max().values for d in hist_data] + [target_da.max().values]
+                    [d["data"].max().values for d in hist_data]
+                    + [target_da.max().values]
                 ),
             )
         bins = np.histogram_bin_edges([], bins=50, range=hrange)
-        true_counts, bins = np.histogram(target_da, bins=bins, range=hrange, density=True)
+        true_counts, bins = np.histogram(
+            target_da, bins=bins, range=hrange, density=True
+        )
         mindensity = 1 / (np.prod(target_da.shape))
         print(mindensity)
         ymin = 10 ** (math.floor(math.log10(mindensity))) / 2

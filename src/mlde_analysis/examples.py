@@ -1,7 +1,7 @@
 import cftime
 import math
 import numpy as np
-from mlde_utils import cp_model_rotated_pole, platecarree
+from mlde_utils import platecarree
 
 from . import (
     plot_map,

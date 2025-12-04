@@ -8,7 +8,7 @@ import xarray as xr
 from mlde_utils import (
     DATASETS_PATH,
     TIME_PERIODS,
-    DatasetMetadata,
+    # DatasetMetadata,
     EmulatorOutputMetadata,
 )
 
@@ -56,7 +56,8 @@ def prep_eval_data(
                 samples_ds[pvarname] = samples_ds[pvarname].assign_attrs(attrs)
 
         dataset_ds = open_dataset_split(
-            dataset_configs[source], split,
+            dataset_configs[source],
+            split,
         ).expand_dims(ensemble_member=ensemble_members)
         dataset_ds = _exclude_days(dataset_ds, exclude_days)
         dataset_ds = dataset_ds.rename({f"{var}": f"target_{var}" for var in eval_vars})
@@ -197,7 +198,9 @@ def open_samples_ds(
 
     return ds
 
+
 VAL_SPLIT_YEARS = [1967, 1975, 2087, 2095]
+
 
 def _experiment_path(dataset_name, split):
     split_dir = split
@@ -238,7 +241,6 @@ def open_dataset_split(dataset_name, split, ensemble_members="all"):
     #     ds = xr.open_dataset(DatasetMetadata(dataset_name).split_path(split)).sel(
     #         ensemble_member=ensemble_members
     #     )
-
 
     return ds
 
