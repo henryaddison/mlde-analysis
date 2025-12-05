@@ -26,7 +26,7 @@ sample_configs:
         color: tab:blue
         order: 11
         CCS: True
-      - label: RCMGEM_pr_xl 200
+      - label: RCMGEM_pr_xl 180
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_pr_hist_fut_alps_cncsnpp_continuous_xl/no_static_rcmgem
             checkpoint: epoch_180
