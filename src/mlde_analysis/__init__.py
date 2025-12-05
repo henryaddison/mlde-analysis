@@ -144,12 +144,14 @@ STYLES = {
     },
     "relhum150cm": {"cmap": hurs_cmap, "vmin": 0, "vmax": 100},
     "tmean150cm": {"cmap": tas_cmap, "norm": tas_norm},
+    "tasmax": {"cmap": tas_cmap, "norm": tas_norm},
     "swbgt": {"cmap": swbgt_cmap, "vmin": -10, "vmax": 40},
     "temp": {"cmap": "coolwarm"},
     "vorticity": {"cmap": "RdBu"},
     "logBlues": {"cmap": "Blues", "norm": matplotlib.colors.LogNorm()},
     "prBias": {"cmap": pr_bias_cmap, "norm": pr_bias_norm},
     "tmean150cmBias": {"cmap": tas_bias_cmap, "norm": tas_bias_norm},
+    "tasmaxBias": {"cmap": tas_bias_cmap, "norm": tas_bias_norm},
     "relhum150cmBias": {"cmap": hurs_bias_cmap, "norm": hurs_bias_norm},
     "swbgtBias": {"cmap": swgbt_bias_cmap, "norm": swgbt_bias_norm},
     "biasError": {"cmap": bias_error_cmap, "norm": bias_error_norm},
@@ -158,6 +160,7 @@ STYLES = {
 VAR_LABELS = {
     "pr": "Precip. (mm/day)",
     "tmean150cm": "Temp. (K)",
+    "tasmax": "Temp. (K)",
     "relhum150cm": "Rel. Humidity (%)",
     "swbgt": "Simplified WBGT (C)",
 }

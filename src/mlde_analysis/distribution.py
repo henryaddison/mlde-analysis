@@ -19,6 +19,7 @@ DIST_THRESHOLDS = defaultdict(
         "pr": [0.1, 25, 75, 125],
         "relhum150cm": [35, 100],
         "tmean150cm": [273, 300],
+        "tasmax": [273, 303],
         "swbgt": [5, 25],
     },
 )

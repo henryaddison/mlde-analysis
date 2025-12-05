@@ -8,6 +8,7 @@ from . import plot_map
 THRESHOLDS = {
     "pr": [0.1],
     "tmean150cm": [273, 283, 298],
+    "tasmax": [273, 303],
     "relhum150cm": [60, 80, 100],
     "swbgt": [20],
 }

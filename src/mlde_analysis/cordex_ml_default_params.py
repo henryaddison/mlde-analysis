@@ -1,4 +1,4 @@
-eval_vars = ["pr"]
+eval_vars = ["pr", "tasmax"]
 target_sim_key = "RCM"
 exclude_days = 0  # Number of days to exclude from each start of each season
 split = "val"
@@ -6,7 +6,7 @@ ensemble_members = [
     "01",
 ]
 samples_per_run = 1
-alp_dataset_configs = {
+alps_dataset_configs = {
     "RCM": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect",
 }
 alps_sample_configs = {
@@ -18,7 +18,7 @@ alps_sample_configs = {
                     "checkpoint": "epoch_200",
                     "dataset": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect",
                     "input_xfm": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan",
-                    "variables": ["pr"],
+                    "variables": ["pr", "tasmax"],
                     "config_hash": "cfb4519edcc06af1",
                 },
             ],
@@ -36,7 +36,7 @@ alps_sample_configs = {
                     "checkpoint": "epoch_200",
                     "dataset": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect",
                     "input_xfm": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan",
-                    "variables": ["pr"],
+                    "variables": ["pr", "tasmax"],
                     "config_hash": "b4b44a4d9b9c2b1a",
                 },
             ],
@@ -102,8 +102,8 @@ nz_sample_configs = {
     ],
 }
 
-dataset_configs = nz_dataset_configs
-sample_configs = nz_sample_configs
+dataset_configs = alps_dataset_configs
+sample_configs = alps_sample_configs
 
 derived_variables_config = {}
 
