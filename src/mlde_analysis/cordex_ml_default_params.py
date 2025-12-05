@@ -1,15 +1,15 @@
 eval_vars = ["pr"]
 target_sim_key = "RCM"
-dataset_configs = {
-    "RCM": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect",
-}
 exclude_days = 0  # Number of days to exclude from each start of each season
 split = "val"
 ensemble_members = [
     "01",
 ]
 samples_per_run = 1
-sample_configs = {
+alp_dataset_configs = {
+    "RCM": "ALPS_domain-Emulator_hist_future-CNRMCM5-perfect",
+}
+alps_sample_configs = {
     "RCM": [
         {
             "sample_specs": [
@@ -50,6 +50,61 @@ sample_configs = {
     ],
 }
 
+sa_dataset_configs = {
+    "RCM": "SA_domain-Emulator_hist_future-ACCESSCM2-perfect",
+}
+sa_sample_configs = {
+    "RCM": [
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "mlde/deterministic/cordex_ml_pr_hist_fut_sa_unet/no_static_rcmgem",
+                    "checkpoint": "epoch_100",
+                    "dataset": "SA_domain-Emulator_hist_future-ACCESSCM2-perfect",
+                    "input_xfm": "SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan",
+                    "variables": ["pr"],
+                    "config_hash": "2f53e4b6e015c5f9",
+                },
+            ],
+            "label": "SA U-Net",
+            "deterministic": True,
+            "PSD": True,
+            "color": "tab:orange",
+            "order": 20,
+            "CCS": True,
+        },
+    ],
+}
+
+nz_dataset_configs = {
+    "RCM": "NZ_domain-Emulator_hist_future-ACCESSCM2-perfect",
+}
+nz_sample_configs = {
+    "RCM": [
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "mlde/deterministic/cordex_ml_pr_hist_fut_nz_unet/no_static_rcmgem",
+                    "checkpoint": "epoch_120",
+                    "dataset": "NZ_domain-Emulator_hist_future-ACCESSCM2-perfect",
+                    "input_xfm": "NZ_domain-Emulator_hist_future-ACCESSCM2-perfect-stan",
+                    "variables": ["pr"],
+                    "config_hash": "8659e730fb341654",
+                },
+            ],
+            "label": "NZ U-Net",
+            "deterministic": True,
+            "PSD": True,
+            "color": "tab:orange",
+            "order": 20,
+            "CCS": True,
+        },
+    ],
+}
+
+dataset_configs = nz_dataset_configs
+sample_configs = nz_sample_configs
+
 derived_variables_config = {}
 
 example_percentiles = {
@@ -70,16 +125,3 @@ examples_sample_idxs = 1
 desc = """
 Describe in more detail the models being compared
 """
-
-# bootstrapping
-niterations = 5
-bootstrap_configs = {
-    "niterations": {
-        "spread-error": 10,
-    }
-}
-
-# eval@60km
-
-sample_configs_at_60km = []
-dataset_configs_at_60km = {}
