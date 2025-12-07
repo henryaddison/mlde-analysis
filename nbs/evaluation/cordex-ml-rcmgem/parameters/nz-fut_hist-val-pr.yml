@@ -1,0 +1,41 @@
+desc: |
+  CORDEX-ML-BENCH
+  Emulator hist-fut training experiment
+  NZ_domain
+  val split
+  pr target variables
+eval_vars: [pr]
+target_sim_key: RCM
+dataset_configs:
+    RCM: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect
+split: val
+ensemble_members: ["01"]
+samples_per_run: 1
+sample_configs:
+    RCM:
+      - label: RCMGEM_pr 140
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_nz_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_140
+            dataset: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect
+            input_xfm: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+            variables: [pr]
+            config_hash: 7ff516f0214166f2
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        order: 11
+        CCS: True
+      - label: U-Net_pr
+        sample_specs:
+          - fq_model_id: mlde/deterministic/cordex_ml_mv_hist_fut_nz_unet/no_static_rcmgem
+            checkpoint: epoch_200
+            dataset: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect
+            input_xfm: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+            variables: [pr]
+            config_hash: 8659e730fb341654
+        deterministic: True
+        PSD: True
+        color: tab:orange
+        order: 20
+        CCS: True
