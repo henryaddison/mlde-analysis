@@ -6,7 +6,7 @@ import numpy as np
 import scipy
 import xarray as xr
 
-from mlde_utils import cp_model_rotated_pole
+from mlde_utils import platecarree
 
 from mlde_analysis import plot_map
 
@@ -477,7 +477,7 @@ def plot_distribution_figure(
         spec,
         gridspec_kw=dict(height_ratios=[4, 2, 2, 2]),
         per_subplot_kw={
-            ak: {"projection": cp_model_rotated_pole}
+            ak: {"projection": platecarree}
             for ak in meanb_axes_keys + stddevb_axes_keys + q999b_axes_keys
         },
     )
