@@ -66,11 +66,3 @@ sample_configs:
       #   color: tab:red
       #   order: 14
       #   CCS: True
-example_percentiles:
-    RCM:
-        DJF Cold: {"percentile": 0.2, "variable": "tasmax", "season": "DJF"}
-        DJF Coldest: {"percentile": 0, "variable": "tasmax", "season": "DJF"}
-        DJF Wettest: {"percentile": 1.0, "variable": "pr", "season": "DJF"}
-        JJA Warm: {"percentile": 0.8, "variable": "tasmax", "season": "JJA"}
-        JJA Hottest: {"percentile": 1.0, "variable": "tasmax", "season": "JJA"}
-        JJA Wettest: {"percentile": 1.0, "variable": "pr", "season": "JJA"}
