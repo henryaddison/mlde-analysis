@@ -50,7 +50,7 @@ sample_configs:
         deterministic: False
         PSD: True
         color: tab:olive
-        order: 14
+        order: 13
         CCS: True
       - label: RCMGEM_pr 340
         sample_specs:
@@ -63,8 +63,34 @@ sample_configs:
         deterministic: False
         PSD: True
         color: tab:pink
-        order: 16
+        order: 14
         CCS: True
+      - label: mv mm;recen 340
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
+            checkpoint: epoch_340
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [pr]
+            config_hash: 86e8cba9bd5c3c86
+        deterministic: False
+        PSD: True
+        color: tab:green
+        order: 15
+        CCS: True
+      # - label: mv mm;recen 400
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
+      #       checkpoint: epoch_400
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [pr]
+      #       config_hash: 86e8cba9bd5c3c86
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:red
+      #   order: 14
+      #   CCS: True
       # - label: U-Net_mv
       #   sample_specs:
       #     - fq_model_id: mlde/deterministic/cordex_ml_mv_hist_fut_alps_unet/no_static_rcmgem
