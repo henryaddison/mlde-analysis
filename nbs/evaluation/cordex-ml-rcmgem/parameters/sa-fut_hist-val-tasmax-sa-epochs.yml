@@ -3,8 +3,9 @@ desc: |
   Emulator hist-fut training experiment
   SA_domain
   val split
-  pr target variables
-eval_vars: [pr]
+  tasmax target variables
+  Compare epochs for s/a model
+eval_vars: [tasmax]
 target_sim_key: RCM
 dataset_configs:
     RCM: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
@@ -13,29 +14,29 @@ ensemble_members: ["01"]
 samples_per_run: 1
 sample_configs:
     RCM:
-      - label: RCMGEM_pr 180
+      - label: e160
         sample_specs:
-          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_pr_hist_fut_sa_cncsnpp_continuous/no_static_rcmgem
-            checkpoint: epoch_180
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_tasmax_hist_fut_sa_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_160
             dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
             input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-            variables: [pr]
-            config_hash: 835702614e20b9bc
+            variables: [tasmax]
+            config_hash: 012fdb9d67644f91
         deterministic: False
         PSD: True
         color: tab:blue
         order: 11
         CCS: True
-      - label: U-Net_pr
+      - label: e240
         sample_specs:
-          - fq_model_id: mlde/deterministic/cordex_ml_pr_hist_fut_sa_unet/no_static_rcmgem
-            checkpoint: epoch_100
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_tasmax_hist_fut_sa_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_240
             dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
             input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-            variables: [pr]
-            config_hash: 2f53e4b6e015c5f9
-        deterministic: True
+            variables: [tasmax]
+            config_hash: 012fdb9d67644f91
+        deterministic: False
         PSD: True
         color: tab:orange
-        order: 20
+        order: 12
         CCS: True

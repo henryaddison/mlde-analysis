@@ -4,6 +4,7 @@ desc: |
   SA_domain
   val split
   pr target variables
+  Compare epochs for s/a model
 eval_vars: [pr]
 target_sim_key: RCM
 dataset_configs:
@@ -13,7 +14,7 @@ ensemble_members: ["01"]
 samples_per_run: 1
 sample_configs:
     RCM:
-      - label: RCMGEM_pr 180
+      - label: e180
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_pr_hist_fut_sa_cncsnpp_continuous/no_static_rcmgem
             checkpoint: epoch_180
@@ -25,17 +26,4 @@ sample_configs:
         PSD: True
         color: tab:blue
         order: 11
-        CCS: True
-      - label: U-Net_pr
-        sample_specs:
-          - fq_model_id: mlde/deterministic/cordex_ml_pr_hist_fut_sa_unet/no_static_rcmgem
-            checkpoint: epoch_100
-            dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
-            input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-            variables: [pr]
-            config_hash: 2f53e4b6e015c5f9
-        deterministic: True
-        PSD: True
-        color: tab:orange
-        order: 20
         CCS: True
