@@ -5,7 +5,7 @@ desc: |
   val split
   tasmax target variables
   compare s/a and mv models
-eval_vars: [pr]
+eval_vars: [tasmax]
 target_sim_key: RCM
 dataset_configs:
     RCM: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
