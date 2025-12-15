@@ -156,7 +156,7 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
         .rename(f"Relative RMS Q999 Bias (%)")
     )
 
-    bins = np.histogram_bin_edges(target_da, bins=50)
+    bins = np.histogram_bin_edges(target_da, 200)
     target_hist_da = xr_hist(target_da, bins=bins)
     model_hist_dist = (
         da.groupby("model", squeeze=False)
@@ -239,7 +239,7 @@ def plot_freq_density(
                 max(hrange[1], target_da.max().values),
             )
 
-    bins = np.histogram_bin_edges([], bins=50, range=hrange)
+    bins = np.histogram_bin_edges([], bins=200, range=hrange)
 
     if target_da is not None:
         if yscale == "log":
@@ -541,7 +541,7 @@ def plot_distribution_figure(
                     + [target_da.max().values]
                 ),
             )
-        bins = np.histogram_bin_edges([], bins=50, range=hrange)
+        bins = np.histogram_bin_edges([], bins=200, range=hrange)
         true_counts, bins = np.histogram(
             target_da, bins=bins, range=hrange, density=True
         )
