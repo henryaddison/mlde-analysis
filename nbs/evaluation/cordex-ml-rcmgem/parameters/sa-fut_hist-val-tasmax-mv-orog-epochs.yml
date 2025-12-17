@@ -33,7 +33,7 @@ sample_configs:
           checkpoint: epoch_200
           dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
           input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-          variables: [pr]
+          variables: [tasmax]
           config_hash: c57783e989d30a98
       deterministic: False
       PSD: True
@@ -46,7 +46,7 @@ sample_configs:
           checkpoint: epoch_300
           dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
           input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-          variables: [pr]
+          variables: [tasmax]
           config_hash: c57783e989d30a98
       deterministic: False
       PSD: True
@@ -59,7 +59,7 @@ sample_configs:
           checkpoint: epoch_400
           dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
           input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-          variables: [pr]
+          variables: [tasmax]
           config_hash: c57783e989d30a98
       deterministic: False
       PSD: True
