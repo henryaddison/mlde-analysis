@@ -21,7 +21,7 @@ sample_configs:
             dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
             input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: 86e8cba9bd5c3c86
+            config_hash: 0e6b703b1c0ea33e
         deterministic: False
         PSD: True
         color: tab:blue
@@ -34,7 +34,7 @@ sample_configs:
             dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
             input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: 86e8cba9bd5c3c86
+            config_hash: 0e6b703b1c0ea33e
         deterministic: False
         PSD: True
         color: tab:orange
@@ -47,7 +47,7 @@ sample_configs:
             dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
             input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: 86e8cba9bd5c3c86
+            config_hash: 0e6b703b1c0ea33e
         deterministic: False
         PSD: True
         color: tab:green
@@ -60,7 +60,7 @@ sample_configs:
       #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
       #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
       #       variables: [pr]
-      #       config_hash: 86e8cba9bd5c3c86
+      #       config_hash: 0e6b703b1c0ea33e
       #   deterministic: False
       #   PSD: True
       #   color: tab:red
