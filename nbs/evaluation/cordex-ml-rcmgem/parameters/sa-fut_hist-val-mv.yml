@@ -39,3 +39,4 @@ sample_configs:
       color: tab:green
       order: 13
       CCS: True
+examples_sample_idxs: 2
