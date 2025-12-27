@@ -40,32 +40,32 @@ sample_configs:
     #   color: tab:orange
     #   order: 12
     #   CCS: True
-    - label: e300
-      sample_specs:
-        - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
-          checkpoint: epoch_300
-          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
-          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-          variables: [pr]
-          config_hash: c57783e989d30a98
-      deterministic: False
-      PSD: True
-      color: tab:green
-      order: 13
-      CCS: True
-    - label: e400
-      sample_specs:
-        - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
-          checkpoint: epoch_400
-          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
-          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
-          variables: [pr]
-          config_hash: c57783e989d30a98
-      deterministic: False
-      PSD: True
-      color: tab:red
-      order: 14
-      CCS: True
+    # - label: e300
+    #   sample_specs:
+    #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
+    #       checkpoint: epoch_300
+    #       dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+    #       input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+    #       variables: [pr]
+    #       config_hash: c57783e989d30a98
+    #   deterministic: False
+    #   PSD: True
+    #   color: tab:green
+    #   order: 13
+    #   CCS: True
+    # - label: e400
+    #   sample_specs:
+    #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
+    #       checkpoint: epoch_400
+    #       dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+    #       input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+    #       variables: [pr]
+    #       config_hash: c57783e989d30a98
+    #   deterministic: False
+    #   PSD: True
+    #   color: tab:red
+    #   order: 14
+    #   CCS: True
     - label: e500
       sample_specs:
         - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
@@ -91,4 +91,56 @@ sample_configs:
       PSD: True
       color: tab:orange
       order: 16
+      CCS: True
+    - label: e700
+      sample_specs:
+        - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
+          checkpoint: epoch_700
+          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+          variables: [pr]
+          config_hash: c05d3105834ec7b3
+      deterministic: False
+      PSD: True
+      color: tab:green
+      order: 17
+      CCS: True
+    - label: e800
+      sample_specs:
+        - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
+          checkpoint: epoch_800
+          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+          variables: [pr]
+          config_hash: c05d3105834ec7b3
+      deterministic: False
+      PSD: True
+      color: tab:red
+      order: 18
+      CCS: True
+    - label: e900
+      sample_specs:
+        - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
+          checkpoint: epoch_900
+          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+          variables: [pr]
+          config_hash: c05d3105834ec7b3
+      deterministic: False
+      PSD: True
+      color: tab:olive
+      order: 19
+      CCS: True
+    - label: e1000
+      sample_specs:
+        - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
+          checkpoint: epoch_1000
+          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+          variables: [pr]
+          config_hash: c05d3105834ec7b3
+      deterministic: False
+      PSD: True
+      color: tab:purple
+      order: 20
       CCS: True
