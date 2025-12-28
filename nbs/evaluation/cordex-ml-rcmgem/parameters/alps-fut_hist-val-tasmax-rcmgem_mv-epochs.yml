@@ -14,7 +14,7 @@ ensemble_members: ["01"]
 samples_per_run: 1
 sample_configs:
     RCM:
-      - label: mm;recen 120
+      - label: e120
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
             checkpoint: epoch_120
@@ -27,7 +27,7 @@ sample_configs:
         color: tab:blue
         order: 11
         CCS: True
-      - label: mm;recen 220
+      - label: e220
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
             checkpoint: epoch_220
@@ -40,7 +40,7 @@ sample_configs:
         color: tab:orange
         order: 12
         CCS: True
-      - label: mm;recen 340
+      - label: e340
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
             checkpoint: epoch_340
@@ -53,7 +53,7 @@ sample_configs:
         color: tab:green
         order: 13
         CCS: True
-      - label: mm;recen 400
+      - label: e400
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
             checkpoint: epoch_400
@@ -65,6 +65,19 @@ sample_configs:
         PSD: True
         color: tab:red
         order: 14
+        CCS: True
+      - label: e500
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
+            checkpoint: epoch_500
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: 7bff2c3759fbdc89
+        deterministic: False
+        PSD: True
+        color: tab:purple
+        order: 15
         CCS: True
 example_percentiles:
     RCM:
