@@ -53,19 +53,6 @@ sample_configs:
         color: tab:green
         order: 13
         CCS: True
-      - label: e440
-        sample_specs:
-          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
-            checkpoint: epoch_440
-            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
-            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
-            variables: [tasmax]
-            config_hash: 43711281dc39bc06
-        deterministic: False
-        PSD: True
-        color: tab:green
-        order: 14
-        CCS: True
       - label: e400
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
@@ -78,6 +65,19 @@ sample_configs:
         PSD: True
         color: tab:red
         order: 14
+        CCS: True
+      - label: e440
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_440
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: 4f289dfc26365bdb
+        deterministic: False
+        PSD: True
+        color: tab:green
+        order: 21
         CCS: True
       - label: e500
         sample_specs:
