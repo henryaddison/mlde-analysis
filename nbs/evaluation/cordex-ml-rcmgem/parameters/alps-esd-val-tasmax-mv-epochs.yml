@@ -27,6 +27,110 @@ sample_configs:
         color: tab:orange
         order: 12
         CCS: True
+      - label: e400
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_400
+            dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+            input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: eacfffc5bdf4c3d3
+        deterministic: False
+        PSD: True
+        color: tab:orange
+        order: 12
+        CCS: True
+      - label: e800
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_800
+            dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+            input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: eacfffc5bdf4c3d3
+        deterministic: False
+        PSD: True
+        color: tab:red
+        order: 14
+        CCS: True
+      - label: e1000
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_1000
+            dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+            input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: eacfffc5bdf4c3d3
+        deterministic: False
+        PSD: True
+        color: tab:purple
+        order: 15
+        CCS: True
+      - label: e1200
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_1200
+            dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+            input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: eacfffc5bdf4c3d3
+        deterministic: False
+        PSD: True
+        color: tab:brown
+        order: 16
+        CCS: True
+      - label: e1400
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_1400
+            dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+            input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: eacfffc5bdf4c3d3
+        deterministic: False
+        PSD: True
+        color: tab:pink
+        order: 17
+        CCS: True
+      - label: e1600
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_1600
+            dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+            input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: eacfffc5bdf4c3d3
+        deterministic: False
+        PSD: True
+        color: tab:grey
+        order: 18
+        CCS: True
+      - label: e1800
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_1800
+            dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+            input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: eacfffc5bdf4c3d3
+        deterministic: False
+        PSD: True
+        color: tab:olive
+        order: 19
+        CCS: True
+      # - label: e2000
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
+      #       checkpoint: epoch_2000
+      #       dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: eacfffc5bdf4c3d3
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:cyan
+      #   order: 20
+      #   CCS: True
 example_percentiles:
     RCM:
         DJF Cold: {"percentile": 0.2, "variable": "tasmax", "season": "DJF"}
