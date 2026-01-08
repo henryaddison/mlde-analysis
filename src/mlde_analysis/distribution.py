@@ -4,6 +4,7 @@ import math
 from matplotlib import pyplot as plt
 import numpy as np
 import scipy
+import string
 import xarray as xr
 
 from mlde_utils import platecarree
@@ -418,9 +419,7 @@ def plot_distribution_figure(
     fig,
     hist_das,
     target_da,
-    mean_bias_das,
-    std_bias_das,
-    q999_bias_das,
+    biases_das,
     modellabel2spec,
     error_ax=None,
     hrange=None,
@@ -439,46 +438,40 @@ def plot_distribution_figure(
         ),
         key=lambda x: modellabel2spec[x["label"]]["order"],
     )
-    mean_biases = sorted(
-        map(
-            lambda modelgp: dict(data=modelgp[1].squeeze("model"), label=modelgp[0]),
-            mean_bias_das.groupby("model", squeeze=False),
-        ),
-        key=lambda x: modellabel2spec[x["label"]]["order"],
+    decorated_biases = {
+        bias_key: sorted(
+            map(
+                lambda modelgp: dict(
+                    data=modelgp[1].squeeze("model"), label=modelgp[0]
+                ),
+                bias_das.groupby("model", squeeze=False),
+            ),
+            key=lambda x: modellabel2spec[x["label"]]["order"],
+        )
+        for bias_key, bias_das in biases_das.items()
+    }
+
+    biases_layout = {
+        bias_key: [f"{bias_key} {x['label']}" for x in decbias]
+        for bias_key, decbias in decorated_biases.items()
+    }
+
+    dist_spec = np.array(["Density"] * len(list(biases_layout.values())[0])).reshape(
+        1, -1
     )
-    std_biases = sorted(
-        map(
-            lambda modelgp: dict(data=modelgp[1].squeeze("model"), label=modelgp[0]),
-            std_bias_das.groupby("model", squeeze=False),
-        ),
-        key=lambda x: modellabel2spec[x["label"]]["order"],
+
+    spec = np.concatenate(
+        [dist_spec]
+        + [np.array(keys).reshape(1, -1) for keys in biases_layout.values()],
+        axis=0,
     )
-    q999_biases = sorted(
-        map(
-            lambda modelgp: dict(data=modelgp[1].squeeze("model"), label=modelgp[0]),
-            q999_bias_das.groupby("model", squeeze=False),
-        ),
-        key=lambda x: modellabel2spec[x["label"]]["order"],
-    )
-
-    meanb_axes_keys = [f"meanb {x['label']}" for x in mean_biases]
-    meanb_spec = np.array(meanb_axes_keys).reshape(1, -1)
-
-    stddevb_axes_keys = [f"stddevb {x['label']}" for x in std_biases]
-    stddevb_spec = np.array(stddevb_axes_keys).reshape(1, -1)
-
-    q999b_axes_keys = [f"q999b {x['label']}" for x in q999_biases]
-    q999b_spec = np.array(q999b_axes_keys).reshape(1, -1)
-
-    dist_spec = np.array(["Density"] * meanb_spec.shape[1]).reshape(1, -1)
-
-    spec = np.concatenate([dist_spec, meanb_spec, stddevb_spec, q999b_spec], axis=0)
     axd = fig.subplot_mosaic(
         spec,
         gridspec_kw=dict(height_ratios=[4, 2, 2, 2]),
         per_subplot_kw={
             ak: {"projection": platecarree}
-            for ak in meanb_axes_keys + stddevb_axes_keys + q999b_axes_keys
+            for bias_keys in biases_layout.values()
+            for ak in bias_keys
         },
     )
 
@@ -494,39 +487,17 @@ def plot_distribution_figure(
         ha="left",
         va="bottom",
     )
-
-    meanb_axes = [axd[f'meanb {bias["label"]}'] for bias in mean_biases]
-    plot_biases(mean_biases, meanb_axes, fig, colorbar=False, **bias_kwargs)
-    meanb_axes[0].annotate(
-        "b.",
-        xy=(0.04, 1.0),
-        xycoords=("figure fraction", "axes fraction"),
-        weight="bold",
-        ha="left",
-        va="bottom",
-    )
-
-    stdb_axes = [axd[f'stddevb {bias["label"]}'] for bias in std_biases]
-    plot_biases(std_biases, stdb_axes, fig, colorbar=False, **bias_kwargs)
-    stdb_axes[0].annotate(
-        "c.",
-        xy=(0.04, 1.0),
-        xycoords=("figure fraction", "axes fraction"),
-        weight="bold",
-        ha="left",
-        va="bottom",
-    )
-
-    q999b_axes = [axd[f'q999b {bias["label"]}'] for bias in q999_biases]
-    plot_biases(q999_biases, q999b_axes, fig, **bias_kwargs)
-    q999b_axes[0].annotate(
-        "d.",
-        xy=(0.04, 1.0),
-        xycoords=("figure fraction", "axes fraction"),
-        weight="bold",
-        ha="left",
-        va="bottom",
-    )
+    for idx, (bias_key, decbias) in enumerate(decorated_biases.items()):
+        axes = [axd[f'{bias_key} {bias["label"]}'] for bias in decbias]
+        plot_biases(decbias, axes, fig, colorbar=False, **bias_kwargs)
+        axes[0].annotate(
+            string.ascii_lowercase[idx + 1] + ".",
+            xy=(0.04, 1.0),
+            xycoords=("figure fraction", "axes fraction"),
+            weight="bold",
+            ha="left",
+            va="bottom",
+        )
 
     if error_ax is not None:
 
