@@ -40,6 +40,19 @@ sample_configs:
         color: tab:orange
         order: 12
         CCS: True
+      - label: e600
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_600
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:green
+        order: 13
+        CCS: True
       - label: e800
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/no_static_rcmgem
