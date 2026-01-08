@@ -1,4 +1,4 @@
 desc: |
-    Explore NX historic-future emulator training dataset
-dataset_name: "MZ_domain-Emulator_hist_future-ACCESSCM2-perfect"
+    Explore NZ historic-future emulator training dataset
+dataset_name: "NZ_domain-Emulator_hist_future-ACCESSCM2-perfect"
 target_vars: [tasmax, pr]
