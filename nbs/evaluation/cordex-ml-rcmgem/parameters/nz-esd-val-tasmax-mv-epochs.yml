@@ -1,0 +1,35 @@
+desc: |
+  CORDEX-ML-BENCH
+  ESD training experiment
+  NZ_domain
+  val split
+  tasmax target variables
+  compare epochs for mv model
+eval_vars: [tasmax]
+target_sim_key: RCM
+dataset_configs:
+    RCM: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+split: val
+ensemble_members: ["01"]
+samples_per_run: 1
+sample_configs:
+    RCM:
+      - label: e200
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_200
+            dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: e56aee38f6874f8c
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        order: 11
+        CCS: True
+example_percentiles:
+    RCM:
+        DJF Warm: {"percentile": 0.8, "variable": "tasmax", "season": "DJF"}
+        DJF Hottest: {"percentile": 1.0, "variable": "tasmax", "season": "DJF"}
+        JJA Cool: {"percentile": 0.2, "variable": "tasmax", "season": "JJA"}
+        JJA Coldest: {"percentile": 0, "variable": "tasmax", "season": "JJA"}
