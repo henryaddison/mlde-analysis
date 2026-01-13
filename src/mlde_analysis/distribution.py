@@ -467,7 +467,7 @@ def plot_distribution_figure(
     )
     axd = fig.subplot_mosaic(
         spec,
-        gridspec_kw=dict(height_ratios=[4, 2, 2, 2]),
+        gridspec_kw=dict(height_ratios=[4] + [2] * len(biases_layout)),
         per_subplot_kw={
             ak: {"projection": platecarree}
             for bias_keys in biases_layout.values()
