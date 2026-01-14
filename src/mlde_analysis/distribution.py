@@ -423,9 +423,12 @@ def plot_distribution_figure(
     modellabel2spec,
     error_ax=None,
     hrange=None,
+    height_ratio=None,
     fd_kwargs={},
     bias_kwargs={},
 ):
+    if height_ratio is None:
+        height_ratio = [3] + [1] * len(biases_das)
     # re-organize data for visualizing
     hist_data = sorted(
         map(
@@ -467,7 +470,7 @@ def plot_distribution_figure(
     )
     axd = fig.subplot_mosaic(
         spec,
-        gridspec_kw=dict(height_ratios=[4] + [2] * len(biases_layout)),
+        gridspec_kw=dict(height_ratios=height_ratio),
         per_subplot_kw={
             ak: {"projection": platecarree}
             for bias_keys in biases_layout.values()
