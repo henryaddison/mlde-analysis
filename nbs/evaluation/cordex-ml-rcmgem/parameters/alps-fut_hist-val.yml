@@ -3,9 +3,9 @@ desc: |
   Emulator hist-fut training experiment
   ALPS domain
   val split
-  pr target variables
+  pr and tasmax target variables
   mv vs s/a
-eval_vars: [pr]
+eval_vars: [pr,tasmax]
 target_sim_key: RCM
 dataset_configs:
     RCM: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
@@ -22,31 +22,37 @@ sample_configs:
             input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
             variables: [pr]
             config_hash: 42ee4eae7bf9f973
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_tasmax_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_280
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: 726e9e95e74ead1e
         deterministic: False
         PSD: True
         color: tab:blue
         order: 11
         CCS: True
-      - label: mv
+      - label: mv e340
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/no_static_rcmgem_tasmaxmmrecen
             checkpoint: epoch_340
             dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
             input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
-            variables: [pr]
+            variables: [pr,tasmax]
             config_hash: 0e6b703b1c0ea33e
         deterministic: False
         PSD: True
         color: tab:orange
         order: 12
         CCS: True
-      - label: mv orog
+      - label: mv orog e540
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
-            checkpoint: epoch_500
+            checkpoint: epoch_540
             dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
             input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
-            variables: [pr]
+            variables: [pr,tasmax]
             config_hash: 4f289dfc26365bdb
         deterministic: False
         PSD: True
