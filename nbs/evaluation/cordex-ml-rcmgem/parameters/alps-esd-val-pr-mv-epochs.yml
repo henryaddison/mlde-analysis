@@ -43,7 +43,7 @@ sample_configs:
       - label: e600
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_alps_cncsnpp_continuous/no_static_rcmgem
-            checkpoint: epoch_400
+            checkpoint: epoch_600
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
