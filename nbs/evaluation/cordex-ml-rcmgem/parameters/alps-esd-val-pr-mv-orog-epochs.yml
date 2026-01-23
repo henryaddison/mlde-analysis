@@ -21,7 +21,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:blue
@@ -34,7 +34,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:orange
@@ -47,7 +47,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:green
@@ -60,7 +60,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:red
@@ -73,7 +73,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:purple
@@ -86,7 +86,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:brown
@@ -99,7 +99,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:pink
@@ -112,7 +112,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:grey
@@ -125,7 +125,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:olive
@@ -138,7 +138,7 @@ sample_configs:
             dataset: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect
             input_xfm: ALPS_domain-ESD_pseudo_reality-CNRMCM5-perfect-stan
             variables: [pr]
-            config_hash: a5465fee3e98a39
+            config_hash: a5465fee3e98a396
         deterministic: False
         PSD: True
         color: tab:cyan
