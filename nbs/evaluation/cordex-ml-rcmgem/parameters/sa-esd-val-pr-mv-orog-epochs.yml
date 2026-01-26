@@ -157,19 +157,6 @@ sample_configs:
         color: tab:blue
         order: 22
         CCS: True
-      - label: e2200
-        sample_specs:
-          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
-            checkpoint: epoch_2200
-            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
-            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
-            variables: [pr]
-            config_hash: 5ac5ad821661e3b9
-        deterministic: False
-        PSD: True
-        color: tab:orange
-        order: 22
-        CCS: True
       - label: e2400
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
@@ -180,7 +167,7 @@ sample_configs:
             config_hash: 5ac5ad821661e3b9
         deterministic: False
         PSD: True
-        color: tab:green
+        color: tab:orange
         order: 24
         CCS: True
       - label: e2600
@@ -193,7 +180,7 @@ sample_configs:
             config_hash: 5ac5ad821661e3b9
         deterministic: False
         PSD: True
-        color: tab:red
+        color: tab:green
         order: 26
         CCS: True
       - label: e2700
@@ -206,6 +193,6 @@ sample_configs:
             config_hash: 5ac5ad821661e3b9
         deterministic: False
         PSD: True
-        color: tab:purple
+        color: tab:red
         order: 27
         CCS: True
