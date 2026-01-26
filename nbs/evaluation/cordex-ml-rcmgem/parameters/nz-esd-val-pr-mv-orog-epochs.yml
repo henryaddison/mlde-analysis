@@ -14,45 +14,45 @@ ensemble_members: ["01"]
 samples_per_run: 1
 sample_configs:
     RCM:
-      - label: e100
-        sample_specs:
-          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
-            checkpoint: epoch_100
-            dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
-            input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
-            variables: [pr]
-            config_hash: 1ef317a6131d0b93
-        deterministic: False
-        PSD: True
-        color: tab:blue
-        order: 11
-        CCS: True
-      - label: e140
-        sample_specs:
-          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
-            checkpoint: epoch_140
-            dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
-            input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
-            variables: [pr]
-            config_hash: 1ef317a6131d0b93
-        deterministic: False
-        PSD: True
-        color: tab:orange
-        order: 11.4
-        CCS: True
-      - label: e200
-        sample_specs:
-          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
-            checkpoint: epoch_200
-            dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
-            input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
-            variables: [pr]
-            config_hash: 2b38f48a6180d996
-        deterministic: False
-        PSD: True
-        color: tab:green
-        order: 12
-        CCS: True
+      # - label: e100
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_100
+      #       dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+      #       input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+      #       variables: [pr]
+      #       config_hash: 1ef317a6131d0b93
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:blue
+      #   order: 11
+      #   CCS: True
+      # - label: e140
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_140
+      #       dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+      #       input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+      #       variables: [pr]
+      #       config_hash: 1ef317a6131d0b93
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:orange
+      #   order: 11.4
+      #   CCS: True
+      # - label: e200
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_200
+      #       dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+      #       input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+      #       variables: [pr]
+      #       config_hash: 2b38f48a6180d996
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:green
+      #   order: 12
+      #   CCS: True
       - label: e240
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
