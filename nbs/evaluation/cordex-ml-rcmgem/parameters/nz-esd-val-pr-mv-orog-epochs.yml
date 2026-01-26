@@ -56,7 +56,7 @@ sample_configs:
       - label: e240
         sample_specs:
           - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_nz_cncsnpp_continuous/w_static_rcmgem
-            checkpoint: epoch_100
+            checkpoint: epoch_240
             dataset: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect
             input_xfm: NZ_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
             variables: [pr]
