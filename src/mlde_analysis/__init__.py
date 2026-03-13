@@ -31,6 +31,23 @@ precip_clevs = [
     150,
 ]
 
+precip_hourly_clevs = [
+    0.1,
+    0.5,  # 1,
+    1,  # 2.5,
+    2,  # 5,
+    3,  # 7.5,
+    4,  # 10,
+    5,  # 15,
+    6,  # 20,
+    7,  # 30,
+    8,  # 40,
+    10,  # 50,
+    20,  # 70,
+    30,  # 100,
+    50,  # 150,
+]
+
 
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     new_cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
@@ -137,6 +154,10 @@ STYLES = {
     "pr": {
         "cmap": chasehigh_precip_cmap,
         "norm": precip_norm(precip_clevs, chasehigh_precip_cmap),
+    },
+    "pr_hourly": {
+        "cmap": chasehigh_precip_cmap,
+        "norm": precip_norm(precip_hourly_clevs, chasehigh_precip_cmap),
     },
     "chaselow_pr": {
         "cmap": chaselow_precip_cmap,
