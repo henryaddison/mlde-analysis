@@ -1,6 +1,6 @@
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.shellapp import InteractiveShellApp
-from mlde_analysis.data import prep_eval_data
+from mlde_analysis.cordex_ml_data import prep_eval_data
 import xarray as xr
 
 
