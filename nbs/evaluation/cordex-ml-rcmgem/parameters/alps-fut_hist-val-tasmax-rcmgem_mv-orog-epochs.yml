@@ -1,0 +1,165 @@
+desc: |
+  CORDEX-ML-BENCH
+  Emulator hist-fut training experiment
+  ALPS domain
+  val split
+  tasmax target variables
+  RCMGEM_mv w/ orog model, compare checkpoints
+eval_vars: [tasmax]
+target_sim_key: RCM
+dataset_configs:
+    RCM: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+split: val
+ensemble_members: ["01"]
+samples_per_run: 1
+sample_configs:
+    RCM:
+# - label: e100
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_100
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: 43711281dc39bc06
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:blue
+      #   order: 11
+      #   CCS: True
+      # - label: e200
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_200
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: 43711281dc39bc06
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:orange
+      #   order: 12
+      #   CCS: True
+      # - label: e300
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_300
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: 43711281dc39bc06
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:green
+      #   order: 13
+      #   CCS: True
+      - label: e400
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_400
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: 43711281dc39bc06
+        deterministic: False
+        PSD: True
+        color: tab:red
+        order: 14
+        CCS: True
+      - label: e440
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_440
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: 4f289dfc26365bdb
+        deterministic: False
+        PSD: True
+        color: tab:green
+        order: 21
+        CCS: True
+      - label: e500
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_500
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: 4f289dfc26365bdb
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        order: 15
+        CCS: True
+      - label: e600
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_600
+            dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+            input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+            variables: [tasmax]
+            config_hash: 4f289dfc26365bdb
+        deterministic: False
+        PSD: True
+        color: tab:orange
+        order: 16
+        CCS: True
+      # - label: e700
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_700
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: 4f289dfc26365bdb
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:pink
+      #   order: 17
+      #   CCS: True
+      # - label: e800
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_800
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: 4f289dfc26365bdb
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:olive
+      #   order: 18
+      #   CCS: True
+      # - label: e900
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_900
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: 4f289dfc26365bdb
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:purple
+      #   order: 19
+      #   CCS: True
+      # - label: e1000
+      #   sample_specs:
+      #     - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_alps_cncsnpp_continuous/w_static_rcmgem
+      #       checkpoint: epoch_1000
+      #       dataset: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect
+      #       input_xfm: ALPS_domain-Emulator_hist_future-CNRMCM5-perfect-stan
+      #       variables: [tasmax]
+      #       config_hash: 4f289dfc26365bdb
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:brown
+      #   order: 20
+      #   CCS: True
+example_percentiles:
+    RCM:
+        DJF Cold: {"percentile": 0.2, "variable": "tasmax", "season": "DJF"}
+        DJF Coldest: {"percentile": 0, "variable": "tasmax", "season": "DJF"}
+        JJA Warm: {"percentile": 0.8, "variable": "tasmax", "season": "JJA"}
+        JJA Hottest: {"percentile": 1.0, "variable": "tasmax", "season": "JJA"}

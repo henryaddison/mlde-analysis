@@ -8,13 +8,14 @@ from . import plot_map
 THRESHOLDS = {
     "pr": [0.1],
     "tmean150cm": [273, 283, 298],
+    "tasmax": [273, 303],
     "relhum150cm": [60, 80, 100],
     "swbgt": [20],
 }
 
 
 def threshold_exceeded_prop(da, threshold):
-    example_dims = set(da.dims) - set(["grid_latitude", "grid_longitude"])
+    example_dims = set(da.dims) - set([da.cf["X"].name, da.cf["Y"].name])
     return (
         100 * (da > threshold).sum(dim=example_dims) / da.count(dim=example_dims)
     ).rename("% Threshold exceeded")
@@ -161,7 +162,7 @@ def plot_threshold_exceedence_errors(threshold_exceedence_stats, style="raw"):
 
 
 def wd_mean(da, threshold):
-    dims = set(da.dims) - set(["grid_latitude", "grid_longitude"])
+    dims = set(da.dims) - set([da.cf["X"].name, da.cf["Y"].name])
     return da.where(da > threshold).mean(dim=dims).rename("wd mean (mm/day)")
 
 

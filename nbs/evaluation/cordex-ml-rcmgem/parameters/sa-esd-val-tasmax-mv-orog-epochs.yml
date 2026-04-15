@@ -1,0 +1,152 @@
+desc: |
+  CORDEX-ML-BENCH
+  ESD training experiment
+  SA_domain
+  val split
+  tasmax target variables
+  Compare epochs for mv model
+eval_vars: [tasmax]
+target_sim_key: RCM
+dataset_configs:
+    RCM: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+split: val
+ensemble_members: ["01"]
+samples_per_run: 1
+sample_configs:
+    RCM:
+      - label: e200
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_200
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        order: 11
+        CCS: True
+      - label: e400
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_400
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:orange
+        order: 12
+        CCS: True
+      - label: e600
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_600
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:green
+        order: 13
+        CCS: True
+      - label: e800
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_800
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:red
+        order: 14
+        CCS: True
+      - label: e1000
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_1000
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:purple
+        order: 15
+        CCS: True
+      - label: e1200
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_1200
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:brown
+        order: 16
+        CCS: True
+      - label: e1400
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_1400
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:pink
+        order: 17
+        CCS: True
+      - label: e1600
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_1600
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:grey
+        order: 18
+        CCS: True
+      - label: e1800
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_1800
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:olive
+        order: 19
+        CCS: True
+      - label: e2000
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_esd_sa_cncsnpp_continuous/w_static_rcmgem
+            checkpoint: epoch_2000
+            dataset: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect
+            input_xfm: SA_domain-ESD_pseudo_reality-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: 04e82512cbc5f441
+        deterministic: False
+        PSD: True
+        color: tab:cyan
+        order: 20
+        CCS: True
+example_percentiles:
+    RCM:
+        DJF Warm: {"percentile": 0.8, "variable": "tasmax", "season": "DJF"}
+        DJF Hottest: {"percentile": 1.0, "variable": "tasmax", "season": "DJF"}
+        JJA Cool: {"percentile": 0.2, "variable": "tasmax", "season": "JJA"}
+        JJA Coldest: {"percentile": 0, "variable": "tasmax", "season": "JJA"}

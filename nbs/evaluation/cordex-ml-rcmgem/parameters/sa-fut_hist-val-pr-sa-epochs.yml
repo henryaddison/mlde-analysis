@@ -1,0 +1,29 @@
+desc: |
+  CORDEX-ML-BENCH
+  Emulator hist-fut training experiment
+  SA_domain
+  val split
+  pr target variables
+  Compare epochs for s/a model
+eval_vars: [pr]
+target_sim_key: RCM
+dataset_configs:
+    RCM: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+split: val
+ensemble_members: ["01"]
+samples_per_run: 1
+sample_configs:
+    RCM:
+      - label: e180
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_pr_hist_fut_sa_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_180
+            dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+            input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+            variables: [pr]
+            config_hash: 835702614e20b9bc
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        order: 11
+        CCS: True

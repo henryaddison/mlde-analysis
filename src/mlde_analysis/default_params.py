@@ -1,4 +1,5 @@
 eval_vars = ["pr"]
+target_sim_key = "CPM"
 dataset_configs = {
     "CPM": "demo-ccpm_pr",
     "GCM": "demo-gcm_pr",

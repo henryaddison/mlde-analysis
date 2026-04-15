@@ -20,7 +20,7 @@ dependencies = [
   "cmcrameri",
   "cmweather",
   "ipympl",
-  "mlde-utils==v0.3.0a9",
+  "mlde-utils==v0.3.0",
   "nbdev",
   #"netcdf4==1.7.2",
   "pre-commit",

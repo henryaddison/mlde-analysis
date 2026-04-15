@@ -1,0 +1,43 @@
+desc: |
+  CORDEX-ML-BENCH
+  Emulator hist-fut training experiment
+  SA_domain
+  val split
+  pr target variables
+  compare samples from JASMIN with IAI ones at epoch 560 for mv model with orog
+eval_vars: [pr]
+target_sim_key: RCM
+dataset_configs:
+    RCM: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+split: val
+ensemble_members: ["01"]
+samples_per_run: 1
+sample_configs:
+  RCM:
+    - label: JASMIN
+      sample_specs:
+        - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_mv_hist_fut_sa_cncsnpp_continuous/w_static_rcmgem
+          checkpoint: epoch_560
+          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+          variables: [pr]
+          config_hash: c05d3105834ec7b3
+      deterministic: False
+      PSD: True
+      color: tab:red
+      order: 1
+      CCS: True
+      RCM:
+    - label: IAI
+      sample_specs:
+        - fq_model_id: mlde/iai-sa-mv-orog
+          checkpoint: epoch_560
+          dataset: SA_domain-Emulator_hist_future-ACCESSCM2-perfect
+          input_xfm: SA_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+          variables: [pr]
+          config_hash: 66d58a2ecc3284b0
+      deterministic: False
+      PSD: True
+      color: tab:blue
+      order: 2
+      CCS: True

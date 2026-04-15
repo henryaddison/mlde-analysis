@@ -2,8 +2,9 @@ import IPython
 import xarray as xr
 
 VAR_RANGES = {
-    "pr": (0, 250),
+    "pr": (0, 1200),
     "tmean150cm": (250, 315),
+    "tasmax": (233, 333),
     "relhum150cm": (10, 120),
     "swbgt": (-10, 40),
 }
@@ -11,6 +12,7 @@ VAR_RANGES = {
 ATTRS = {
     "pr": {"long_name": "Precip.", "units": "mm/day"},
     "tmean150cm": {"long_name": "Temp.", "units": "K"},
+    "tasmax": {"long_name": "Temp.", "units": "K"},
     "relhum150cm": {"long_name": "Rel. Humidity", "units": "%"},
     "swbgt": {"long_name": "sWBGT", "units": "C"},
 }

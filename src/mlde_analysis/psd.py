@@ -51,7 +51,7 @@ def rapsd(pr_da, pixel_size=8.8):
         npix,
         pixel_size,
         input_core_dims=[
-            ["grid_latitude", "grid_longitude"],
+            [pr_da.cf["Y"].name, pr_da.cf["X"].name],
             [],
             [],
         ],  # list with one entry per arg
@@ -60,8 +60,8 @@ def rapsd(pr_da, pixel_size=8.8):
         ],
         exclude_dims=set(
             (
-                "grid_latitude",
-                "grid_longitude",
+                pr_da.cf["Y"].name,
+                pr_da.cf["X"].name,
             )
         ),  # dimensions allowed to change size. Must be set!
         # vectorize=True,
@@ -89,7 +89,7 @@ def pysteps_rapsd(pr_da, pixel_size):
         pr_da,  # now arguments in the order expected by function
         pixel_size,
         input_core_dims=[
-            ["grid_latitude", "grid_longitude"],
+            [pr_da.cf["Y"].name, pr_da.cf["X"].name],
             [],
         ],  # list with one entry per arg
         output_core_dims=[
@@ -97,8 +97,8 @@ def pysteps_rapsd(pr_da, pixel_size):
         ],
         exclude_dims=set(
             (
-                "grid_latitude",
-                "grid_longitude",
+                pr_da.cf["Y"].name,
+                pr_da.cf["X"].name,
             )
         ),  # dimensions allowed to change size. Must be set!
         vectorize=True,
@@ -111,7 +111,7 @@ def plot_psd(target_rapsd, pred_rapsds, ax, legend_kwargs={}):
     ax.plot(
         1 / target_rapsd["freq"].data,
         target_rapsd.data,
-        label="CPM",
+        label="Target",
         color="black",
         linewidth=3,
         linestyle=":",

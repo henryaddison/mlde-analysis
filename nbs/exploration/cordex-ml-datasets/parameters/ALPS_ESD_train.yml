@@ -1,0 +1,7 @@
+desc: "Exploring the training data for the Alps domain for the ESD pseudo reality experiment"
+experiment: "ESD_pseudo_reality"
+domain: "ALPS_domain"
+gcm_name: "CNRMCM5"
+split: "train"
+target_variables: ["tasmax", "pr"]
+framework: "perfect"

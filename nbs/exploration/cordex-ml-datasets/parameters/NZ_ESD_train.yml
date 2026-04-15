@@ -1,0 +1,7 @@
+desc: "Exploring the training data for the NZ domain for the ESD pseudo reality experiment"
+experiment: "ESD_pseudo_reality"
+domain: "NZ_domain"
+gcm_name: "ACCESSCM2"
+split: "train"
+target_variables: ["tasmax", "pr"]
+framework: "perfect"

@@ -1,0 +1,48 @@
+desc: |
+  CORDEX-ML-BENCH
+  Emulator hist-fut training experiment
+  NZ_domain
+  val split
+  tasmax target variables
+  compare epochs for s/a model
+eval_vars: [tasmax]
+target_sim_key: RCM
+dataset_configs:
+    RCM: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect
+split: val
+ensemble_members: ["01"]
+samples_per_run: 1
+sample_configs:
+    RCM:
+      - label: e100
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_tasmax_hist_fut_nz_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_100
+            dataset: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect
+            input_xfm: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: b5596a3e42249319
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        order: 11
+        CCS: True
+      - label: e240
+        sample_specs:
+          - fq_model_id: mlde/score-sde/subvpsde/cordex_ml_tasmax_hist_fut_nz_cncsnpp_continuous/no_static_rcmgem
+            checkpoint: epoch_240
+            dataset: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect
+            input_xfm: NZ_domain-Emulator_hist_future-ACCESSCM2-perfect-stan
+            variables: [tasmax]
+            config_hash: b5596a3e42249319
+        deterministic: False
+        PSD: True
+        color: tab:orange
+        order: 12
+        CCS: True
+example_percentiles:
+    RCM:
+        DJF Cold: {"percentile": 0.2, "variable": "tasmax", "season": "DJF"}
+        DJF Coldest: {"percentile": 0, "variable": "tasmax", "season": "DJF"}
+        JJA Warm: {"percentile": 0.8, "variable": "tasmax", "season": "JJA"}
+        JJA Hottest: {"percentile": 1.0, "variable": "tasmax", "season": "JJA"}

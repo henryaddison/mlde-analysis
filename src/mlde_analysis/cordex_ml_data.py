@@ -1,0 +1,310 @@
+import importlib
+import os
+import numpy as np
+import pandas as pd
+from pathlib import Path
+import xarray as xr
+
+from mlde_utils import (
+    DATASETS_PATH,
+    TIME_PERIODS,
+    # DatasetMetadata,
+    EmulatorOutputMetadata,
+)
+
+from . import display
+
+
+WORKDIRS_PATH = Path(os.getenv("WORKDIRS_PATH"))
+
+
+def prep_eval_data(
+    sample_configs,
+    dataset_configs,
+    derived_var_configs,
+    eval_vars,
+    split,
+    exclude_days,
+    ensemble_members,
+    samples_per_run,
+):
+    models = {
+        source: dict(
+            sorted(
+                {
+                    run_config["label"]: {"order": -1, "CCS": False, "source": source}
+                    | run_config
+                    for run_config in data_configs
+                }.items(),
+                key=lambda x: x[1]["order"],
+            )
+        )
+        for source, data_configs in sample_configs.items()
+    }
+
+    merged_ds = {}
+    for source, sample_config in sample_configs.items():
+        samples_ds = open_concat_sample_datasets(
+            sample_config,
+            split=split,
+            ensemble_members=ensemble_members,
+            samples_per_run=samples_per_run,
+        )
+        for var, attrs in display.ATTRS.items():
+            pvarname = f"pred_{var}"
+            if pvarname in samples_ds.data_vars:
+                samples_ds[pvarname] = samples_ds[pvarname].assign_attrs(attrs)
+
+        dataset_ds = open_dataset_split(
+            dataset_configs[source],
+            split,
+        ).expand_dims(ensemble_member=ensemble_members)
+        dataset_ds = _exclude_days(dataset_ds, exclude_days)
+        dataset_ds = dataset_ds.rename({f"{var}": f"target_{var}" for var in eval_vars})
+        if "target_pr" in dataset_ds.data_vars:
+            dataset_ds["target_pr"] = si_to_mmday(dataset_ds["target_pr"])
+
+        for var, attrs in display.ATTRS.items():
+            tvarname = f"target_{var}"
+            if tvarname in dataset_ds.data_vars:
+                dataset_ds[tvarname] = dataset_ds[tvarname].assign_attrs(attrs)
+
+        ds = xr.merge([samples_ds, dataset_ds], join="inner", compat="override")
+        assert len(dataset_ds["time"]) == len(ds["time"]), (
+            f"Different time length for dataset before and after merging with samples: "
+            f"{len(ds['time'])} != {len(dataset_ds['time'])}. "
+            "Perhaps samples do not cover the time period of the dataset."
+        )
+        ds = attach_eval_coords(ds)
+
+        ds = attach_derived_variables(ds, derived_var_configs)
+
+        merged_ds[source] = ds
+
+    return merged_ds, models
+
+
+def _exclude_days(ds, exclude_days):
+    """
+    Exclude a margin of n days at the start and end of each season to avoid risks of data leakage from training set via autocorrelation.
+    """
+    if exclude_days > 0:
+        # WARNING: this exclusion logic is designed for random season split strategy
+        # TODO: make this exclusion depend on the split strategy
+        doy_whitelist = np.concat(
+            [
+                (
+                    np.arange(
+                        60 + i * 90 + exclude_days, 60 + (i + 1) * 90 - exclude_days
+                    )
+                    % 360
+                )
+                + 1
+                for i in range(4)
+            ]
+        )
+        ds = ds.sel(time=ds.time.dt.dayofyear.isin(doy_whitelist))
+    return ds
+
+
+def attach_derived_variables(ds, conf, prefixes=["target", "pred"]):
+    for var, argsconf in conf.items():
+
+        parts = argsconf[0].split(".")
+        module_name, function_name = ".".join(parts[:-1]), parts[-1]
+        module = importlib.import_module(module_name)
+        function = getattr(module, function_name)
+
+        for prefix in prefixes:
+
+            kwargs = {
+                argname: ds[f"{prefix}_{val}"] for argname, val in argsconf[1].items()
+            }
+
+            ds[f"{prefix}_{var}"] = function(**kwargs)
+
+    return ds
+
+
+def si_to_mmday(da: xr.DataArray) -> xr.DataArray:
+    return da
+    # convert from kg m-2 s-1 (i.e. mm s-1) to mm day-1
+    attrs = {
+        "units": "mm/day",
+        "grid_mapping": da.attrs.get("grid_mapping", "rotated_latitude_longitude"),
+        "standard_name": "precipitation_flux",
+        "long_name": f"Precip.",
+    }
+    # return da(da * 3600 * 24).assign_attrs(attrs)
+    return da.assign_attrs(attrs)
+
+
+def open_samples_ds(
+    run_name,
+    checkpoint_id,
+    dataset_name,
+    input_xfm_key,
+    split,
+    ensemble_members,
+    num_samples,
+    deterministic,
+    config_hash=None,
+):
+    eo_meta = EmulatorOutputMetadata(fq_run_id=run_name, base_dir=WORKDIRS_PATH)
+    per_em_datasets = []
+    for ensemble_member in ensemble_members:
+        samples_dir = eo_meta.samples_path(
+            checkpoint=checkpoint_id,
+            input_xfm=input_xfm_key,
+            dataset=dataset_name,
+            split=split,
+            ensemble_member=ensemble_member,
+            config_hash=config_hash,
+        )
+        sample_files_list = list(
+            eo_meta.samples_glob(
+                checkpoint=checkpoint_id,
+                input_xfm=input_xfm_key,
+                dataset=dataset_name,
+                split=split,
+                ensemble_member=ensemble_member,
+                config_hash=config_hash,
+            )
+        )
+        if len(sample_files_list) == 0:
+            raise RuntimeError(f"{samples_dir} has no sample files")
+
+        if deterministic:
+            em_ds = xr.open_dataset(sample_files_list[0])
+        else:
+            sample_files_list = sample_files_list[:num_samples]
+            if len(sample_files_list) < num_samples:
+                raise RuntimeError(
+                    f"{samples_dir} does not have {num_samples} sample files"
+                )
+            em_ds = xr.concat(
+                [
+                    xr.open_dataset(sample_filepath)
+                    for sample_filepath in sample_files_list
+                ],
+                dim="sample_id",
+            ).isel(sample_id=range(num_samples))
+
+        per_em_datasets.append(em_ds.expand_dims(ensemble_member=[ensemble_member]))
+
+    ds = xr.concat(per_em_datasets, dim="ensemble_member")
+    if "pred_pr" in ds.data_vars:
+        ds["pred_pr"] = si_to_mmday(ds["pred_pr"])
+
+    return ds
+
+
+VAL_SPLIT_YEARS = [1967, 1975, 2087, 2095]
+
+
+def _experiment_path(dataset_name, split):
+    split_dir = split
+    if split == "val":
+        split_dir = "train"
+
+    return DATASETS_PATH / dataset_name / split_dir
+
+
+def _open_raw_split(filepath, split):
+    ds = xr.open_dataset(filepath)
+
+    if split in ["train", "val"]:
+        split_mask = ds["time.year"].isin(VAL_SPLIT_YEARS)
+        if split == "train":
+            split_mask = ~split_mask
+        ds = ds.sel(time=split_mask)
+
+    return ds
+
+
+def open_raw_dataset_split_predictands(
+    dataset_name,
+    split,
+):
+    experiment_path = _experiment_path(dataset_name, split)
+
+    filepath = experiment_path / "target" / "pr_tasmax.nc"
+
+    return _open_raw_split(filepath, split)
+
+
+def open_dataset_split(dataset_name, split, ensemble_members="all"):
+    ds = open_raw_dataset_split_predictands(dataset_name, split)
+    # if ensemble_members == "all":
+    #     ds = xr.open_dataset(DatasetMetadata(dataset_name).split_path(split))
+    # else:
+    #     ds = xr.open_dataset(DatasetMetadata(dataset_name).split_path(split)).sel(
+    #         ensemble_member=ensemble_members
+    #     )
+
+    return ds
+
+
+def open_concat_sample_datasets(sample_runs, split, ensemble_members, samples_per_run):
+    sample_datasets = []
+    for sample_run in sample_runs:
+        per_var_sample_datasets = [
+            open_samples_ds(
+                run_name=sample_src["fq_model_id"],
+                checkpoint_id=sample_src["checkpoint"],
+                dataset_name=sample_src["dataset"],
+                input_xfm_key=sample_src["input_xfm"],
+                config_hash=sample_src.get(
+                    "config_hash", None
+                ),  # Optional config hash for older samples
+                split=split,
+                ensemble_members=ensemble_members,
+                num_samples=samples_per_run,
+                deterministic=sample_run["deterministic"],
+            )[f"pred_{var}"]
+            for sample_src in sample_run["sample_specs"]
+            for var in sample_src["variables"]
+        ]
+
+        sample_datasets.append(xr.merge(per_var_sample_datasets, join="inner"))
+
+    samples_ds = xr.concat(
+        sample_datasets, pd.Index([sr["label"] for sr in sample_runs], name="model")
+    )
+
+    if "sample_id" not in samples_ds.dims:
+        samples_ds = samples_ds.expand_dims("sample_id")
+
+    return samples_ds
+
+
+def tp_from_time(x):
+    for tp_key, (tp_start, tp_end) in TIME_PERIODS.items():
+        if (x >= tp_start) and (x <= tp_end):
+            return tp_key
+    raise RuntimeError(f"No time period for {x}")
+
+
+def attach_eval_coords(ds):
+    # time_period_coord_values = xr.apply_ufunc(
+    #     tp_from_time, ds["time"], input_core_dims=None, vectorize=True
+    # )
+    # ds = ds.assign_coords(time_period=("time", time_period_coord_values.data))
+
+    dec_adjusted_year = ds["time.year"] + (ds["time.month"] == 12)
+    ds = ds.assign_coords(dec_adjusted_year=("time", dec_adjusted_year.data))
+
+    # ds = ds.assign_coords(
+    #     stratum=("time", ds["time_period"].str.cat(ds["time.season"], sep=" ").data)
+    # )
+
+    # ds = ds.assign_coords(
+    #     tp_season_year=(
+    #         "time",
+    #         ds["time_period"]
+    #         .str.cat(ds["time.season"], ds["dec_adjusted_year"], sep=" ")
+    #         .data,
+    #     )
+    # )
+
+    return ds

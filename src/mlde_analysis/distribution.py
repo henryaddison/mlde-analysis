@@ -4,9 +4,10 @@ import math
 from matplotlib import pyplot as plt
 import numpy as np
 import scipy
+import string
 import xarray as xr
 
-from mlde_utils import cp_model_rotated_pole
+from mlde_utils import platecarree
 
 from mlde_analysis import plot_map
 
@@ -19,22 +20,23 @@ DIST_THRESHOLDS = defaultdict(
         "pr": [0.1, 25, 75, 125],
         "relhum150cm": [35, 100],
         "tmean150cm": [273, 300],
+        "tasmax": [273, 303],
         "swbgt": [5, 25],
     },
 )
 
 
-def mean_bias(sample_da, cpm_da, normalize=False):
-    return stat_bias(sample_da, cpm_da, xr.DataArray.mean, normalize=normalize)
+def mean_bias(sample_da, target_da, normalize=False):
+    return stat_bias(sample_da, target_da, xr.DataArray.mean, normalize=normalize)
 
 
-def std_bias(sample_da, cpm_da, normalize=False):
-    return stat_bias(sample_da, cpm_da, xr.DataArray.std, normalize=normalize)
+def std_bias(sample_da, target_da, normalize=False):
+    return stat_bias(sample_da, target_da, xr.DataArray.std, normalize=normalize)
 
 
 def stat_bias(
     sample_da,
-    cpm_da,
+    target_da,
     stat_func,
     normalize=False,
 ):
@@ -42,9 +44,9 @@ def stat_bias(
 
     sample_summary = stat_func(sample_da, dim=sample_dims)
 
-    truth_dims = set(["ensemble_member", "sample_id", "time"]) & set(cpm_da.dims)
+    truth_dims = set(["ensemble_member", "sample_id", "time"]) & set(target_da.dims)
 
-    cpm_summary = stat_func(cpm_da, dim=truth_dims)
+    cpm_summary = stat_func(target_da, dim=truth_dims)
 
     raw_bias = sample_summary - cpm_summary
 
@@ -55,8 +57,8 @@ def stat_bias(
             .assign_attrs({"long_name": "Bias", "units": "%"})
         )
     else:
-        return raw_bias.rename(f"Bias [{cpm_da.attrs['units']}]").assign_attrs(
-            {"long_name": "Bias", "units": cpm_da.attrs["units"]}
+        return raw_bias.rename(f"Bias [{target_da.attrs['units']}]").assign_attrs(
+            {"long_name": "Bias", "units": target_da.attrs["units"]}
         )
 
 
@@ -67,31 +69,31 @@ def rms(da: xr.DataArray) -> xr.DataArray:
     return np.sqrt(np.mean(da**2))
 
 
-def rms_mean_bias(sample_da, cpm_da, normalize=False):
-    return rms(mean_bias(sample_da, cpm_da, normalize=normalize))
+def rms_mean_bias(sample_da, target_da, normalize=False):
+    return rms(mean_bias(sample_da, target_da, normalize=normalize))
 
 
-def rms_std_bias(sample_da, cpm_da, normalize=False):
-    return rms(std_bias(sample_da, cpm_da, normalize=normalize))
+def rms_std_bias(sample_da, target_da, normalize=False):
+    return rms(std_bias(sample_da, target_da, normalize=normalize))
 
 
-def rms_stat_bias(stat_bias_func, sample_da, cpm_da, normalize=False):
-    return rms(stat_bias_func(sample_da, cpm_da, normalize=normalize))
+def rms_stat_bias(stat_bias_func, sample_da, target_da, normalize=False):
+    return rms(stat_bias_func(sample_da, target_da, normalize=normalize))
 
 
-def rms_q999_bias(sample_da, cpm_da, normalize=False):
+def rms_q999_bias(sample_da, target_da, normalize=False):
     f_q999_bias = functools.partial(
         stat_bias, stat_func=functools.partial(xr.DataArray.quantile, q=0.999)
     )
-    return rms_stat_bias(f_q999_bias, sample_da, cpm_da, normalize=normalize)
+    return rms_stat_bias(f_q999_bias, sample_da, target_da, normalize=normalize)
 
 
-def normalized_mean_bias(sample_da, cpm_da):
-    return mean_bias(sample_da, cpm_da, normalize=True)
+def normalized_mean_bias(sample_da, target_da):
+    return mean_bias(sample_da, target_da, normalize=True)
 
 
-def normalized_std_bias(sample_da, cpm_da):
-    return std_bias(sample_da, cpm_da, normalize=True)
+def normalized_std_bias(sample_da, target_da):
+    return std_bias(sample_da, target_da, normalize=True)
 
 
 def xr_hist(da, bins, **kwargs):
@@ -118,45 +120,45 @@ def hist_dist(hist_da, target_hist_da):
     ).rename("JS_distance")
 
 
-def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
+def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
     nan_count = (
         np.isnan(da).groupby("model", squeeze=False).sum(...).rename(f"NaN Count")
     )
     rms_mean_biases = (
         da.groupby("model", squeeze=False)
-        .map(rms_mean_bias, cpm_da=cpm_da, normalize=False)
-        .rename(f"RMS Mean Bias ({cpm_da.attrs['units']})")
+        .map(rms_mean_bias, target_da=target_da, normalize=False)
+        .rename(f"RMS Mean Bias ({target_da.attrs['units']})")
     )
     rms_std_biases = (
         da.groupby("model", squeeze=False)
-        .map(rms_std_bias, cpm_da=cpm_da, normalize=False)
-        .rename(f"RMS Std Dev Bias ({cpm_da.attrs['units']})")
+        .map(rms_std_bias, target_da=target_da, normalize=False)
+        .rename(f"RMS Std Dev Bias ({target_da.attrs['units']})")
     )
 
     rms_q999_biases = (
         da.groupby("model", squeeze=False)
-        .map(rms_q999_bias, cpm_da=cpm_da, normalize=False)
-        .rename(f"RMS Q999 Bias ({cpm_da.attrs['units']})")
+        .map(rms_q999_bias, target_da=target_da, normalize=False)
+        .rename(f"RMS Q999 Bias ({target_da.attrs['units']})")
     )
 
     relative_rms_mean_biases = (
         da.groupby("model", squeeze=False)
-        .map(rms_mean_bias, cpm_da=cpm_da, normalize=True)
+        .map(rms_mean_bias, target_da=target_da, normalize=True)
         .rename("Relative RMS Mean Bias (%)")
     )
     relative_rms_std_biases = (
         da.groupby("model", squeeze=False)
-        .map(rms_std_bias, cpm_da=cpm_da, normalize=True)
+        .map(rms_std_bias, target_da=target_da, normalize=True)
         .rename("Relative RMS Std Dev Bias (%)")
     )
     relative_rms_q999_biases = (
         da.groupby("model", squeeze=False)
-        .map(rms_q999_bias, cpm_da=cpm_da, normalize=True)
+        .map(rms_q999_bias, target_da=target_da, normalize=True)
         .rename(f"Relative RMS Q999 Bias (%)")
     )
 
-    bins = np.histogram_bin_edges(cpm_da, bins=50)
-    target_hist_da = xr_hist(cpm_da, bins=bins)
+    bins = np.histogram_bin_edges(target_da, 200)
+    target_hist_da = xr_hist(target_da, bins=bins)
     model_hist_dist = (
         da.groupby("model", squeeze=False)
         .map(xr_hist, bins=bins)
@@ -177,11 +179,11 @@ def compute_metrics(da, cpm_da, thresholds=[0.1, 25, 75, 125]):
             .rename(f"Emu > {threshold}")
         )
 
-        cpm_exceedence_da = (
-            cpm_da.where(cpm_da > threshold).count() / cpm_da.count()
+        target_exceedence_da = (
+            target_da.where(target_da > threshold).count() / target_da.count()
         ).rename(f"CPM > {threshold}")
 
-        diff_da = (emu_exceedence_da - cpm_exceedence_da).rename(
+        diff_da = (emu_exceedence_da - target_exceedence_da).rename(
             f"Emu > {threshold} - CPM > {threshold}"
         )
         das.extend([emu_exceedence_da, diff_da])
@@ -238,7 +240,7 @@ def plot_freq_density(
                 max(hrange[1], target_da.max().values),
             )
 
-    bins = np.histogram_bin_edges([], bins=50, range=hrange)
+    bins = np.histogram_bin_edges([], bins=200, range=hrange)
 
     if target_da is not None:
         if yscale == "log":
@@ -391,7 +393,7 @@ def plot_biases(biases, axes, fig, colorbar=True, **plot_map_kwargs):
         cb.ax.tick_params(labelsize="small")
 
 
-def plot_freq_density_figure(pred_da, cpm_da, modellabel2spec, fig):
+def plot_freq_density_figure(pred_da, target_label, modellabel2spec, fig):
     hist_data = sorted(
         map(
             lambda modelgp: dict(
@@ -406,7 +408,9 @@ def plot_freq_density_figure(pred_da, cpm_da, modellabel2spec, fig):
 
     axd = fig.subplot_mosaic([["Density"]])
     ax = axd["Density"]
-    plot_freq_density(hist_data, ax=ax, target_da=cpm_da, linewidth=1, yscale="log")
+    plot_freq_density(
+        hist_data, ax=ax, target_da=target_label, linewidth=1, yscale="log"
+    )
 
     return ax
 
@@ -414,16 +418,17 @@ def plot_freq_density_figure(pred_da, cpm_da, modellabel2spec, fig):
 def plot_distribution_figure(
     fig,
     hist_das,
-    cpm_da,
-    mean_bias_das,
-    std_bias_das,
-    q999_bias_das,
+    target_da,
+    biases_das,
     modellabel2spec,
     error_ax=None,
     hrange=None,
+    height_ratio=None,
     fd_kwargs={},
     bias_kwargs={},
 ):
+    if height_ratio is None:
+        height_ratio = [3] + [1] * len(biases_das)
     # re-organize data for visualizing
     hist_data = sorted(
         map(
@@ -436,52 +441,46 @@ def plot_distribution_figure(
         ),
         key=lambda x: modellabel2spec[x["label"]]["order"],
     )
-    mean_biases = sorted(
-        map(
-            lambda modelgp: dict(data=modelgp[1].squeeze("model"), label=modelgp[0]),
-            mean_bias_das.groupby("model", squeeze=False),
-        ),
-        key=lambda x: modellabel2spec[x["label"]]["order"],
+    decorated_biases = {
+        bias_key: sorted(
+            map(
+                lambda modelgp: dict(
+                    data=modelgp[1].squeeze("model"), label=modelgp[0]
+                ),
+                bias_das.groupby("model", squeeze=False),
+            ),
+            key=lambda x: modellabel2spec[x["label"]]["order"],
+        )
+        for bias_key, bias_das in biases_das.items()
+    }
+
+    biases_layout = {
+        bias_key: [f"{bias_key} {x['label']}" for x in decbias]
+        for bias_key, decbias in decorated_biases.items()
+    }
+
+    dist_spec = np.array(["Density"] * len(list(biases_layout.values())[0])).reshape(
+        1, -1
     )
-    std_biases = sorted(
-        map(
-            lambda modelgp: dict(data=modelgp[1].squeeze("model"), label=modelgp[0]),
-            std_bias_das.groupby("model", squeeze=False),
-        ),
-        key=lambda x: modellabel2spec[x["label"]]["order"],
+
+    spec = np.concatenate(
+        [dist_spec]
+        + [np.array(keys).reshape(1, -1) for keys in biases_layout.values()],
+        axis=0,
     )
-    q999_biases = sorted(
-        map(
-            lambda modelgp: dict(data=modelgp[1].squeeze("model"), label=modelgp[0]),
-            q999_bias_das.groupby("model", squeeze=False),
-        ),
-        key=lambda x: modellabel2spec[x["label"]]["order"],
-    )
-
-    meanb_axes_keys = [f"meanb {x['label']}" for x in mean_biases]
-    meanb_spec = np.array(meanb_axes_keys).reshape(1, -1)
-
-    stddevb_axes_keys = [f"stddevb {x['label']}" for x in std_biases]
-    stddevb_spec = np.array(stddevb_axes_keys).reshape(1, -1)
-
-    q999b_axes_keys = [f"q999b {x['label']}" for x in q999_biases]
-    q999b_spec = np.array(q999b_axes_keys).reshape(1, -1)
-
-    dist_spec = np.array(["Density"] * meanb_spec.shape[1]).reshape(1, -1)
-
-    spec = np.concatenate([dist_spec, meanb_spec, stddevb_spec, q999b_spec], axis=0)
     axd = fig.subplot_mosaic(
         spec,
-        gridspec_kw=dict(height_ratios=[4, 2, 2, 2]),
+        gridspec_kw=dict(height_ratios=height_ratio),
         per_subplot_kw={
-            ak: {"projection": cp_model_rotated_pole}
-            for ak in meanb_axes_keys + stddevb_axes_keys + q999b_axes_keys
+            ak: {"projection": platecarree}
+            for bias_keys in biases_layout.values()
+            for ak in bias_keys
         },
     )
 
     ax = axd["Density"]
     plot_freq_density(
-        hist_data, ax=ax, target_da=cpm_da, linewidth=1, hrange=hrange, **fd_kwargs
+        hist_data, ax=ax, target_da=target_da, linewidth=1, hrange=hrange, **fd_kwargs
     )
     ax.annotate(
         "a.",
@@ -491,54 +490,36 @@ def plot_distribution_figure(
         ha="left",
         va="bottom",
     )
-
-    meanb_axes = [axd[f'meanb {bias["label"]}'] for bias in mean_biases]
-    plot_biases(mean_biases, meanb_axes, fig, colorbar=False, **bias_kwargs)
-    meanb_axes[0].annotate(
-        "b.",
-        xy=(0.04, 1.0),
-        xycoords=("figure fraction", "axes fraction"),
-        weight="bold",
-        ha="left",
-        va="bottom",
-    )
-
-    stdb_axes = [axd[f'stddevb {bias["label"]}'] for bias in std_biases]
-    plot_biases(std_biases, stdb_axes, fig, colorbar=False, **bias_kwargs)
-    stdb_axes[0].annotate(
-        "c.",
-        xy=(0.04, 1.0),
-        xycoords=("figure fraction", "axes fraction"),
-        weight="bold",
-        ha="left",
-        va="bottom",
-    )
-
-    q999b_axes = [axd[f'q999b {bias["label"]}'] for bias in q999_biases]
-    plot_biases(q999_biases, q999b_axes, fig, **bias_kwargs)
-    q999b_axes[0].annotate(
-        "d.",
-        xy=(0.04, 1.0),
-        xycoords=("figure fraction", "axes fraction"),
-        weight="bold",
-        ha="left",
-        va="bottom",
-    )
+    for idx, (bias_key, decbias) in enumerate(decorated_biases.items()):
+        axes = [axd[f'{bias_key} {bias["label"]}'] for bias in decbias]
+        plot_biases(decbias, axes, fig, colorbar=False, **bias_kwargs)
+        axes[0].annotate(
+            string.ascii_lowercase[idx + 1] + ".",
+            xy=(0.04, 1.0),
+            xycoords=("figure fraction", "axes fraction"),
+            weight="bold",
+            ha="left",
+            va="bottom",
+        )
 
     if error_ax is not None:
 
         if hrange is None:
             hrange = (
                 min(
-                    [d["data"].min().values for d in hist_data] + [cpm_da.min().values]
+                    [d["data"].min().values for d in hist_data]
+                    + [target_da.min().values]
                 ),
                 max(
-                    [d["data"].max().values for d in hist_data] + [cpm_da.max().values]
+                    [d["data"].max().values for d in hist_data]
+                    + [target_da.max().values]
                 ),
             )
-        bins = np.histogram_bin_edges([], bins=50, range=hrange)
-        true_counts, bins = np.histogram(cpm_da, bins=bins, range=hrange, density=True)
-        mindensity = 1 / (np.prod(cpm_da.shape))
+        bins = np.histogram_bin_edges([], bins=200, range=hrange)
+        true_counts, bins = np.histogram(
+            target_da, bins=bins, range=hrange, density=True
+        )
+        mindensity = 1 / (np.prod(target_da.shape))
         print(mindensity)
         ymin = 10 ** (math.floor(math.log10(mindensity))) / 2
         print(ymin)
@@ -562,6 +543,6 @@ def plot_distribution_figure(
             )
         error_ax.legend(fontsize="small")
         error_ax.set_title("Absolute Error in freq density")
-        error_ax.set_xlabel(xr.plot.utils.label_from_attrs(da=cpm_da))
+        error_ax.set_xlabel(xr.plot.utils.label_from_attrs(da=target_da))
 
     return axd
