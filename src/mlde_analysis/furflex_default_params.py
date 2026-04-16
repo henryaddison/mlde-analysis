@@ -1,0 +1,88 @@
+desc = """
+Describe in more detail the models being compared
+"""
+eval_vars = ["pr"]
+target_sim_key = "CPM"
+dataset_configs = {
+    "CPM": "engwales_ccpm-4x-cpmgem_12em_future_1hr_pr",
+}
+exclude_days = 0  # Number of days to exclude from each start of each season
+split = "val"
+ensemble_members = [
+    "r001i1p00000",
+    # "r001i1p01113",
+    # "r001i1p01554",
+    # "r001i1p01649",
+    # "r001i1p01843",
+    # "r001i1p01935",
+    # "r001i1p02868",
+    # "r001i1p02123",
+    # "r001i1p02242",
+    # "r001i1p02305",
+    # "r001i1p02335",
+    # "r001i1p02491",
+]
+samples_per_run = 1
+sample_configs = {
+    "CPM": [
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "latte-s8-1gpu-future",
+                    "checkpoint": "0065",
+                    "dataset": "engwales_ccpm-4x-cpmgem_12em_future_1hr_pr",
+                    "input_xfm": "",
+                    "variables": ["pr"],
+                },
+            ],
+            "label": "e0065",
+            "deterministic": False,
+            "PSD": True,
+            "color": "tab:blue",
+            "order": 10,
+            "CCS": True,
+        },
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "latte-s8-1gpu-future",
+                    "checkpoint": "0240",
+                    "dataset": "engwales_ccpm-4x-cpmgem_12em_future_1hr_pr",
+                    "input_xfm": "",
+                    "variables": ["pr"],
+                },
+            ],
+            "label": "e0240",
+            "deterministic": False,
+            "PSD": True,
+            "color": "tab:orange",
+            "order": 11,
+            "CCS": True,
+        },
+    ],
+}
+
+derived_variables_config = {}
+
+example_percentiles = {
+    "CPM": {
+        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
+        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
+        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
+        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
+    },
+    "GCM": {
+        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
+        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
+        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
+        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
+    },
+}
+example_overrides = {
+    "CPM": {
+        "JJA Wet": ["01", "1993-08-01 12:00:00"],
+    },
+    "GCM": {},
+}
+example_inputs = ["vorticity850"]
+examples_sample_idxs = [0, 2]
