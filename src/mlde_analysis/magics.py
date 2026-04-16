@@ -1,6 +1,6 @@
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.shellapp import InteractiveShellApp
-from mlde_analysis.cordex_ml_data import prep_eval_data
+from mlde_analysis.furflex_data import prep_eval_data
 import xarray as xr
 
 
@@ -36,7 +36,8 @@ class LoadEvalData(Magics):
         }
 
         var_das = {
-            var: xr.merge([pred_das[var], target_sim_das[var]]) for var in eval_vars
+            var: xr.merge([pred_das[var], target_sim_das[var]], compat="no_conflicts")
+            for var in eval_vars
         }
 
         modellabel2spec = {
