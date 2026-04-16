@@ -98,16 +98,19 @@ def normalized_std_bias(sample_da, target_da):
 
 def xr_hist(da, bins, **kwargs):
     def _np_hist(da, bins, **kwargs):
-        return np.histogram(da, bins=bins, **kwargs)[0]
+        hist_output = np.histogram(da, bins=bins, **kwargs)
+        return hist_output[0], hist_output[1]
 
-    return xr.apply_ufunc(
+    hist, bin_edges = xr.apply_ufunc(
         _np_hist,
         da,
         input_core_dims=[da.dims],  # list with one entry per arg
-        output_core_dims=[["bins"]],
+        output_core_dims=[["bins"], ["edge"]],
         vectorize=True,
         kwargs=dict(bins=bins, density=True) | kwargs,
-    ).rename("frequency_density")
+    )
+    hist = hist.rename("frequency_density")
+    return hist, bin_edges.values
 
 
 def hist_dist(hist_da, target_hist_da):
@@ -158,10 +161,10 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
     )
 
     bins = np.histogram_bin_edges(target_da, 200)
-    target_hist_da = xr_hist(target_da, bins=bins)
+    target_hist_da, bins = xr_hist(target_da, bins=bins)
     model_hist_dist = (
         da.groupby("model", squeeze=False)
-        .map(xr_hist, bins=bins)
+        .map(lambda x: xr_hist(x, bins=bins)[0])
         .groupby("model", squeeze=False)
         .map(hist_dist, target_hist_da=target_hist_da)
         .rename("J-S distance")
@@ -254,7 +257,7 @@ def plot_freq_density(
             target_da, bins=bins, range=hrange, density=True
         )
 
-        target_counts = xr_hist(target_da, bins, range=hrange)
+        target_counts, bins = xr_hist(target_da, bins, range=hrange)
         ax.stairs(
             target_counts,
             bins,
@@ -267,7 +270,7 @@ def plot_freq_density(
         ymin = None
 
     for pred in hist_data:
-        counts = xr_hist(pred["data"], bins, range=hrange)
+        counts, bins = xr_hist(pred["data"], bins, range=hrange)
         ax.stairs(
             counts,
             bins,
