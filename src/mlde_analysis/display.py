@@ -2,7 +2,7 @@ import IPython
 import xarray as xr
 
 VAR_RANGES = {
-    "pr": (0, 1200),
+    "pr": (0, 100),
     "tmean150cm": (250, 315),
     "tasmax": (233, 333),
     "relhum150cm": (10, 120),
