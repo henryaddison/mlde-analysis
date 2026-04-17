@@ -257,8 +257,8 @@ def open_samples_ds(
         em_ds = em_ds.stack(valid_time=("time", "frame"))
         em_ds = em_ds.assign_coords(
             time_and_frame=em_ds.time
-            + pd.to_timedelta(em_ds.frame, unit="h")
-            + pd.to_timedelta(30, unit="min")
+            + pd.to_timedelta(em_ds.frame, unit="h").to_pytimedelta()
+            + pd.to_timedelta(30, unit="min").to_pytimedelta()
         )
         em_ds = (
             em_ds.swap_dims({"valid_time": "time_and_frame"})
