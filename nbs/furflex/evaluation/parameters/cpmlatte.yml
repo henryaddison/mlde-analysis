@@ -15,9 +15,9 @@ sample_configs:
       - label: e0065
         sample_specs:
           - fq_model_id: latte-s8-1gpu-future
-            checkpoint: 0065
+            checkpoint: "0065"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
-            input_xfm:
+            input_xfm: ""
             variables: [pr]
         deterministic: False
         PSD: True
@@ -27,9 +27,9 @@ sample_configs:
       - label: e0240
         sample_specs:
           - fq_model_id: latte-s8-1gpu-future
-            checkpoint: 0240
+            checkpoint: "0240"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
-            input_xfm:
+            input_xfm: ""
             variables: [pr]
         deterministic: False
         PSD: True
@@ -39,9 +39,9 @@ sample_configs:
       - label: e0300
         sample_specs:
           - fq_model_id: latte-s8-1gpu-future
-            checkpoint: 0300
+            checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
-            input_xfm:
+            input_xfm: ""
             variables: [pr]
         deterministic: False
         PSD: True
@@ -51,9 +51,9 @@ sample_configs:
       - label: e0280gc
         sample_specs:
           - fq_model_id: latte-s8-global-conditioning-1gpu-future
-            checkpoint: 0280
+            checkpoint: "0280"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
-            input_xfm:
+            input_xfm: ""
             variables: [pr]
         deterministic: False
         PSD: True
