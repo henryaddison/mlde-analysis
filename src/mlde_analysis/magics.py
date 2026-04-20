@@ -1,5 +1,10 @@
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.shellapp import InteractiveShellApp
+from IPython.core.magic_arguments import (
+    argument,
+    magic_arguments,
+    parse_argstring,
+)  # type: ignore
 from mlde_analysis.furflex_data import prep_eval_data
 import xarray as xr
 
@@ -7,8 +12,18 @@ import xarray as xr
 @magics_class
 class LoadEvalData(Magics):
 
+    @magic_arguments()
+    @argument(
+        "-c",
+        "--coarsen",
+        action="store",
+        default=None,
+        type=int,
+        help="An optional argument to coarsen time dim.",
+    )
     @line_magic
     def load_eval_data(self, line):
+        args = parse_argstring(self.load_eval_data, line)
         eval_vars = self.shell.user_ns["eval_vars"]
         eval_ds, models = prep_eval_data(
             self.shell.user_ns["sample_configs"],
@@ -21,22 +36,23 @@ class LoadEvalData(Magics):
             samples_per_run=self.shell.user_ns["samples_per_run"],
         )
         for sim_src in eval_ds.keys():
-            # eval_ds[sim_src] = eval_ds[sim_src].assign_coords(date=EVAL_DS["CPM"].time.dt.floor("D")).groupby("date").mean().rename(date="time")
-            # eval_ds[sim_src] = eval_ds[sim_src].drop_vars(["yyyymmddhh", "time_period", "stratum", "tp_season_year"]).coarsen(time=24).mean(keep_attrs=True)
-            eval_ds[sim_src] = (
-                eval_ds[sim_src]
-                .drop_vars(
-                    [
-                        "yyyymmddhh",
-                        "time_period",
-                        "stratum",
-                        "tp_season_year",
-                        "time_bnds",
-                    ]
+            if args.coarsen:
+                # eval_ds[sim_src] = eval_ds[sim_src].assign_coords(date=EVAL_DS["CPM"].time.dt.floor("D")).groupby("date").mean().rename(date="time")
+                # eval_ds[sim_src] = eval_ds[sim_src].drop_vars(["yyyymmddhh", "time_period", "stratum", "tp_season_year"]).coarsen(time=24).mean(keep_attrs=True)
+                eval_ds[sim_src] = (
+                    eval_ds[sim_src]
+                    .drop_vars(
+                        [
+                            "yyyymmddhh",
+                            "time_period",
+                            "stratum",
+                            "tp_season_year",
+                            "time_bnds",
+                        ]
+                    )
+                    .coarsen(time=args.coarsen)
+                    .sum(keep_attrs=True)
                 )
-                .coarsen(time=24)
-                .sum(keep_attrs=True)
-            )
 
         target_sim_key = self.shell.user_ns["target_sim_key"]
 
