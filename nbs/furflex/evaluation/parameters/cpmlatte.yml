@@ -60,6 +60,18 @@ sample_configs:
         color: tab:green
         order: 14
         CCS: True
+      - label: e0850
+        sample_specs:
+          - fq_model_id: latte-s8-1gpu-future
+            checkpoint: "0850"
+            dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
+            input_xfm: ""
+            variables: [pr]
+        deterministic: False
+        PSD: True
+        color: tab:purple
+        order: 15
+        CCS: True
       # - label: e0280gc
       #   sample_specs:
       #     - fq_model_id: latte-s8-global-conditioning-1gpu-future
