@@ -16,18 +16,18 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "cf-xarray",
-  "cmcrameri",
-  "cmweather",
-  "ipympl",
+  "cf-xarray~=0.10.5",
+  "cmcrameri~=1.9",
+  "cmweather~=0.3.2",
+  "ipympl~=0.9.7",
   "mlde-utils==v0.3.0",
-  "nbdev",
+  "nbdev~=2.4",
   #"netcdf4==1.7.2",
-  "pre-commit",
-  "properscoring",
-  "python-cmethods",
-  "xhistogram",
-  "xskillscore", "statsmodels",
+  "properscoring~=0.1",
+  "python-cmethods~=2.3",
+  "xhistogram~=0.3.2",
+  "xskillscore~=0.0.26",
+  "statsmodels~=0.14.4",
 ]
 dynamic = ["version"]
 
@@ -55,28 +55,36 @@ dev = {features = ["dev"], solve-group = "default"}
 
 [tool.pixi.dependencies]
 black = { version = "~=25.1.0" }
-bottleneck = { version = "*" }
-dask = { version = "*" }
-flake8 = { version = "==6.1.0" }
-iris = { version = "*" }
-jupyterlab = { version = "*" }
-metpy = { version = "*" }
+bottleneck = { version = "~=1.5" }
+dask = { version = "==2025.11.0" }
+flake8 = { version = "~=7.3" }
+iris = { version = "~=3.12" }
+jupyterlab = { version = "~=4.4" }
+metpy = { version = "~=1.7.0" }
 nc-time-axis = { version = "==1.4.1" }
-numpy = { version = "*" }
-papermill = { version = "*" }
-pint = { version = "*" }
-pysteps = { version = "*" }
-python = { version = "~=3.12.0" }
-python-cdo = { version = "*" }
+numpy = { version = "~=2.3" }
+papermill = { version = "~=2.6" }
+pint = { version = "~=0.24.4" }
+pysteps = { version = "~=1.17" }
+python = { version = "~=3.12.11" }
+python-cdo = { version = "~=1.6" }
 python-dotenv = { version = "~=1.2.0" }
-scikit-learn = { version = "*" }
-scipy = { version = "*" }
-seaborn = { version = "*" }
-typer = { version = "*" }
-xarray = { version = "*" }
+scikit-learn = { version = "~=1.7" }
+scipy = { version = "~=1.15" }
+seaborn = { version = "~=0.13.2" }
+typer = { version = "~=0.16.0" }
+xarray = { version = "==2025.12.0" }
+h5netcdf = ">=1.7.3,<2"
+hdf5plugin = ">=6.0.0,<7"
+zarr = ">=3.1.5,<4"
 
 [tool.pixi.pypi-dependencies]
 mlde_analysis = { path = ".", editable = true }
+
+[tool.pixi.feature.dev.dependencies]
+pre-commit = "~=4.5"
+flake8 = { version = "~=7.3" }
+black = { version = "~=25.1.0" }
 
 [tool.pixi.feature.dev.tasks]
 test = "pytest"

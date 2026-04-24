@@ -3,12 +3,16 @@ import cmweather  # noqa
 import string
 import matplotlib
 import matplotlib.pyplot as plt
+import os
 import numpy as np
+from pathlib import Path
 import seaborn as sns
 import xarray as xr
 
 from mlde_utils import cp_model_rotated_pole, platecarree
 
+DATA_PATH = Path(os.getenv("DATA_PATH"))
+DERIVED_DATA = Path(os.getenv("DERIVED_DATA", DATA_PATH / "derived"))
 
 precip_clevs = [
     0.1,
@@ -25,6 +29,23 @@ precip_clevs = [
     70,
     100,
     150,
+]
+
+precip_hourly_clevs = [
+    0.1,
+    0.5,  # 1,
+    1,  # 2.5,
+    2,  # 5,
+    3,  # 7.5,
+    4,  # 10,
+    5,  # 15,
+    6,  # 20,
+    7,  # 30,
+    8,  # 40,
+    10,  # 50,
+    20,  # 70,
+    30,  # 100,
+    50,  # 150,
 ]
 
 
@@ -134,6 +155,10 @@ STYLES = {
         "cmap": chasehigh_precip_cmap,
         "norm": precip_norm(precip_clevs, chasehigh_precip_cmap),
     },
+    "pr_hourly": {
+        "cmap": chasehigh_precip_cmap,
+        "norm": precip_norm(precip_hourly_clevs, chasehigh_precip_cmap),
+    },
     "chaselow_pr": {
         "cmap": chaselow_precip_cmap,
         "norm": precip_norm(precip_clevs, chaselow_precip_cmap),
@@ -211,9 +236,7 @@ def plot_map(
 ):
     if style is not None:
         kwargs = STYLES[style] | kwargs
-    pcm = da.plot.pcolormesh(
-        ax=ax, x="lon", y="lat", add_colorbar=add_colorbar, **kwargs
-    )
+    pcm = da.plot.pcolormesh(ax=ax, add_colorbar=add_colorbar, **kwargs)
     ax.set_title(title)
     ax.coastlines(**({"resolution": "10m", "linewidth": 0.3} | (cl_kwargs or {})))
     # ax.gridlines(draw_labels={"bottom": "x", "left": "y"}, x_inline=False, y_inline=False)#, xlabel_style=dict(fontsize=24), ylabel_style=dict(fontsize=24))
