@@ -34,22 +34,8 @@ class LoadEvalData(Magics):
             exclude_days=self.shell.user_ns["exclude_days"],
             ensemble_members=self.shell.user_ns["ensemble_members"],
             samples_per_run=self.shell.user_ns["samples_per_run"],
+            coarsen_time=args.coarsen,
         )
-        for sim_src in eval_ds.keys():
-            if args.coarsen:
-                # eval_ds[sim_src] = eval_ds[sim_src].assign_coords(date=EVAL_DS["CPM"].time.dt.floor("D")).groupby("date").mean().rename(date="time")
-                # eval_ds[sim_src] = eval_ds[sim_src].drop_vars(["yyyymmddhh", "time_period", "stratum", "tp_season_year"]).coarsen(time=24).mean(keep_attrs=True)
-                eval_ds[sim_src] = (
-                    eval_ds[sim_src]
-                    .drop_vars(
-                        [
-                            "time_bnds",
-                        ],
-                        errors="ignore",
-                    )
-                    .coarsen(time=args.coarsen)
-                    .sum(keep_attrs=True)
-                )
 
         target_sim_key = self.shell.user_ns["target_sim_key"]
 

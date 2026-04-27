@@ -137,6 +137,7 @@ def prep_eval_data(
     exclude_days,
     ensemble_members,
     samples_per_run,
+    coarsen_time=None,
 ):
     models = {
         source: dict(
@@ -194,6 +195,24 @@ def prep_eval_data(
             f"{len(ds['time'])} != {len(dataset_ds['time'])}. "
             "Perhaps samples do not cover the time period of the dataset."
         )
+
+        if coarsen_time is not None:
+            # ds = ds.assign_coords(date=ds.time.dt.floor("D")).groupby("date").mean().rename(date="time")
+            # ds = ds.coarsen(time=24).mean(keep_attrs=True)
+            ds = (
+                ds.drop_vars(
+                    [
+                        "time_bnds",
+                        "month_number",  # TODO: these should already be removed from datasets
+                        "year",  # TODO: these should already be removed from datasets
+                        "yyyymmddhh",  # TODO: these should already be removed from datasets
+                    ],
+                    errors="ignore",
+                )
+                .coarsen(time=coarsen_time)
+                .sum(keep_attrs=True)
+            )
+
         ds = attach_eval_coords(ds)
 
         ds = attach_derived_variables(ds, derived_var_configs)
