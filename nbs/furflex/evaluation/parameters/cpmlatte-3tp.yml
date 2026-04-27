@@ -12,10 +12,10 @@ ensemble_members: ["r001i1p00000"]
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: e0160
+      - label: e0150
         sample_specs:
           - fq_model_id: latte-b8-cpmgem-daily-presetengwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            checkpoint: "0160"
+            checkpoint: "0150"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
