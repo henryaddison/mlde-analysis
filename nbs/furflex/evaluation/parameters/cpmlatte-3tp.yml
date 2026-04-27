@@ -14,7 +14,7 @@ sample_configs:
     CPM:
       - label: e0150
         sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-presetengwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+          - fq_model_id: latte-b8-cpmgem-daily-preset
             checkpoint: "0150"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
