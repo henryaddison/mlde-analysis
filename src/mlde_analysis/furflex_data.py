@@ -45,7 +45,7 @@ class FurflexEmulatorOutputMetadata:
             / dataset
             # / input_xfm
             / split
-            # / ensemble_member
+            / ensemble_member
         )
         if config_hash is not None:
             path = path / config_hash
