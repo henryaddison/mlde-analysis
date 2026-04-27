@@ -43,12 +43,9 @@ class LoadEvalData(Magics):
                     eval_ds[sim_src]
                     .drop_vars(
                         [
-                            "yyyymmddhh",
-                            "time_period",
-                            "stratum",
-                            "tp_season_year",
                             "time_bnds",
-                        ]
+                        ],
+                        errors="ignore",
                     )
                     .coarsen(time=args.coarsen)
                     .sum(keep_attrs=True)
