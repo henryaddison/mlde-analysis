@@ -8,7 +8,19 @@ target_sim_key: CPM
 dataset_configs:
     CPM: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
 split: val
-ensemble_members: ["r001i1p00000"]
+ensemble_members:
+  - r001i1p00000
+  - r001i1p01113
+  - r001i1p01554
+  - r001i1p01649
+  - r001i1p01843
+  - r001i1p01935
+  - r001i1p02868
+  - r001i1p02123
+  - r001i1p02242
+  - r001i1p02305
+  - r001i1p02335
+  - r001i1p02491
 samples_per_run: 1
 sample_configs:
     CPM:
