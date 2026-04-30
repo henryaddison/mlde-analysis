@@ -1,6 +1,7 @@
 from collections import defaultdict
 import functools
 import math
+import dask
 from matplotlib import pyplot as plt
 import numpy as np
 import scipy
@@ -101,25 +102,41 @@ def xr_hist(da, bins, **kwargs):
         hist_output = np.histogram(da, bins=bins, **kwargs)
         return hist_output[0], hist_output[1]
 
+    def _dask_hist(da, bins, **kwargs):
+        hist_output = dask.array.histogram(da, bins=bins, **kwargs)
+        return hist_output[0], hist_output[1]
+
+    if isinstance(da.data, dask.array.Array):
+        hist_func = _dask_hist
+        extra_kwargs = {"dask": "allowed"}
+    else:
+        hist_func = _np_hist
+        extra_kwargs = {}
+
     hist, bin_edges = xr.apply_ufunc(
-        _np_hist,
+        hist_func,  # first the function
         da,
         input_core_dims=[da.dims],  # list with one entry per arg
         output_core_dims=[["bins"], ["edge"]],
         vectorize=True,
         kwargs=dict(bins=bins, density=True) | kwargs,
+        **extra_kwargs,
     )
     hist = hist.rename("frequency_density")
     return hist, bin_edges.values
 
 
 def hist_dist(hist_da, target_hist_da):
+    extra_args = {}
+    if isinstance(hist_da.data, dask.array.Array):
+        extra_args["dask"] = "allowed"
     return xr.apply_ufunc(
         scipy.spatial.distance.jensenshannon,
         hist_da.squeeze("model", drop=True),
         target_hist_da,
         input_core_dims=[["bins"], ["bins"]],  # list with one entry per arg
         # vectorize=True,
+        **extra_args,
     ).rename("JS_distance")
 
 
