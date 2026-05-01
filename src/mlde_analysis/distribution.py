@@ -67,7 +67,7 @@ def rms(da: xr.DataArray) -> xr.DataArray:
     """
     Compute the root mean square of a DataArray.
     """
-    return np.sqrt(np.mean(da**2))
+    return dask.array.sqrt((da**2).mean())
 
 
 def rms_mean_bias(sample_da, target_da, normalize=False):
@@ -142,7 +142,10 @@ def hist_dist(hist_da, target_hist_da):
 
 def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
     nan_count = (
-        np.isnan(da).groupby("model", squeeze=False).sum(...).rename(f"NaN Count")
+        dask.array.isnan(da)
+        .groupby("model", squeeze=False)
+        .sum(...)
+        .rename(f"NaN Count")
     )
     rms_mean_biases = (
         da.groupby("model", squeeze=False)
@@ -177,7 +180,11 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
         .rename(f"Relative RMS Q999 Bias (%)")
     )
 
-    bins = np.histogram_bin_edges(target_da, 200)
+    target_min = target_da.min().compute()
+    target_max = target_da.max().compute()
+    bins = np.histogram_bin_edges(
+        [], bins=200, range=(target_min.item(), target_max.item())
+    )
     target_hist_da, bins = xr_hist(target_da, bins=bins)
     model_hist_dist = (
         da.groupby("model", squeeze=False)
@@ -270,9 +277,9 @@ def plot_freq_density(
             ymin = 0
         else:
             ymin = None
-        target_counts, bins = np.histogram(
-            target_da, bins=bins, range=hrange, density=True
-        )
+        # target_counts, bins = np.histogram(
+        #     target_da, bins=bins, range=hrange, density=True
+        # )
 
         target_counts, bins = xr_hist(target_da, bins, range=hrange)
         ax.stairs(
@@ -523,7 +530,7 @@ def plot_distribution_figure(
         )
 
     if error_ax is not None:
-
+        # TODO: make this dask-friendly (mainly by storing the computed histograms from previous steps and reusing them here, instead of recomputing them)
         if hrange is None:
             hrange = (
                 min(
