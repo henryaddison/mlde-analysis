@@ -93,26 +93,12 @@ class FurflexDatasetMetadata:
 
 
 def open_dataset_split(dataset_name, split, ensemble_members="all"):
-    if ensemble_members == "all":
-        ds = xr.open_dataset(
-            FurflexDatasetMetadata(dataset_name).predictands_split_path(split),
-            chunks={
-                "ensemble_member": 1,
-                "time": 24 * 90,
-                "grid_longitude": 64,
-                "grid_latitude": 64,
-            },
-        )
-    else:
-        ds = xr.open_dataset(
-            FurflexDatasetMetadata(dataset_name).predictands_split_path(split),
-            chunks={
-                "ensemble_member": 1,
-                "time": 24 * 90,
-                "grid_longitude": 64,
-                "grid_latitude": 64,
-            },
-        ).sel(ensemble_member=ensemble_members)
+    ds = xr.open_dataset(
+        FurflexDatasetMetadata(dataset_name).predictands_split_path(split),
+        chunks={},
+    )
+    if ensemble_members != "all":
+        ds = ds.sel(ensemble_member=ensemble_members)
 
     return ds
 
@@ -274,7 +260,8 @@ def open_samples_ds(
                 sample_files_list[0],
                 chunks={
                     "ensemble_member": 1,
-                    "time": 24 * 90,
+                    # "time": 16,
+                    "frame": 24,
                     "grid_longitude": 64,
                     "grid_latitude": 64,
                 },
@@ -291,7 +278,8 @@ def open_samples_ds(
                         sample_filepath,
                         chunks={
                             "ensemble_member": 1,
-                            "time": 24 * 90,
+                            # "time": 16,
+                            "frame": 24,
                             "grid_longitude": 64,
                             "grid_latitude": 64,
                         },
