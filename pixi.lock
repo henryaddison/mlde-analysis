@@ -97,6 +97,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/flake8-7.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexcache-0.3-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexparser-0.4-pyhd8ed1ab_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/flox-0.11.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-inconsolata-3.000-h77eed37_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-source-code-pro-2.038-h77eed37_0.tar.bz2
@@ -317,6 +318,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/notebook-shim-0.2.4-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/numcodecs-0.16.5-py312hf79963d_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/numpy-2.3.0-py312h6cf2f7f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/numpy_groupies-0.11.3-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/ocl-icd-2.3.3-hb9d3cd8_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/opencl-headers-2024.10.24-h5888daf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/opencv-4.11.0-qt6_py312h78c9a49_607.conda
@@ -603,6 +605,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/flake8-7.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexcache-0.3-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/flexparser-0.4-pyhd8ed1ab_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/flox-0.11.2-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-inconsolata-3.000-h77eed37_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-source-code-pro-2.038-h77eed37_0.tar.bz2
@@ -825,6 +828,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/notebook-shim-0.2.4-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/numcodecs-0.16.5-py312hf79963d_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/numpy-2.3.0-py312h6cf2f7f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/numpy_groupies-0.11.3-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/ocl-icd-2.3.3-hb9d3cd8_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/opencl-headers-2024.10.24-h5888daf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/opencv-4.11.0-qt6_py312h78c9a49_607.conda
@@ -2428,6 +2432,25 @@ packages:
   - pkg:pypi/flexparser?source=hash-mapping
   size: 28686
   timestamp: 1733663636245
+- conda: https://conda.anaconda.org/conda-forge/noarch/flox-0.11.2-pyhd8ed1ab_0.conda
+  sha256: 27b110a72d05d4a2287fbb96f04139ad3a6663405de743701863efc77042be1e
+  md5: 6638eee762bdf0cb437202ac55d3e9c9
+  depends:
+  - numpy >=1.26
+  - numpy_groupies >=0.9.19
+  - packaging >=21.3
+  - pandas >=2.1
+  - python >=3.11
+  - scipy >=1.12
+  - toolz
+  constrains:
+  - numbagg >=0.6
+  license: Apache-2.0
+  license_family: APACHE
+  purls:
+  - pkg:pypi/flox?source=hash-mapping
+  size: 74511
+  timestamp: 1772121806252
 - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2
   sha256: 58d7f40d2940dd0a8aa28651239adbf5613254df0f75789919c4e6762054403b
   md5: 0c96522c6bdaed4b1566d11387caaf45
@@ -5300,8 +5323,8 @@ packages:
   timestamp: 1742402716323
 - pypi: ./
   name: mlde-analysis
-  version: 0.6.1.dev42+ga5d99305d.d20260430
-  sha256: cd726d24f0890e8f254fd4bf0e6553ffd5503a24c0dcccd48894f2b2ac791c5e
+  version: 0.6.1.dev43+g5c7c574dd.d20260501
+  sha256: f260337317291ffd741fac8b8d4670628ffa518f128846943c646f164b834f05
   requires_dist:
   - cf-xarray~=0.10.5
   - cmcrameri~=1.9
@@ -5650,6 +5673,18 @@ packages:
   - pkg:pypi/numpy?source=hash-mapping
   size: 8417476
   timestamp: 1749430957684
+- conda: https://conda.anaconda.org/conda-forge/noarch/numpy_groupies-0.11.3-pyhd8ed1ab_0.conda
+  sha256: 94c148b8d4687c839a37c4a68b1674fa548b065e833b9b4701865d548995239f
+  md5: 5402c2b046432ceb2d192a82802e7854
+  depends:
+  - numpy
+  - python >=3.9
+  license: BSD-2-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/numpy-groupies?source=hash-mapping
+  size: 38384
+  timestamp: 1747937493897
 - conda: https://conda.anaconda.org/conda-forge/linux-64/ocl-icd-2.3.3-hb9d3cd8_0.conda
   sha256: 2254dae821b286fb57c61895f2b40e3571a070910fdab79a948ff703e1ea807b
   md5: 56f8947aa9d5cf37b0b3d43b83f34192
