@@ -11,8 +11,6 @@ app = typer.Typer()
 def main(
     filepath: Path,
 ):
-
-    filepath = "predictions.zarr"
     rechunked_filepath = filepath.replace("predictions", "predictions-rechunked")
 
     typer.echo(f"Rechunking {filepath} to {rechunked_filepath}")
