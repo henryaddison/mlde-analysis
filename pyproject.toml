@@ -87,6 +87,7 @@ mlde_analysis = { path = ".", editable = true }
 pre-commit = "~=4.5"
 flake8 = { version = "~=7.3" }
 black = { version = "~=25.1.0" }
+dask-labextension = ">=7.0.0,<8"
 
 [tool.pixi.feature.dev.tasks]
 test = "pytest"

@@ -583,6 +583,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-2025.11.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-core-2025.11.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/dask-gateway-2026.3.0-pyhd7f29a5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/dask-labextension-7.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/dav1d-1.2.1-hd590300_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/dbus-1.13.6-h5008d03_3.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/debugpy-1.8.14-py312h2ec8cdc_0.conda
@@ -663,6 +664,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/jsonschema-specifications-2025.4.1-pyh29332c3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jsonschema-with-format-nongpl-4.24.0-hd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter-lsp-2.2.5-pyhe01879c_2.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter-server-proxy-4.5.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.6.3-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_core-5.8.1-pyh31011fe_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_events-0.12.0-pyh29332c3_0.conda
@@ -917,6 +919,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/setuptools-80.9.0-pyhff2d567_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/shapely-2.1.1-py312h21f5128_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/shellingham-1.5.4-pyhd8ed1ab_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/simpervisor-1.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/simplejson-3.20.1-py312h66e93f0_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/six-1.17.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/snappy-1.2.1-h8bd8927_1.conda
@@ -2072,6 +2075,21 @@ packages:
   - pkg:pypi/dask-gateway?source=hash-mapping
   size: 29893
   timestamp: 1776236898974
+- conda: https://conda.anaconda.org/conda-forge/noarch/dask-labextension-7.0.0-pyhd8ed1ab_1.conda
+  sha256: a157787c6c524686d200d35f77ffc12e22d2bcd13e2de3d25c70842d9d3e0ac2
+  md5: 9aef5e5bebe4a054efd88c298beaeae8
+  depends:
+  - bokeh >=1.0.0,!=2.0.0
+  - distributed >=1.24.1
+  - jupyter-server-proxy >=1.3.2
+  - jupyterlab >=4.0.0,<5
+  - python >=3.9
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/dask-labextension?source=hash-mapping
+  size: 39682
+  timestamp: 1735227027456
 - conda: https://conda.anaconda.org/conda-forge/linux-64/dav1d-1.2.1-hd590300_0.conda
   sha256: 22053a5842ca8ee1cf8e1a817138cdb5e647eb2c46979f84153f6ad7bde73020
   md5: 418c6ca5929a611cbd69204907a83995
@@ -3273,6 +3291,23 @@ packages:
   - pkg:pypi/jupyter-lsp?source=compressed-mapping
   size: 57659
   timestamp: 1748550130303
+- conda: https://conda.anaconda.org/conda-forge/noarch/jupyter-server-proxy-4.5.0-pyhcf101f3_1.conda
+  sha256: 9831fbd1266aaf6e87ebdc3acda74411a3816b0e4a0617f25f54c708f4fd7795
+  md5: 6a79adce0515be9ee586631937b3b7e4
+  depends:
+  - aiohttp
+  - jupyter_server >=1.24.0
+  - simpervisor >=1.0.0
+  - tornado >=6.1.0
+  - traitlets >=5.1.1
+  - python >=3.10
+  - python
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/jupyter-server-proxy?source=hash-mapping
+  size: 57173
+  timestamp: 1775748597567
 - conda: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.6.3-pyhd8ed1ab_1.conda
   sha256: 19d8bd5bb2fde910ec59e081eeb59529491995ce0d653a5209366611023a0b3a
   md5: 4ebae00eae9705b0c3d6d1018a81d047
@@ -5323,8 +5358,8 @@ packages:
   timestamp: 1742402716323
 - pypi: ./
   name: mlde-analysis
-  version: 0.6.1.dev43+g5c7c574dd.d20260501
-  sha256: f260337317291ffd741fac8b8d4670628ffa518f128846943c646f164b834f05
+  version: 0.6.1.dev57+ge775ad901.d20260507
+  sha256: e30e60711404fa6cf745ed0315252bcad0b64b3fbd98e3d2cf9edac521c058e3
   requires_dist:
   - cf-xarray~=0.10.5
   - cmcrameri~=1.9
@@ -7090,6 +7125,17 @@ packages:
   - pkg:pypi/shellingham?source=compressed-mapping
   size: 14462
   timestamp: 1733301007770
+- conda: https://conda.anaconda.org/conda-forge/noarch/simpervisor-1.0.0-pyhd8ed1ab_1.conda
+  sha256: 9c53a1dc8c7fd2c881b98f3a9e50fa8c5d67e3ca52de12338f0d94b40da6881e
+  md5: b12cd36c9eea3f4d2f77daef432bdc00
+  depends:
+  - python >=3.9
+  license: BSD-3-Clause
+  license_family: BSD
+  purls:
+  - pkg:pypi/simpervisor?source=hash-mapping
+  size: 13639
+  timestamp: 1734339920707
 - conda: https://conda.anaconda.org/conda-forge/linux-64/simplejson-3.20.1-py312h66e93f0_0.conda
   sha256: 22041442f0659ef55073ca8536708115cdf6ac19d461a4db6840dc9b4d534ced
   md5: d1c95aa4908e88bd4216f04b6bb7e297
