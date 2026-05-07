@@ -93,14 +93,12 @@ class FurflexDatasetMetadata:
 
 
 def open_dataset_split(dataset_name, split, ensemble_members="all"):
-    if ensemble_members == "all":
-        ds = xr.open_dataset(
-            FurflexDatasetMetadata(dataset_name).predictands_split_path(split)
-        )
-    else:
-        ds = xr.open_dataset(
-            FurflexDatasetMetadata(dataset_name).predictands_split_path(split)
-        ).sel(ensemble_member=ensemble_members)
+    ds = xr.open_dataset(
+        FurflexDatasetMetadata(dataset_name).predictands_split_path(split),
+        chunks={},
+    )
+    if ensemble_members != "all":
+        ds = ds.sel(ensemble_member=ensemble_members)
 
     return ds
 
@@ -258,7 +256,10 @@ def open_samples_ds(
             raise RuntimeError(f"{samples_dir} has no sample files")
 
         if deterministic:
-            em_ds = xr.open_dataset(sample_files_list[0])
+            em_ds = xr.open_dataset(
+                sample_files_list[0],
+                chunks={},
+            )
         else:
             sample_files_list = sample_files_list[:num_samples]
             if len(sample_files_list) < num_samples:
@@ -267,7 +268,7 @@ def open_samples_ds(
                 )
             em_ds = xr.concat(
                 [
-                    xr.open_dataset(sample_filepath)
+                    xr.open_dataset(sample_filepath, chunks={})
                     for sample_filepath in sample_files_list
                 ],
                 dim="sample_id",

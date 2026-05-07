@@ -4,14 +4,14 @@ Describe in more detail the models being compared
 eval_vars = ["pr"]
 target_sim_key = "CPM"
 dataset_configs = {
-    "CPM": "engwales_ccpm-4x-cpmgem_12em_future_1hr_pr",
+    "CPM": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset",
 }
 exclude_days = 0  # Number of days to exclude from each start of each season
 split = "val"
 ensemble_members = [
     "r001i1p00000",
-    # "r001i1p01113",
-    # "r001i1p01554",
+    "r001i1p01113",
+    "r001i1p01554",
     # "r001i1p01649",
     # "r001i1p01843",
     # "r001i1p01935",
@@ -28,35 +28,18 @@ sample_configs = {
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "latte-s8-1gpu-future",
-                    "checkpoint": "0065",
-                    "dataset": "engwales_ccpm-4x-cpmgem_12em_future_1hr_pr",
+                    "fq_model_id": "latte-b8-cpmgem-daily-preset",
+                    "checkpoint": "0150",
+                    "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset",
                     "input_xfm": "",
                     "variables": ["pr"],
                 },
             ],
-            "label": "e0065",
+            "label": "e0150",
             "deterministic": False,
             "PSD": True,
             "color": "tab:blue",
             "order": 10,
-            "CCS": True,
-        },
-        {
-            "sample_specs": [
-                {
-                    "fq_model_id": "latte-s8-1gpu-future",
-                    "checkpoint": "0240",
-                    "dataset": "engwales_ccpm-4x-cpmgem_12em_future_1hr_pr",
-                    "input_xfm": "",
-                    "variables": ["pr"],
-                },
-            ],
-            "label": "e0240",
-            "deterministic": False,
-            "PSD": True,
-            "color": "tab:orange",
-            "order": 11,
             "CCS": True,
         },
     ],

@@ -1,3 +1,4 @@
+import dask
 import numpy as np
 import pysteps
 import scipy
@@ -84,6 +85,13 @@ def pysteps_rapsd(pr_da, pixel_size):
     else:
         r_range = np.arange(0, int(npix / 2))
     freqs = freqs[r_range]
+    if isinstance(pr_da.data, dask.array.Array):
+        extra_kwargs = {
+            "dask": "parallelized",
+            "dask_gufunc_kwargs": {"output_sizes": {"freq": len(freqs)}},
+        }
+    else:
+        extra_kwargs = {}
     rapsd_da = xr.apply_ufunc(
         _urapsd,  # first the function
         pr_da,  # now arguments in the order expected by function
@@ -102,6 +110,7 @@ def pysteps_rapsd(pr_da, pixel_size):
             )
         ),  # dimensions allowed to change size. Must be set!
         vectorize=True,
+        **extra_kwargs,
     )
     rapsd_da["freq"] = freqs
     return rapsd_da

@@ -1,6 +1,7 @@
 from collections import defaultdict
 import functools
 import math
+import dask
 from matplotlib import pyplot as plt
 import numpy as np
 import scipy
@@ -66,7 +67,7 @@ def rms(da: xr.DataArray) -> xr.DataArray:
     """
     Compute the root mean square of a DataArray.
     """
-    return np.sqrt(np.mean(da**2))
+    return dask.array.sqrt((da**2).mean())
 
 
 def rms_mean_bias(sample_da, target_da, normalize=False):
@@ -101,31 +102,50 @@ def xr_hist(da, bins, **kwargs):
         hist_output = np.histogram(da, bins=bins, **kwargs)
         return hist_output[0], hist_output[1]
 
+    def _dask_hist(da, bins, **kwargs):
+        hist_output = dask.array.histogram(da, bins=bins, **kwargs)
+        return hist_output[0], hist_output[1]
+
+    if isinstance(da.data, dask.array.Array):
+        hist_func = _dask_hist
+        extra_kwargs = {"dask": "allowed"}
+    else:
+        hist_func = _np_hist
+        extra_kwargs = {}
+
     hist, bin_edges = xr.apply_ufunc(
-        _np_hist,
+        hist_func,  # first the function
         da,
         input_core_dims=[da.dims],  # list with one entry per arg
         output_core_dims=[["bins"], ["edge"]],
         vectorize=True,
         kwargs=dict(bins=bins, density=True) | kwargs,
+        **extra_kwargs,
     )
     hist = hist.rename("frequency_density")
     return hist, bin_edges.values
 
 
 def hist_dist(hist_da, target_hist_da):
+    extra_args = {}
+    if isinstance(hist_da.data, dask.array.Array):
+        extra_args["dask"] = "allowed"
     return xr.apply_ufunc(
         scipy.spatial.distance.jensenshannon,
         hist_da.squeeze("model", drop=True),
         target_hist_da,
         input_core_dims=[["bins"], ["bins"]],  # list with one entry per arg
         # vectorize=True,
+        **extra_args,
     ).rename("JS_distance")
 
 
 def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
     nan_count = (
-        np.isnan(da).groupby("model", squeeze=False).sum(...).rename(f"NaN Count")
+        dask.array.isnan(da)
+        .groupby("model", squeeze=False)
+        .sum(...)
+        .rename(f"NaN Count")
     )
     rms_mean_biases = (
         da.groupby("model", squeeze=False)
@@ -160,7 +180,11 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
         .rename(f"Relative RMS Q999 Bias (%)")
     )
 
-    bins = np.histogram_bin_edges(target_da, 200)
+    target_min = target_da.min().compute()
+    target_max = target_da.max().compute()
+    bins = np.histogram_bin_edges(
+        [], bins=200, range=(target_min.item(), target_max.item())
+    )
     target_hist_da, bins = xr_hist(target_da, bins=bins)
     model_hist_dist = (
         da.groupby("model", squeeze=False)
@@ -253,9 +277,9 @@ def plot_freq_density(
             ymin = 0
         else:
             ymin = None
-        target_counts, bins = np.histogram(
-            target_da, bins=bins, range=hrange, density=True
-        )
+        # target_counts, bins = np.histogram(
+        #     target_da, bins=bins, range=hrange, density=True
+        # )
 
         target_counts, bins = xr_hist(target_da, bins, range=hrange)
         ax.stairs(
@@ -506,7 +530,7 @@ def plot_distribution_figure(
         )
 
     if error_ax is not None:
-
+        # TODO: make this dask-friendly (mainly by storing the computed histograms from previous steps and reusing them here, instead of recomputing them)
         if hrange is None:
             hrange = (
                 min(
