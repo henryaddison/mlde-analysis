@@ -258,13 +258,7 @@ def open_samples_ds(
         if deterministic:
             em_ds = xr.open_dataset(
                 sample_files_list[0],
-                chunks={
-                    "ensemble_member": 1,
-                    # "time": 16,
-                    "frame": 24,
-                    "grid_longitude": 64,
-                    "grid_latitude": 64,
-                },
+                chunks={},
             )
         else:
             sample_files_list = sample_files_list[:num_samples]
@@ -274,16 +268,7 @@ def open_samples_ds(
                 )
             em_ds = xr.concat(
                 [
-                    xr.open_dataset(
-                        sample_filepath,
-                        chunks={
-                            "ensemble_member": 1,
-                            # "time": 16,
-                            "frame": 24,
-                            "grid_longitude": 64,
-                            "grid_latitude": 64,
-                        },
-                    )
+                    xr.open_dataset(sample_filepath, chunks={})
                     for sample_filepath in sample_files_list
                 ],
                 dim="sample_id",
