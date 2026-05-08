@@ -84,15 +84,15 @@ sample_configs:
         color: tab:purple
         order: 15
         CCS: True
-      # - label: e0650
-      #   sample_specs:
-      #     - fq_model_id: latte-b8-cpmgem-daily-preset
-      #       checkpoint: "0650"
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-      #       input_xfm: ""
-      #       variables: [pr]
-      #   deterministic: False
-      #   PSD: True
-      #   color: tab:brown
-      #   order: 16
-      #   CCS: True
+      - label: e0650
+        sample_specs:
+          - fq_model_id: latte-b8-cpmgem-daily-preset
+            checkpoint: "0650"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+        deterministic: False
+        PSD: True
+        color: tab:brown
+        order: 16
+        CCS: True
