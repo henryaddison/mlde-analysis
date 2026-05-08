@@ -47,25 +47,11 @@ sample_configs = {
 
 derived_variables_config = {}
 
-example_percentiles = {
+examples_to_plot = {
     "CPM": {
-        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
-        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
-        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
-        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
-    },
-    "GCM": {
-        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
-        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
-        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
-        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
+        "band": {
+            "times": ["2080-03-01", "2080-03-03"],
+            "query": {"ensemble_member": "r001i1p00000"},
+        },
     },
 }
-example_overrides = {
-    "CPM": {
-        "JJA Wet": ["01", "1993-08-01 12:00:00"],
-    },
-    "GCM": {},
-}
-example_inputs = ["vorticity850"]
-examples_sample_idxs = [0, 2]

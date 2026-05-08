@@ -108,3 +108,9 @@ sample_configs:
         color: tab:pink
         order: 17
         CCS: True
+examples_to_plot:
+  CPM:
+    band:
+      times: ["2073-02-17", "2073-02-19"]
+      query:
+        ensemble_member: r001i1p00000

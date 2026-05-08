@@ -167,6 +167,9 @@ STYLES = {
         "cmap": chasehigh_precip_cmap,
         "norm": precip_norm(precip_clevs, chasehigh_precip_cmap),
     },
+    "pr_hourly_bokeh": {
+        "clim": (0, 50),
+    },
     "relhum150cm": {"cmap": hurs_cmap, "vmin": 0, "vmax": 100},
     "tmean150cm": {"cmap": tas_cmap, "norm": tas_norm},
     "tasmax": {"cmap": tas_cmap, "norm": tas_norm},
@@ -181,6 +184,16 @@ STYLES = {
     "swbgtBias": {"cmap": swgbt_bias_cmap, "norm": swgbt_bias_norm},
     "biasError": {"cmap": bias_error_cmap, "norm": bias_error_norm},
 }
+
+STYLES["pr_hourly_bokeh"]["cmap"] = [
+    matplotlib.colors.to_hex(STYLES["pr_hourly"]["cmap"](level))
+    for level in STYLES["pr_hourly"]["norm"](
+        np.linspace(
+            *STYLES["pr_hourly_bokeh"]["clim"],
+            STYLES["pr_hourly_bokeh"]["clim"][1] * 20 + 1,
+        )
+    )
+]
 
 VAR_LABELS = {
     "pr": "Precip. (mm/day)",
