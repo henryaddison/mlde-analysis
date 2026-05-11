@@ -48,42 +48,42 @@ sample_configs:
         color: tab:orange
         order: 12
         CCS: True
-      - label: e0150
-        sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-preset
-            checkpoint: "0150"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-        deterministic: False
-        PSD: True
-        color: tab:green
-        order: 13
-        CCS: True
-      - label: e0300
-        sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-preset
-            checkpoint: "0300"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-        deterministic: False
-        PSD: True
-        color: tab:red
-        order: 14
-        CCS: True
-      - label: e0500
-        sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-preset
-            checkpoint: "0500"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-        deterministic: False
-        PSD: True
-        color: tab:purple
-        order: 15
-        CCS: True
+      # - label: e0150
+      #   sample_specs:
+      #     - fq_model_id: latte-b8-cpmgem-daily-preset
+      #       checkpoint: "0150"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:green
+      #   order: 13
+      #   CCS: True
+      # - label: e0300
+      #   sample_specs:
+      #     - fq_model_id: latte-b8-cpmgem-daily-preset
+      #       checkpoint: "0300"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:red
+      #   order: 14
+      #   CCS: True
+      # - label: e0500
+      #   sample_specs:
+      #     - fq_model_id: latte-b8-cpmgem-daily-preset
+      #       checkpoint: "0500"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:purple
+      #   order: 15
+      #   CCS: True
       - label: e0650
         sample_specs:
           - fq_model_id: latte-b8-cpmgem-daily-preset
@@ -95,4 +95,16 @@ sample_configs:
         PSD: True
         color: tab:brown
         order: 16
+        CCS: True
+      - label: xl8-e0059
+        sample_specs:
+          - fq_model_id: latte-xl8-cpmgem-daily-preset
+            checkpoint: "0059"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+        deterministic: False
+        PSD: True
+        color: tab:pink
+        order: 17
         CCS: True
