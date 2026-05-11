@@ -96,18 +96,18 @@ sample_configs:
         color: tab:brown
         order: 16
         CCS: True
-      - label: xl8-e0059
-        sample_specs:
-          - fq_model_id: latte-xl8-cpmgem-daily-preset
-            checkpoint: "0059"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-        deterministic: False
-        PSD: True
-        color: tab:pink
-        order: 17
-        CCS: True
+      # - label: xl8-e0059
+      #   sample_specs:
+      #     - fq_model_id: latte-xl8-cpmgem-daily-preset
+      #       checkpoint: "0059"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:pink
+      #   order: 17
+      #   CCS: True
 examples_to_plot:
   CPM:
     band:
