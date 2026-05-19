@@ -75,19 +75,19 @@ sample_configs:
         color: tab:red
         order: 14
         CCS: True
-      # - label: 2000-2000 b8 e150
-      #   sample_specs:
-      #     - fq_model_id: latte-b8-cpmgem-daily-preset
-      #       checkpoint: "0150"
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-      #       input_xfm: ""
-      #       variables: [pr]
-      #       config_hash: "2000-steps"
-      #   deterministic: False
-      #   PSD: True
-      #   color: tab:purple
-      #   order: 15
-      #   CCS: True
+      - label: 2000-2000 b8 e150
+        sample_specs:
+          - fq_model_id: latte-b8-2000-steps-cpmgem-daily-preset
+            checkpoint: "0150"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "2000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:purple
+        order: 15
+        CCS: True
 examples_to_plot:
   CPM:
     band:
