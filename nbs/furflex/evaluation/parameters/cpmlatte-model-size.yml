@@ -24,19 +24,32 @@ ensemble_members:
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: xl8 e150 1000
-        sample_specs:
-          - fq_model_id: latte-xl8-cpmgem-daily-preset
-            checkpoint: "0150"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-            config_hash: "1000-steps"
-        deterministic: False
-        PSD: True
-        color: tab:blue
-        order: 11
-        CCS: True
+      # - label: xl8 e150 1000
+      #   sample_specs:
+      #     - fq_model_id: latte-xl8-cpmgem-daily-preset
+      #       checkpoint: "0150"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #       config_hash: "1000-steps"
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:blue
+      #   order: 11
+      #   CCS: True
+      # - label: xl8-4gpus e150 1000
+      #   sample_specs:
+      #     - fq_model_id: latte-xl8-cpmgem-daily-preset-4gpus
+      #       checkpoint: "0150"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #       config_hash: "1000-steps"
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:olive
+      #   order: 11
+      #   CCS: True
       - label: b8 e150 1000
         sample_specs:
           - fq_model_id: latte-b8-cpmgem-daily-preset
@@ -50,6 +63,32 @@ sample_configs:
         color: tab:orange
         order: 12
         CCS: True
+      # - label: s8 e150 1000
+      #   sample_specs:
+      #     - fq_model_id: latte-s8-cpmgem-daily-preset
+      #       checkpoint: "0150"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #       config_hash: "1000-steps"
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:green
+      #   order: 13
+      #   CCS: True
+      # - label: xl8-4G e300 1000
+      #   sample_specs:
+      #     - fq_model_id: latte-xl8-cpmgem-daily-preset-4gpus
+      #       checkpoint: "0300"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #       config_hash: "1000-steps"
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:red
+      #   order: 14
+      #   CCS: True
       - label: b8 e300 1000
         sample_specs:
           - fq_model_id: latte-b8-cpmgem-daily-preset
@@ -73,8 +112,34 @@ sample_configs:
             config_hash: "1000-steps"
         deterministic: False
         PSD: True
-        color: tab:red
-        order: 14
+        color: tab:purple
+        order: 15
+        CCS: True
+      - label: b8 e500 1000
+        sample_specs:
+          - fq_model_id: latte-b8-cpmgem-daily-preset
+            checkpoint: "0500"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:pink
+        order: 16
+        CCS: True
+      - label: s8 e500 1000
+        sample_specs:
+          - fq_model_id: latte-s8-cpmgem-daily-preset
+            checkpoint: "0500"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:brown
+        order: 17
         CCS: True
 examples_to_plot:
   CPM:
