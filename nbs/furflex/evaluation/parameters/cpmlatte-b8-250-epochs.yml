@@ -65,7 +65,6 @@ sample_configs:
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
-            config_hash: "e3e1da6158435718"
         deterministic: False
         PSD: True
         color: tab:green
