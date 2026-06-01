@@ -8,7 +8,7 @@ import scipy
 import string
 import xarray as xr
 
-from mlde_utils import platecarree
+from mlde_utils import cp_model_rotated_pole
 
 from mlde_analysis import plot_map
 
@@ -500,7 +500,7 @@ def plot_distribution_figure(
         spec,
         gridspec_kw=dict(height_ratios=height_ratio),
         per_subplot_kw={
-            ak: {"projection": platecarree}
+            ak: {"projection": cp_model_rotated_pole}
             for bias_keys in biases_layout.values()
             for ak in bias_keys
         },
