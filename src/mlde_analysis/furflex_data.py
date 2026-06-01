@@ -137,19 +137,15 @@ def prep_eval_data(
     samples_per_run,
     coarsen_time=None,
 ):
-    models = {
-        source: dict(
-            sorted(
-                {
-                    run_config["label"]: {"order": -1, "CCS": False, "source": source}
-                    | run_config
-                    for run_config in data_configs
-                }.items(),
-                key=lambda x: x[1]["order"],
+    order = 1
+    models = {}
+    for source, data_configs in sample_configs.items():
+        models[source] = {}
+        for run_config in data_configs:
+            models[source][run_config["label"]] = (
+                {"CCS": False, "source": source} | run_config | {"order": order}
             )
-        )
-        for source, data_configs in sample_configs.items()
-    }
+            order += 1
 
     merged_ds = {}
     for source, sample_config in sample_configs.items():
