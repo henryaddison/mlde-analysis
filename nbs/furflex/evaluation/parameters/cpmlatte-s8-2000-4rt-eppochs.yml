@@ -37,18 +37,18 @@ sample_configs:
         PSD: True
         color: tab:orange
         CCS: True
-      - label: e300
-        sample_specs:
-          - fq_model_id: latte-s8-4rt-cpmgem-daily-preset-2000-steps-4gpus
-            checkpoint: "0300"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-            config_hash: "2000-steps"
-        deterministic: False
-        PSD: True
-        color: tab:blue
-        CCS: True
+      # - label: e300
+      #   sample_specs:
+      #     - fq_model_id: latte-s8-4rt-cpmgem-daily-preset-2000-steps-4gpus
+      #       checkpoint: "0300"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #       config_hash: "2000-steps"
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:blue
+      #   CCS: True
       - label: e0500
         sample_specs:
           - fq_model_id: latte-s8-4rt-cpmgem-daily-preset-2000-steps-4gpus
