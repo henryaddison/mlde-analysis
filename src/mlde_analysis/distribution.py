@@ -194,29 +194,6 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
         .rename("J-S distance")
     )
 
-    das = []
-    for threshold in thresholds:
-        emu_exceedence_da = (
-            da.groupby("model", squeeze=False)
-            .map(
-                lambda group_da: (
-                    group_da.where(group_da > threshold).count() / group_da.count()
-                )
-            )
-            .rename(f"Emu > {threshold}")
-        )
-
-        target_exceedence_da = (
-            target_da.where(target_da > threshold).count() / target_da.count()
-        ).rename(f"CPM > {threshold}")
-
-        diff_da = (emu_exceedence_da - target_exceedence_da).rename(
-            f"Emu > {threshold} - CPM > {threshold}"
-        )
-        das.extend([emu_exceedence_da, diff_da])
-
-    thshd_exceedence_ds = xr.merge(das)
-
     metrics_ds = xr.merge(
         [
             nan_count,
@@ -230,7 +207,31 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
         ]
     )
 
-    return xr.merge([metrics_ds, thshd_exceedence_ds])
+    # das = []
+    # for threshold in thresholds:
+    #     emu_exceedence_da = (
+    #         da.groupby("model", squeeze=False)
+    #         .map(
+    #             lambda group_da: (
+    #                 group_da.where(group_da > threshold).count() / group_da.count()
+    #             )
+    #         )
+    #         .rename(f"Emu > {threshold}")
+    #     )
+
+    #     target_exceedence_da = (
+    #         target_da.where(target_da > threshold).count() / target_da.count()
+    #     ).rename(f"CPM > {threshold}")
+
+    #     diff_da = (emu_exceedence_da - target_exceedence_da).rename(
+    #         f"Emu > {threshold} - CPM > {threshold}"
+    #     )
+    #     das.extend([emu_exceedence_da, diff_da])
+
+    # thshd_exceedence_ds = xr.merge(das)
+    # metrics_ds = xr.merge([metrics_ds, thshd_exceedence_ds])
+
+    return metrics_ds
 
 
 def plot_freq_density(
