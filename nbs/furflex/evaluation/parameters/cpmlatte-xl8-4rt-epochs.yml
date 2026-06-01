@@ -32,7 +32,7 @@ sample_configs:
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
-            config_hash: "2000-steps"
+            config_hash: "1000-steps"
         deterministic: False
         PSD: True
         color: tab:orange
@@ -44,7 +44,7 @@ sample_configs:
       #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
       #       input_xfm: ""
       #       variables: [pr]
-      #       config_hash: "2000-steps"
+      #       config_hash: "1000-steps"
       #   deterministic: False
       #   PSD: True
       #   color: tab:blue
@@ -56,7 +56,7 @@ sample_configs:
       #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
       #       input_xfm: ""
       #       variables: [pr]
-      #       config_hash: "2000-steps"
+      #       config_hash: "1000-steps"
       #   deterministic: False
       #   PSD: True
       #   color: tab:red
