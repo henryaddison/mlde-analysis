@@ -1,14 +1,29 @@
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.shellapp import InteractiveShellApp
-from mlde_analysis.data import prep_eval_data
+from IPython.core.magic_arguments import (
+    argument,
+    magic_arguments,
+    parse_argstring,
+)  # type: ignore
+from mlde_analysis.furflex_data import prep_eval_data
 import xarray as xr
 
 
 @magics_class
 class LoadEvalData(Magics):
 
+    @magic_arguments()
+    @argument(
+        "-c",
+        "--coarsen",
+        action="store",
+        default=None,
+        type=int,
+        help="An optional argument to coarsen time dim.",
+    )
     @line_magic
     def load_eval_data(self, line):
+        args = parse_argstring(self.load_eval_data, line)
         eval_vars = self.shell.user_ns["eval_vars"]
         eval_ds, models = prep_eval_data(
             self.shell.user_ns["sample_configs"],
@@ -19,6 +34,7 @@ class LoadEvalData(Magics):
             exclude_days=self.shell.user_ns["exclude_days"],
             ensemble_members=self.shell.user_ns["ensemble_members"],
             samples_per_run=self.shell.user_ns["samples_per_run"],
+            coarsen_time=args.coarsen,
         )
 
         target_sim_key = self.shell.user_ns["target_sim_key"]
