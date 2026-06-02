@@ -1,6 +1,8 @@
 import importlib
 import numpy as np
+import os
 import pandas as pd
+from pathlib import Path
 import xarray as xr
 
 from mlde_utils import (
@@ -10,6 +12,8 @@ from mlde_utils import (
 )
 
 from . import display
+
+WORKDIRS_PATH = Path(os.getenv("WORKDIRS_PATH"))
 
 
 def prep_eval_data(
@@ -149,7 +153,7 @@ def open_samples_ds(
     deterministic,
     config_hash=None,
 ):
-    eo_meta = EmulatorOutputMetadata(fq_run_id=run_name)
+    eo_meta = EmulatorOutputMetadata(fq_run_id=run_name, base_dir=WORKDIRS_PATH)
     per_em_datasets = []
     for ensemble_member in ensemble_members:
         samples_dir = eo_meta.samples_path(
