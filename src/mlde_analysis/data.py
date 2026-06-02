@@ -42,17 +42,6 @@ def prep_eval_data(
 
     merged_ds = {}
     for source, sample_config in sample_configs.items():
-        samples_ds = open_concat_sample_datasets(
-            sample_config,
-            split=split,
-            ensemble_members=ensemble_members,
-            samples_per_run=samples_per_run,
-        )
-        for var, attrs in display.ATTRS.items():
-            pvarname = f"pred_{var}"
-            if pvarname in samples_ds.data_vars:
-                samples_ds[pvarname] = samples_ds[pvarname].assign_attrs(attrs)
-
         dataset_ds = open_dataset_split(
             dataset_configs[source], split, ensemble_members
         )
@@ -62,6 +51,18 @@ def prep_eval_data(
             tvarname = f"target_{var}"
             if tvarname in dataset_ds.data_vars:
                 dataset_ds[tvarname] = dataset_ds[tvarname].assign_attrs(attrs)
+
+        samples_ds = open_concat_sample_datasets(
+            sample_config,
+            split=split,
+            ensemble_members=ensemble_members,
+            samples_per_run=samples_per_run,
+            dataset_ds=dataset_ds,
+        )
+        for var, attrs in display.ATTRS.items():
+            pvarname = f"pred_{var}"
+            if pvarname in samples_ds.data_vars:
+                samples_ds[pvarname] = samples_ds[pvarname].assign_attrs(attrs)
 
         ds = xr.merge([samples_ds, dataset_ds], join="inner", compat="override")
         assert len(dataset_ds["time"]) == len(ds["time"]), (
@@ -215,7 +216,9 @@ def open_dataset_split(dataset_name, split, ensemble_members="all"):
     return ds
 
 
-def open_concat_sample_datasets(sample_runs, split, ensemble_members, samples_per_run):
+def open_concat_sample_datasets(
+    sample_runs, split, ensemble_members, samples_per_run, dataset_ds
+):
     sample_datasets = []
     for sample_run in sample_runs:
         per_var_sample_datasets = [
@@ -231,7 +234,10 @@ def open_concat_sample_datasets(sample_runs, split, ensemble_members, samples_pe
                 ensemble_members=ensemble_members,
                 num_samples=samples_per_run,
                 deterministic=sample_run["deterministic"],
-            )[f"pred_{var}"]
+            )[f"pred_{var}"].assign_coords(
+                grid_latitude=dataset_ds["grid_latitude"].copy(),
+                grid_longitude=dataset_ds["grid_longitude"].copy(),
+            )
             for sample_src in sample_run["sample_specs"]
             for var in sample_src["variables"]
         ]
