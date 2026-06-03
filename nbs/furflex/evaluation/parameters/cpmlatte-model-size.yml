@@ -27,7 +27,7 @@ sample_configs:
     CPM:
       - label: xl8-4G e150
         sample_specs:
-          - fq_model_id: latte-xl8-cpmgem-daily-preset-4gpus
+          - fq_model_id: cpmgem-subdaily/latte-xl8-cpmgem-daily-preset-4gpus
             checkpoint: "0150"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -39,7 +39,7 @@ sample_configs:
         CCS: True
       - label: b8 e150
         sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
             checkpoint: "0150"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -51,7 +51,7 @@ sample_configs:
         CCS: True
       - label: s8 e150
         sample_specs:
-          - fq_model_id: latte-s8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-s8-cpmgem-daily-preset
             checkpoint: "0150"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -63,7 +63,7 @@ sample_configs:
         CCS: True
       - label: xl8-4G e300
         sample_specs:
-          - fq_model_id: latte-xl8-cpmgem-daily-preset-4gpus
+          - fq_model_id: cpmgem-subdaily/latte-xl8-cpmgem-daily-preset-4gpus
             checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -75,7 +75,7 @@ sample_configs:
         CCS: True
       - label: b8 e300
         sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
             checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -87,7 +87,7 @@ sample_configs:
         CCS: True
       - label: s8 e300
         sample_specs:
-          - fq_model_id: latte-s8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-s8-cpmgem-daily-preset
             checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -99,7 +99,7 @@ sample_configs:
         CCS: True
       - label: xl8-4G e500
         sample_specs:
-          - fq_model_id: latte-xl8-cpmgem-daily-preset-4gpus
+          - fq_model_id: cpmgem-subdaily/latte-xl8-cpmgem-daily-preset-4gpus
             checkpoint: "0500"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -111,7 +111,7 @@ sample_configs:
         CCS: True
       - label: b8 e500
         sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
             checkpoint: "0500"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -123,7 +123,7 @@ sample_configs:
         CCS: True
       - label: s8 e500
         sample_specs:
-          - fq_model_id: latte-s8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-s8-cpmgem-daily-preset
             checkpoint: "0500"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
