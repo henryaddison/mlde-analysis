@@ -14,7 +14,7 @@ sample_configs:
     CPM:
       - label: e0065
         sample_specs:
-          - fq_model_id: latte-s8-1gpu-future
+          - fq_model_id: cpmgem-subdaily/latte-s8-1gpu-future
             checkpoint: "0065"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
             input_xfm: ""
@@ -26,7 +26,7 @@ sample_configs:
         CCS: True
       - label: e0240
         sample_specs:
-          - fq_model_id: latte-s8-1gpu-future
+          - fq_model_id: cpmgem-subdaily/latte-s8-1gpu-future
             checkpoint: "0240"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
             input_xfm: ""
@@ -38,7 +38,7 @@ sample_configs:
         CCS: True
       - label: e0300
         sample_specs:
-          - fq_model_id: latte-s8-1gpu-future
+          - fq_model_id: cpmgem-subdaily/latte-s8-1gpu-future
             checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
             input_xfm: ""
@@ -50,7 +50,7 @@ sample_configs:
         CCS: True
       - label: e0450
         sample_specs:
-          - fq_model_id: latte-s8-1gpu-future
+          - fq_model_id: cpmgem-subdaily/latte-s8-1gpu-future
             checkpoint: "0450"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
             input_xfm: ""
@@ -62,7 +62,7 @@ sample_configs:
         CCS: True
       - label: e0850
         sample_specs:
-          - fq_model_id: latte-s8-1gpu-future
+          - fq_model_id: cpmgem-subdaily/latte-s8-1gpu-future
             checkpoint: "0850"
             dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
             input_xfm: ""
@@ -74,7 +74,7 @@ sample_configs:
         CCS: True
       # - label: e0280gc
       #   sample_specs:
-      #     - fq_model_id: latte-s8-global-conditioning-1gpu-future
+      #     - fq_model_id: cpmgem-subdaily/latte-s8-global-conditioning-1gpu-future
       #       checkpoint: "0280"
       #       dataset: engwales_ccpm-4x-cpmgem_12em_future_1hr_pr
       #       input_xfm: ""

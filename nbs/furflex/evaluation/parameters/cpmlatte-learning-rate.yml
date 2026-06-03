@@ -26,7 +26,7 @@ sample_configs:
     CPM:
       - label: 1e-4 e300
         sample_specs:
-          - fq_model_id: latte-b8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
             checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
@@ -38,7 +38,7 @@ sample_configs:
         CCS: True
       - label: 2e-4 e300
         sample_specs:
-          - fq_model_id: latte-b8-lr2e-4-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/latte-b8-lr2e-4-cpmgem-daily-preset
             checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
