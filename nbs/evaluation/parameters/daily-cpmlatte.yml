@@ -22,7 +22,7 @@ sample_configs:
         CCS: True
         color: tab:blue
         order: 11
-      - label: CPMLatte daily
+      - label: CPMLatte daily e50
         sample_specs:
           - fq_model_id: cpmgem-subdaily/latte-b8-daily-cpmgem-daily-preset-4gpus/post/daily
             checkpoint: "0050"
@@ -34,7 +34,7 @@ sample_configs:
         CCS: True
         color: tab:orange
         order: 12
-      - label: CPMLatte daily
+      - label: CPMLatte daily e200
         sample_specs:
           - fq_model_id: cpmgem-subdaily/latte-b8-daily-cpmgem-daily-preset-4gpus/post/daily
             checkpoint: "0200"
