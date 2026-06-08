@@ -53,5 +53,9 @@ examples_to_plot = {
             "times": ["2080-03-01", "2080-03-03"],
             "query": {"ensemble_member": "r001i1p00000"},
         },
+        "covn": {
+            "times": ["2029-06-23", "2029-06-25"],
+            "query": {"ensemble_member": "r001i1p02868"},
+        },
     },
 }
