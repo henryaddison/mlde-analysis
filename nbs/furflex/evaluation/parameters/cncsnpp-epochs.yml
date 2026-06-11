@@ -25,7 +25,7 @@ ensemble_members:
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: e0150
+      - label: e0150 b8
         sample_specs:
           - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
             checkpoint: "0150"
