@@ -84,3 +84,15 @@ sample_configs:
         PSD: True
         color: tab:brown
         CCS: True
+      - label: 1.0 e300
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/cpmlatte-hourly-pr/ew-cpmgem-daily-preset/1gpu/latte-b8-cmn-1.0
+            checkpoint: "0300"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:purple
+        CCS: True
