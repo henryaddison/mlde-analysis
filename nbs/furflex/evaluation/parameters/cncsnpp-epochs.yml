@@ -37,7 +37,7 @@ sample_configs:
         PSD: True
         color: tab:orange
         CCS: True
-      - label: e0150
+      - label: e0150 fixed
         sample_specs:
           - fq_model_id: cpmgem-subdaily/cncsnpp-cpmgem-daily-preset-4gpus-fixed-sigma
             checkpoint: "0150"
@@ -48,4 +48,16 @@ sample_configs:
         deterministic: False
         PSD: True
         color: tab:blue
+        CCS: True
+      - label: e0150 learn
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/cncsnpp-cpmgem-daily-preset-4gpus-learn-sigma
+            checkpoint: "0150"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:red
         CCS: True
