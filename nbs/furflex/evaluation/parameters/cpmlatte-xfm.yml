@@ -84,27 +84,39 @@ sample_configs:
         PSD: True
         color: tab:cyan
         CCS: True
-      # - label: sqrt e0500
-      #   sample_specs:
-      #     - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
-      #       checkpoint: "0500"
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-      #       input_xfm: ""
-      #       variables: [pr]
-      #       config_hash: "1000-steps"
-      #   deterministic: False
-      #   PSD: True
-      #   color: tab:purple
-      #   CCS: True
-      # - label: 4rt e500
-      #   sample_specs:
-      #     - fq_model_id: cpmgem-subdaily/latte-b8-4rt-cpmgem-daily-preset
-      #       checkpoint: "0500"
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-      #       input_xfm: ""
-      #       variables: [pr]
-      #       config_hash: "1000-steps"
-      #   deterministic: False
-      #   PSD: True
-      #   color: tab:brown
-      #   CCS: True
+      - label: sqrt e0500
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
+            checkpoint: "0500"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:purple
+        CCS: True
+      - label: 4rt e500
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/latte-b8-4rt-cpmgem-daily-preset
+            checkpoint: "0500"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:brown
+        CCS: True
+      - label: 4rt;recen e500
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/latte-b8-4rtrecen-cpmgem-daily-preset
+            checkpoint: "0500"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        CCS: True

@@ -25,17 +25,17 @@ ensemble_members:
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: 1000-250 b8 e150
-        sample_specs:
-          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
-            checkpoint: "0150"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-        deterministic: False
-        PSD: True
-        color: tab:blue
-        CCS: True
+      # - label: 1000-250 b8 e150
+      #   sample_specs:
+      #     - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
+      #       checkpoint: "0150"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:blue
+      #   CCS: True
       - label: 1000-1000 b8 e150
         sample_specs:
           - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
@@ -61,17 +61,17 @@ sample_configs:
         color: tab:purple
         order: 1
         CCS: True
-      - label: 1000-250 b8 e300
-        sample_specs:
-          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
-            checkpoint: "0300"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
-            input_xfm: ""
-            variables: [pr]
-        deterministic: False
-        PSD: True
-        color: tab:green
-        CCS: True
+      # - label: 1000-250 b8 e300
+      #   sample_specs:
+      #     - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
+      #       checkpoint: "0300"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       input_xfm: ""
+      #       variables: [pr]
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:green
+      #   CCS: True
       - label: 1000-1000 b8 e300
         sample_specs:
           - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
@@ -119,6 +119,30 @@ sample_configs:
         deterministic: False
         PSD: True
         color: tab:olive
+        CCS: True
+      - label: 1000 b8 e950
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
+            checkpoint: "0950"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:blue
+        CCS: True
+      - label: 2000 b8 e950
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/latte-b8-2000-steps-cpmgem-daily-preset
+            checkpoint: "0950"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "2000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:green
         CCS: True
 examples_to_plot:
   CPM:
