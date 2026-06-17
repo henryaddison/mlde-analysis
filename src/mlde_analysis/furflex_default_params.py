@@ -4,7 +4,7 @@ Describe in more detail the models being compared
 eval_vars = ["pr"]
 target_sim_key = "CPM"
 dataset_configs = {
-    "CPM": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset",
+    "CPM": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
 }
 exclude_days = 0  # Number of days to exclude from each start of each season
 split = "val"
@@ -30,7 +30,7 @@ sample_configs = {
                 {
                     "fq_model_id": "latte-b8-cpmgem-daily-preset",
                     "checkpoint": "0150",
-                    "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset",
+                    "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
                     "input_xfm": "",
                     "variables": ["pr"],
                 },
@@ -50,12 +50,12 @@ derived_variables_config = {}
 examples_to_plot = {
     "CPM": {
         "band": {
-            "times": ["2080-03-01", "2080-03-03"],
+            "times": ["2080-03-01", "2080-03-02"],
             "query": {"ensemble_member": "r001i1p00000"},
         },
-        "covn": {
-            "times": ["2029-06-23", "2029-06-25"],
-            "query": {"ensemble_member": "r001i1p02868"},
+        "conv": {
+            "times": ["2029-06-23", "2029-06-24"],
+            "query": {"ensemble_member": "r001i1p02491"},
         },
     },
 }
