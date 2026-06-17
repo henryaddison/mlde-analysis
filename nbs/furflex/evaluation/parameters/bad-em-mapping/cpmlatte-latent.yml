@@ -7,7 +7,7 @@ desc: |
 eval_vars: [pr]
 target_sim_key: CPM
 dataset_configs:
-    CPM: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+    CPM: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
 split: val
 ensemble_members:
   - r001i1p00000
@@ -27,9 +27,9 @@ sample_configs:
     CPM:
       - label: b8-latent e300 1000
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset-latent
+          - fq_model_id: cpmgem-subdaily/bad-em-mapping/latte-b8-cpmgem-daily-preset-latent
             checkpoint: "0300"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
             config_hash: "1000-steps"
@@ -40,9 +40,9 @@ sample_configs:
         CCS: True
       - label: b8 e300 1000
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/bad-em-mapping/latte-b8-cpmgem-daily-preset
             checkpoint: "0300"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
             config_hash: "1000-steps"
@@ -53,9 +53,9 @@ sample_configs:
         CCS: True
       - label: b8 e500 1000
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/latte-b8-cpmgem-daily-preset
+          - fq_model_id: cpmgem-subdaily/bad-em-mapping/latte-b8-cpmgem-daily-preset
             checkpoint: "0500"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
             config_hash: "1000-steps"
