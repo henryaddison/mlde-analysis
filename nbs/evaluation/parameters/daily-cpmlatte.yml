@@ -24,10 +24,10 @@ sample_configs:
         order: 11
       - label: CPMLatte daily sum e50
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/latte-b8-daily-cpmgem-daily-preset-4gpus/post/daily
+          - fq_model_id: cpmgem-subdaily/bad-em-mapping/latte-b8-daily-cpmgem-daily-preset-4gpus/post/daily
             checkpoint: "0050"
             input_xfm: ""
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             config_hash: "1000-steps"
             variables: [pr]
         deterministic: False
@@ -36,10 +36,10 @@ sample_configs:
         order: 12
       # - label: CPMLatte daily mean e50
       #   sample_specs:
-      #     - fq_model_id: cpmgem-subdaily/latte-b8-daily-mean-cpmgem-daily-preset-4gpus/post/daily
+      #     - fq_model_id: cpmgem-subdaily/bad-em-mapping/latte-b8-daily-mean-cpmgem-daily-preset-4gpus/post/daily
       #       checkpoint: "0050"
       #       input_xfm: ""
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
       #       config_hash: "1000-steps"
       #       variables: [pr]
       #   deterministic: False
@@ -48,10 +48,10 @@ sample_configs:
       #   order: 13
       # - label: CPMLatte daily sum e200
       #   sample_specs:
-      #     - fq_model_id: cpmgem-subdaily/latte-b8-daily-cpmgem-daily-preset-4gpus/post/daily
+      #     - fq_model_id: cpmgem-subdaily/bad-em-mapping/latte-b8-daily-cpmgem-daily-preset-4gpus/post/daily
       #       checkpoint: "0200"
       #       input_xfm: ""
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
       #       config_hash: "1000-steps"
       #       variables: [pr]
       #   deterministic: False
@@ -60,10 +60,10 @@ sample_configs:
       #   order: 14
       # - label: cNCSN++ lssum e50
       #   sample_specs:
-      #     - fq_model_id: cpmgem-subdaily/cncsnpp-daily-cpmgem-daily-preset-4gpus-learn-sigma/post/daily
+      #     - fq_model_id: cpmgem-subdaily/bad-em-mapping/cncsnpp-daily-cpmgem-daily-preset-4gpus-learn-sigma/post/daily
       #       checkpoint: "0050"
       #       input_xfm: ""
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
       #       config_hash: "1000-steps"
       #       variables: [pr]
       #   deterministic: False
@@ -72,10 +72,10 @@ sample_configs:
       #   order: 15
       - label: cNCSN++ fssum e50
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/cncsnpp-daily-cpmgem-daily-preset-4gpus-fixed-sigma/post/daily
+          - fq_model_id: cpmgem-subdaily/bad-em-mapping/cncsnpp-daily-cpmgem-daily-preset-4gpus-fixed-sigma/post/daily
             checkpoint: "0050"
             input_xfm: ""
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             config_hash: "1000-steps"
             variables: [pr]
         deterministic: False
@@ -84,10 +84,10 @@ sample_configs:
         order: 16
       # - label: cNCSN++ fsmean e50
       #   sample_specs:
-      #     - fq_model_id: cpmgem-subdaily/cncsnpp-daily-mean-cpmgem-daily-preset-4gpus-fixed-sigma/post/daily
+      #     - fq_model_id: cpmgem-subdaily/bad-em-mapping/cncsnpp-daily-mean-cpmgem-daily-preset-4gpus-fixed-sigma/post/daily
       #       checkpoint: "0050"
       #       input_xfm: ""
-      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+      #       dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
       #       config_hash: "1000-steps"
       #       variables: [pr]
       #   deterministic: False
@@ -96,10 +96,10 @@ sample_configs:
       #   order: 17
       - label: Latte lssum dailyxfm e50
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/latte-b8-daily-cpmgem-daily-preset-1gpu-daily-xfm-recentre/post/daily
+          - fq_model_id: cpmgem-subdaily/bad-em-mapping/latte-b8-daily-cpmgem-daily-preset-1gpu-daily-xfm-recentre/post/daily
             checkpoint: "0050"
             input_xfm: ""
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             config_hash: "1000-steps"
             variables: [pr]
         deterministic: False
@@ -108,10 +108,10 @@ sample_configs:
         order: 17
       - label: cNCSN++ lssum dailyxfm e50
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/cncsnpp-daily-cpmgem-daily-preset-1gpu-fixed-sigma-daily-xfm-recentre/post/daily
+          - fq_model_id: cpmgem-subdaily/bad-em-mapping/cncsnpp-daily-cpmgem-daily-preset-1gpu-fixed-sigma-daily-xfm-recentre/post/daily
             checkpoint: "0050"
             input_xfm: ""
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
+            dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             config_hash: "1000-steps"
             variables: [pr]
         deterministic: False
