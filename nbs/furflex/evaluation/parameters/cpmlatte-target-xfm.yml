@@ -25,10 +25,10 @@ ensemble_members:
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: sqrtrecen e0150
+      - label: sqrtrecen e0300
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/sqrtrecen
-            checkpoint: "0150"
+            checkpoint: "0300"
             dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
@@ -37,10 +37,10 @@ sample_configs:
         PSD: True
         color: tab:orange
         CCS: True
-      - label: sqrt e0150
+      - label: sqrt e0300
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/sqrt
-            checkpoint: "0150"
+            checkpoint: "0300"
             dataset: bad-em-mapping-engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset
             input_xfm: ""
             variables: [pr]
@@ -49,10 +49,10 @@ sample_configs:
         PSD: True
         color: tab:blue
         CCS: True
-      - label: 4rtrecen e0150
+      - label: 4rtrecen e0300
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen
-            checkpoint: "0150"
+            checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
             input_xfm: ""
             variables: [pr]
@@ -61,10 +61,10 @@ sample_configs:
         PSD: True
         color: tab:green
         CCS: True
-      - label: 4rt e0150
+      - label: 4rt e0300
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rt
-            checkpoint: "0150"
+            checkpoint: "0300"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
             input_xfm: ""
             variables: [pr]
