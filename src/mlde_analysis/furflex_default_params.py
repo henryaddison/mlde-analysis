@@ -55,7 +55,7 @@ examples_to_plot = {
         },
         "conv": {
             "times": ["2029-06-23", "2029-06-24"],
-            "query": {"ensemble_member": "r001i1p02491"},
+            "query": {"ensemble_member": "r001i1p02868"},
         },
     },
 }
