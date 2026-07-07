@@ -14,7 +14,7 @@ ensemble_members:
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: xl8-2k e0150
+      - label: Emulator
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-xl8/4rtrecen-2000steps
             checkpoint: "0150"
@@ -26,30 +26,30 @@ sample_configs:
         PSD: True
         color: tab:purple
         CCS: True
-      - label: b8-2k e0300
-        sample_specs:
-          - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
-            checkpoint: "0300"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
-            input_xfm: ""
-            variables: [pr]
-            config_hash: "2000-steps"
-        deterministic: False
-        PSD: True
-        color: tab:green
-        CCS: True
-      - label: b8-2k e0500
-        sample_specs:
-          - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
-            checkpoint: "0500"
-            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
-            input_xfm: ""
-            variables: [pr]
-            config_hash: "2000-steps"
-        deterministic: False
-        PSD: True
-        color: tab:green
-        CCS: True
+      # - label: b8-2k e0300
+      #   sample_specs:
+      #     - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
+      #       checkpoint: "0300"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
+      #       input_xfm: ""
+      #       variables: [pr]
+      #       config_hash: "2000-steps"
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:green
+      #   CCS: True
+      # - label: b8-2k e0500
+      #   sample_specs:
+      #     - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
+      #       checkpoint: "0500"
+      #       dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
+      #       input_xfm: ""
+      #       variables: [pr]
+      #       config_hash: "2000-steps"
+      #   deterministic: False
+      #   PSD: True
+      #   color: tab:green
+      #   CCS: True
 examples_to_plot:
   CPM:
     convective:
