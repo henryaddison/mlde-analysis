@@ -413,6 +413,7 @@ def plot_biases(biases, axes, fig, colorbar=True, **plot_map_kwargs):
             pcm,
             ax=axes,
             location="bottom",
+            pad=0.12,
             shrink=0.8,
             extend="both",
             aspect=40,
@@ -520,7 +521,8 @@ def plot_distribution_figure(
     )
     for idx, (bias_key, decbias) in enumerate(decorated_biases.items()):
         axes = [axd[f'{bias_key} {bias["label"]}'] for bias in decbias]
-        plot_biases(decbias, axes, fig, colorbar=False, **bias_kwargs)
+        show_colorbar = idx == len(decorated_biases) - 1
+        plot_biases(decbias, axes, fig, colorbar=show_colorbar, **bias_kwargs)
         axes[0].annotate(
             string.ascii_lowercase[idx + 1] + ".",
             xy=(0.04, 1.0),
