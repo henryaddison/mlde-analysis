@@ -79,6 +79,8 @@ hdf5plugin = ">=6.0.0,<7"
 zarr = ">=3.1.5,<4"
 dask-gateway = ">=2026.3.0,<2027"
 flox = ">=0.11.2,<0.12"
+hvplot = ">=0.12.2,<0.13"
+geoviews = ">=1.15.1,<2"
 
 [tool.pixi.pypi-dependencies]
 mlde_analysis = { path = ".", editable = true }

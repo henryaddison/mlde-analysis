@@ -4,7 +4,7 @@ Describe in more detail the models being compared
 eval_vars = ["pr"]
 target_sim_key = "CPM"
 dataset_configs = {
-    "CPM": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset",
+    "CPM": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
 }
 exclude_days = 0  # Number of days to exclude from each start of each season
 split = "val"
@@ -28,18 +28,52 @@ sample_configs = {
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "latte-b8-cpmgem-daily-preset",
+                    "fq_model_id": "cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
                     "checkpoint": "0150",
-                    "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset",
+                    "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
                     "input_xfm": "",
                     "variables": ["pr"],
+                    "config_hash": "1000-steps",
                 },
             ],
             "label": "e0150",
             "deterministic": False,
             "PSD": True,
             "color": "tab:blue",
-            "order": 10,
+            "CCS": True,
+        },
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
+                    "checkpoint": "0300",
+                    "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
+                    "input_xfm": "",
+                    "variables": ["pr"],
+                    "config_hash": "1000-steps",
+                },
+            ],
+            "label": "e0300",
+            "deterministic": False,
+            "PSD": True,
+            "color": "tab:orange",
+            "CCS": True,
+        },
+        {
+            "sample_specs": [
+                {
+                    "fq_model_id": "cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
+                    "checkpoint": "0500",
+                    "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
+                    "input_xfm": "",
+                    "variables": ["pr"],
+                    "config_hash": "1000-steps",
+                },
+            ],
+            "label": "e0500",
+            "deterministic": False,
+            "PSD": True,
+            "color": "tab:red",
             "CCS": True,
         },
     ],
@@ -47,25 +81,15 @@ sample_configs = {
 
 derived_variables_config = {}
 
-example_percentiles = {
+examples_to_plot = {
     "CPM": {
-        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
-        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
-        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
-        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
-    },
-    "GCM": {
-        "DJF Wet": {"percentile": 0.8, "variable": "pr", "season": "DJF"},
-        "DJF Wettest": {"percentile": 0.2, "variable": "pr", "season": "DJF"},
-        "JJA Wet": {"percentile": 0.8, "variable": "pr", "season": "JJA"},
-        "JJA Wettest": {"percentile": 1.0, "variable": "pr", "season": "JJA"},
+        "band": {
+            "times": ["2080-03-01", "2080-03-02"],
+            "query": {"ensemble_member": "r001i1p00000"},
+        },
+        "conv": {
+            "times": ["2029-06-23", "2029-06-24"],
+            "query": {"ensemble_member": "r001i1p02868"},
+        },
     },
 }
-example_overrides = {
-    "CPM": {
-        "JJA Wet": ["01", "1993-08-01 12:00:00"],
-    },
-    "GCM": {},
-}
-example_inputs = ["vorticity850"]
-examples_sample_idxs = [0, 2]
