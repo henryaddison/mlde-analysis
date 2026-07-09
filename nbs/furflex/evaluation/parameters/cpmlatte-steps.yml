@@ -25,7 +25,7 @@ ensemble_members:
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: 1000 e0150
+      - label: 1k-1k e0150
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen
             checkpoint: "0150"
@@ -37,7 +37,7 @@ sample_configs:
         PSD: True
         color: tab:orange
         CCS: True
-      - label: 2000 e0150
+      - label: 2k-2k e0150
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
             checkpoint: "0150"
@@ -49,7 +49,7 @@ sample_configs:
         PSD: True
         color: tab:blue
         CCS: True
-      - label: 1000 e0300
+      - label: 1k-1k e0300
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen
             checkpoint: "0300"
@@ -61,7 +61,7 @@ sample_configs:
         PSD: True
         color: tab:red
         CCS: True
-      - label: 2000 e0300
+      - label: 2k-2k e0300
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
             checkpoint: "0300"
@@ -73,7 +73,7 @@ sample_configs:
         PSD: True
         color: tab:green
         CCS: True
-      - label: 1000 e0500
+      - label: 1k-1k e0500
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen
             checkpoint: "0500"
@@ -85,7 +85,7 @@ sample_configs:
         PSD: True
         color: tab:brown
         CCS: True
-      - label: 2000 e0500
+      - label: 2k-2k e0500
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
             checkpoint: "0500"
@@ -96,4 +96,16 @@ sample_configs:
         deterministic: False
         PSD: True
         color: tab:olive
+        CCS: True
+      - label: 2k-1k e0500
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
+            checkpoint: "0500"
+            dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:purple
         CCS: True
