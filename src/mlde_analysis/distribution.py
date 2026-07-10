@@ -147,6 +147,24 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
         .sum(...)
         .rename(f"NaN Count")
     )
+    target_max = target_da.max()
+    max_value = (
+        da.groupby("model", squeeze=False)
+        .max(dim=...)
+        .rename(f"Max Value ({target_da.attrs['units']})")
+    )
+    max_value_bias = (max_value - target_max).rename(
+        f"Max Value Bias ({target_da.attrs['units']})"
+    )
+    target_vhi_exceedence_count = target_da.where(target_da > 60).count()
+    vhi_exceedence_count = (
+        da.groupby("model", squeeze=False)
+        .map(lambda gda: gda.where(gda > 60).count())
+        .rename(f"VHI Exceedence Count")
+    )
+    vhi_exceedence_bias = (vhi_exceedence_count - target_vhi_exceedence_count).rename(
+        f"VHI Exceedence Count Bias"
+    )
     rms_mean_biases = (
         da.groupby("model", squeeze=False)
         .map(rms_mean_bias, target_da=target_da, normalize=False)
@@ -204,7 +222,12 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
             relative_rms_std_biases,
             relative_rms_q999_biases,
             model_hist_dist,
-        ]
+            max_value,
+            max_value_bias,
+            vhi_exceedence_count,
+            vhi_exceedence_bias,
+        ],
+        compat="no_conflicts",
     )
 
     # das = []
