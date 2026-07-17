@@ -66,3 +66,6 @@ examples_to_plot:
     convective:
       times: ["2029-06-23", "2029-06-23"]
       query: {"ensemble_member": "r001i1p02868"}
+    front:
+      times: ["2080-03-01", "2080-03-01"]
+      query: {"ensemble_member": "r001i1p00000"}
