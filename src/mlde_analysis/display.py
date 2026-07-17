@@ -11,7 +11,8 @@ VAR_RANGES = {
 }
 
 ATTRS = {
-    "pr": {"long_name": "Precip.", "units": "mm/day"},
+    "pr": {"long_name": "Precip.", "units": "mm/hour"},
+    "daily pr": {"long_name": "Precip.", "units": "mm/day"},
     "tmean150cm": {"long_name": "Temp.", "units": "K"},
     "tasmax": {"long_name": "Temp.", "units": "K"},
     "relhum150cm": {"long_name": "Rel. Humidity", "units": "%"},
