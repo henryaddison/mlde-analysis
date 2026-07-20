@@ -1,6 +1,9 @@
-import glob
 import importlib
-from mlde_utils import DATASETS_PATH, TIME_PERIODS
+from mlde_utils import (
+    TIME_PERIODS,
+    FurflexDatasetMetadata,
+    FurflexEmulatorOutputMetadata,
+)
 import numpy as np
 import os
 import pandas as pd
@@ -10,86 +13,6 @@ import xarray as xr
 from . import display
 
 WORKDIRS_PATH = Path(os.getenv("WORKDIRS_PATH"))
-
-
-class FurflexEmulatorOutputMetadata:
-    def __init__(self, fq_run_id: str, base_dir: Path):
-        self.base_dir = base_dir
-        self.fq_run_id = fq_run_id
-
-    def workdir_path(self) -> Path:
-        """
-        Returns the path to the emulator output for the given run ID.
-        """
-        return Path(self.base_dir, self.fq_run_id)
-
-    def __str__(self) -> str:
-        return f"FurflexEmulatorOutputMetadata(path={self.workdir_path()})"
-
-    def samples_path(
-        self,
-        checkpoint: str,
-        input_xfm: str,
-        dataset: str,
-        split: str,
-        ensemble_member: str,
-        config_hash: str,  # missing from older outputs, use None in that case
-    ) -> Path:
-        """
-        Returns the path to the samples for the given parameters.
-        """
-        path = (
-            self.workdir_path()
-            / "samples"
-            / checkpoint
-            / dataset
-            # / input_xfm
-            / split
-            / ensemble_member
-        )
-        if config_hash is not None:
-            path = path / config_hash
-        return path
-
-    def samples_glob(self, *args, **kwargs) -> list[Path]:
-        """
-        Returns a list of prediction files for the given parameters
-        """
-        return self.samples_path(*args, **kwargs).glob("*/predictions.zarr")
-
-
-class FurflexDatasetMetadata:
-    def __init__(self, name, base_dir=DATASETS_PATH):
-        self.name = name
-        self.base_dir = base_dir
-
-    def __str__(self):
-        return f"FurflexDatasetMetadata({self.path()})"
-
-    def path(self):
-        return Path(self.base_dir, self.name)
-
-    def splits(self):
-        return map(
-            lambda f: os.path.splitext(f)[0],
-            glob.glob("*", root_dir=str(self.path())),
-        )
-
-    def split_path(self, split):
-        return self.path() / split
-
-    def predictands_split_path(self, split):
-        return self.split_path(split) / "predictands.zarr"
-
-    # def config_path(self) -> Path:
-    #     return self.path() / "ds-config.yml"
-
-    # def config(self) -> dict:
-    #     with open(self.config_path(), "r") as f:
-    #         return yaml.safe_load(f)
-
-    # def ensemble_members(self) -> list[str]:
-    #     return self.config()["ensemble_members"]
 
 
 def open_dataset_split(dataset_name, split, ensemble_members="all"):
