@@ -64,7 +64,7 @@ sample_configs:
         CCS: True
       - label: latent xl e250
         sample_specs:
-          - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/latent-4rtrecen-2000steps
+          - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-xl8/latent-4rtrecen-2000steps
             checkpoint: "0250"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
             input_xfm: ""
