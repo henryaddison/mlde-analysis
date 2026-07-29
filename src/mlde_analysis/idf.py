@@ -1,5 +1,6 @@
-import numpy as np
 import matplotlib
+import numpy as np
+import xarray as xr
 
 # THRESHOLD = 0.01 # threshold value in mm/10min
 # BINS = [0.0,0.01,0.02,0.05,0.1,0.2,0.5,1.0,2.0,5.0,10.0,20.0,50.0,1000.0]
@@ -49,7 +50,7 @@ def calc_spells(data, threshold=THRESHOLD):
             )
         )
         start_position += current_spell_length
-    return spells  # np.array(spells, dtype=np.float64)
+    return spells
 
     # # ALTERNATIVE CODE
     # spells = []
@@ -64,6 +65,11 @@ def calc_spells(data, threshold=THRESHOLD):
     # return spells
 
 
+def ucalc_distn(data, threshold=THRESHOLD):
+    spells = calc_spells(data, threshold=threshold)
+    return calc_distn(np.array(spells, dtype=np.float64))[0]
+
+
 def calc_distn(spell_data):
     """
     Calculate the 2D histogram of spell durations and maximum values.
@@ -75,23 +81,40 @@ def calc_distn(spell_data):
     return hist
 
 
-def calc_pmf(spell_data):
+def calc_pmf(da):
     """
     Calculate the 2D probability mass function (PMF) of spell durations and maximum values.
+    Computed for each individual time series in the input DataArray and then summed across all time series (e.g. over all grid boxes and ensemble members) to produce a single PMF for the entire DataArray.
 
     Parameters
     ----------
-    spell_data : array-like
-        The input spell data, where each row represents a spell with its duration and maximum value.
+    da : xarray.DataArray
+        The input data array.
 
     Returns
     -------
     np.ndarray
         A 2D array representing the PMF of spell durations and maximum values.
     """
-    hist = calc_distn(np.array(spell_data, dtype=np.float64))
-    pmf = hist[0] / np.sum(hist[0])
-    return pmf
+    hist = (
+        xr.apply_ufunc(
+            ucalc_distn,
+            da,
+            input_core_dims=[["time"]],
+            output_core_dims=[["duration_bin", "intensity_bin"]],
+            vectorize=True,
+            dask="parallelized",
+            dask_gufunc_kwargs={
+                "output_sizes": {
+                    "duration_bin": len(DURATIONS_BINS) - 1,
+                    "intensity_bin": len(INTENSITY_BINS) - 1,
+                }
+            },
+        )
+        .sum(dim=["ensemble_member", "grid_latitude", "grid_longitude"])
+        .compute()
+    )
+    return hist / hist.sum()
 
 
 def plot_pmf(ax, pmf, title):
