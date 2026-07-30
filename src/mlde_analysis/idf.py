@@ -1,4 +1,3 @@
-import matplotlib
 import numpy as np
 import xarray as xr
 
@@ -117,7 +116,7 @@ def calc_pmf(da):
     return hist / hist.sum()
 
 
-def plot_pmf(ax, pmf, title):
+def plot_pmf(ax, pmf, title, **kwargs):
     """
     Plot the 2D probability mass function (PMF) on the given axes.
 
@@ -133,7 +132,10 @@ def plot_pmf(ax, pmf, title):
     xticks = np.arange(0, len(INTENSITY_BINS), 1)
     yticks = np.arange(0, len(DURATIONS_BINS), 1)
     shw = ax.pcolormesh(
-        xticks, yticks, pmf, norm=matplotlib.colors.LogNorm(vmin=0.001, vmax=0.1)
+        xticks,
+        yticks,
+        pmf,
+        **kwargs,
     )
     ax.set_xticks(xticks)
     ax.set_xticklabels(INTENSITY_BINS, rotation=90, fontsize="x-small")
