@@ -28,7 +28,7 @@ sample_configs = {
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
+                    "fq_model_id": "ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
                     "checkpoint": "0150",
                     "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
                     "input_xfm": "",
@@ -45,7 +45,7 @@ sample_configs = {
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
+                    "fq_model_id": "ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
                     "checkpoint": "0300",
                     "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
                     "input_xfm": "",
@@ -62,7 +62,7 @@ sample_configs = {
         {
             "sample_specs": [
                 {
-                    "fq_model_id": "cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
+                    "fq_model_id": "ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen",
                     "checkpoint": "0500",
                     "dataset": "engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2",
                     "input_xfm": "",
