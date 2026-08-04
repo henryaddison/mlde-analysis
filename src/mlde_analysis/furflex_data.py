@@ -26,6 +26,17 @@ def open_dataset_split(dataset_name, split, ensemble_members="all"):
     return ds
 
 
+def open_dataset_predictors_split(dataset_name, split, ensemble_members="all"):
+    ds = xr.open_dataset(
+        FurflexDatasetMetadata(dataset_name).predictors_split_path(split),
+        chunks={},
+    )
+    if ensemble_members != "all":
+        ds = ds.sel(ensemble_member=ensemble_members)
+
+    return ds
+
+
 def _exclude_days(ds, exclude_days):
     """
     Exclude a margin of n days at the start and end of each season to avoid risks of data leakage from training set via autocorrelation.
