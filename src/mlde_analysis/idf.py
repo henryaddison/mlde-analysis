@@ -139,7 +139,9 @@ def calc_pmf(da):
         .sum(dim=["ensemble_member", "grid_latitude", "grid_longitude"])
         .compute()
     )
-    return hist / hist.sum()
+    return hist / hist.sum(dim=["duration_bin", "intensity_bin"]).rename(
+        "Probability Mass"
+    )
 
 
 def calc_pmf_ndimage(da):
@@ -175,7 +177,9 @@ def calc_pmf_ndimage(da):
         .sum(dim=["ensemble_member", "grid_latitude", "grid_longitude"])
         .compute()
     )
-    return hist / hist.sum()
+    return hist / hist.sum(dim=["duration_bin", "intensity_bin"]).rename(
+        "Probability Mass"
+    )
 
 
 def plot_pmf(ax, pmf, title, **kwargs):
