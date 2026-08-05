@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.ndimage as ndimage
 import xarray as xr
 
 # THRESHOLD = 0.01 # threshold value in mm/10min
@@ -69,6 +70,31 @@ def ucalc_distn(data, threshold=THRESHOLD):
     return calc_distn(np.array(spells, dtype=np.float64))[0]
 
 
+def ucalc_distn_ndimage(data, threshold=THRESHOLD):
+    id_regions, num_ids = ndimage.label(data >= threshold, structure=[1, 1, 1])
+
+    region_intensities = ndimage.maximum(
+        data, id_regions, index=np.arange(0, num_ids + 1)
+    )
+    # this lumps all the dry entries into one spell even though it's not contiguous
+    region_durs = ndimage.labeled_comprehension(
+        data,
+        id_regions,
+        index=np.arange(0, num_ids + 1),
+        func=len,
+        out_dtype=int,
+        default=0,
+    )
+
+    hist = np.histogram2d(
+        region_durs, region_intensities, [DURATIONS_BINS, INTENSITY_BINS]
+    )
+    # dry bin spells are lumped into one spell but should be counted as multiple spells of length 1, so we set the dry intensity, short duration bin to the "length" of the dry spells and other dry durations to 0
+    hist[0][:, 0] = 0
+    hist[0][0, 0] = region_durs[0]
+    return hist[0]
+
+
 def calc_distn(spell_data):
     """
     Calculate the 2D histogram of spell durations and maximum values.
@@ -98,6 +124,42 @@ def calc_pmf(da):
     hist = (
         xr.apply_ufunc(
             ucalc_distn,
+            da,
+            input_core_dims=[["time"]],
+            output_core_dims=[["duration_bin", "intensity_bin"]],
+            vectorize=True,
+            dask="parallelized",
+            dask_gufunc_kwargs={
+                "output_sizes": {
+                    "duration_bin": len(DURATIONS_BINS) - 1,
+                    "intensity_bin": len(INTENSITY_BINS) - 1,
+                }
+            },
+        )
+        .sum(dim=["ensemble_member", "grid_latitude", "grid_longitude"])
+        .compute()
+    )
+    return hist / hist.sum()
+
+
+def calc_pmf_ndimage(da):
+    """
+    Calculate the 2D probability mass function (PMF) of spell durations and maximum values.
+    Computed for each individual time series in the input DataArray and then summed across all time series (e.g. over all grid boxes and ensemble members) to produce a single PMF for the entire DataArray.
+
+    Parameters
+    ----------
+    da : xarray.DataArray
+        The input data array.
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array representing the PMF of spell durations and maximum values.
+    """
+    hist = (
+        xr.apply_ufunc(
+            ucalc_distn_ndimage,
             da,
             input_core_dims=[["time"]],
             output_core_dims=[["duration_bin", "intensity_bin"]],
