@@ -1,3 +1,4 @@
+import cartopy.crs as ccrs
 import cf_xarray as cfxr  # noqa: F401
 import cmweather  # noqa
 import string
@@ -10,6 +11,8 @@ import seaborn as sns
 import xarray as xr
 
 from mlde_utils import cp_model_rotated_pole, platecarree
+
+osgb_crs = ccrs.OSGB()
 
 DATA_PATH = Path(os.getenv("DATA_PATH"))
 DERIVED_DATA = Path(os.getenv("DERIVED_DATA", DATA_PATH / "derived"))
