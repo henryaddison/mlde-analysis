@@ -89,7 +89,7 @@ def ucalc_distn_ndimage(data, threshold=THRESHOLD):
     hist = np.histogram2d(
         region_durs, region_intensities, [DURATIONS_BINS, INTENSITY_BINS]
     )
-    # dry bin spells are lumped into one spell but should be counted as multiple spells of length 1, so we set the dry intensity, short duration bin to the "length" of the dry spells and other dry durations to 0
+    # dry spells are lumped into one spell but should be counted as multiple spells of length 1, so we set the dry intensity, short duration bin to the "length" of the dry spells and other dry durations to 0
     hist[0][:, 0] = 0
     hist[0][0, 0] = region_durs[0]
     return hist[0]
