@@ -8,7 +8,7 @@ eval_vars: [pr]
 target_sim_key: CPM
 dataset_configs:
     CPM: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
-    GPM: engwales_gcm-4x-cpmgem_12em_1hr_pr_preset_v2
+    GCM: engwales_gcm-4x-cpmgem_12em_1hr_pr_preset_v2
 split: val
 ensemble_members:
   - r001i1p00000

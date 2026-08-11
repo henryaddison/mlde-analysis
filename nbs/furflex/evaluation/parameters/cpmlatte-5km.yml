@@ -26,7 +26,7 @@ sample_configs:
       - label: b8-2k-1k e0025
         sample_specs:
           - fq_model_id: cpmgem-subdaily/v3_engwales_100y_5km_1hr_pr/latte-b8/4rtrecen-2000steps
-            checkpoint: "1000"
+            checkpoint: "0025"
             dataset: v3_engwales_ccpm-5km_100x12em_1hr_pr
             input_xfm: ""
             variables: [pr]
