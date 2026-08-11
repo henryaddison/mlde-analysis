@@ -93,6 +93,9 @@ def prep_eval_data(
                     dataset_ds[var] = dataset_ds[var].expand_dims(
                         {"frame": np.arange(0, 24)}, axis=2
                     )
+                    # accumlated variables like pr need to be divided by 24 to get hourly values
+                    if var == "pr":
+                        dataset_ds[var] = dataset_ds[var] / 24.0
 
             dataset_ds = dataset_ds.stack(valid_time=("time", "frame"))
             dataset_ds = dataset_ds.assign_coords(
