@@ -70,6 +70,7 @@ def prep_eval_data(
     ensemble_members,
     samples_per_run,
     coarsen_time=None,
+    target_sim_key="CPM",
 ):
     order = 1
     models = {}
@@ -82,10 +83,12 @@ def prep_eval_data(
             order += 1
 
     merged_ds = {}
-    for source, sample_config in sample_configs.items():
-        dataset_ds = open_dataset_split(
-            dataset_configs[source], split, ensemble_members
-        )
+    datasets = {}
+    for source, dataset_config in dataset_configs.items():
+        if source not in sample_configs:
+            continue  # skip datasets that don't have corresponding sample configs
+
+        dataset_ds = open_dataset_split(dataset_config, split, ensemble_members)
         if source == "GCM":
             # need to upsample GCM data to hourly to match the sample data
             for var in eval_vars:
@@ -119,6 +122,12 @@ def prep_eval_data(
             if var in dataset_ds.data_vars:
                 dataset_ds[var] = dataset_ds[var].assign_attrs(attrs)
 
+        datasets[source] = dataset_ds
+
+    target_dataset = datasets[target_sim_key]
+
+    for source, sample_config in sample_configs.items():
+        dataset_ds = datasets[source]
         samples_ds = open_concat_sample_datasets(
             sample_config,
             split=split,
@@ -138,14 +147,14 @@ def prep_eval_data(
 
         samples_ds = samples_ds.rename(
             {
-                "grid_latitude": dataset_ds.cf["Y"].name,
-                "grid_longitude": dataset_ds.cf["X"].name,
+                "grid_latitude": target_dataset.cf["Y"].name,
+                "grid_longitude": target_dataset.cf["X"].name,
             }
         )
         samples_ds = samples_ds.assign_coords(
             {
-                dataset_ds.cf["Y"].name: dataset_ds.cf["Y"].copy(),
-                dataset_ds.cf["X"].name: dataset_ds.cf["X"].copy(),
+                target_dataset.cf["Y"].name: target_dataset.cf["Y"].copy(),
+                target_dataset.cf["X"].name: target_dataset.cf["X"].copy(),
             }
         )
 

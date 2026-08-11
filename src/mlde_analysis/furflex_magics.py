@@ -26,6 +26,7 @@ class LoadEvalData(Magics):
     def load_eval_data(self, line):
         args = parse_argstring(self.load_eval_data, line)
         eval_vars = self.shell.user_ns["eval_vars"]
+        target_sim_key = self.shell.user_ns["target_sim_key"]
         eval_ds, models = prep_eval_data(
             self.shell.user_ns["sample_configs"],
             self.shell.user_ns["dataset_configs"],
@@ -36,9 +37,8 @@ class LoadEvalData(Magics):
             ensemble_members=self.shell.user_ns["ensemble_members"],
             samples_per_run=self.shell.user_ns["samples_per_run"],
             coarsen_time=args.coarsen,
+            target_sim_key=target_sim_key,
         )
-
-        target_sim_key = self.shell.user_ns["target_sim_key"]
 
         target_sim_das = {
             var: eval_ds[target_sim_key].cf[f"target_{var}"] for var in eval_vars
