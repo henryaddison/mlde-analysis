@@ -51,3 +51,18 @@ sample_configs:
         PSD: True
         color: tab:orange
         CCS: True
+examples_to_plot:
+  CPM:
+    # convective:
+    #   times: ["2029-06-23", "2029-06-23"]
+    #   query: {"ensemble_member": "r001i1p02868"}
+    front:
+      times: ["2080-03-01", "2080-03-01"]
+      query: {"ensemble_member": "r001i1p00000"}
+  GCM:
+    # convective:
+    #   times: ["2029-06-23", "2029-06-23"]
+    #   query: {"ensemble_member": "r001i1p02868"}
+    front:
+      times: ["2080-03-01", "2080-03-01"]
+      query: {"ensemble_member": "r001i1p00000"}
