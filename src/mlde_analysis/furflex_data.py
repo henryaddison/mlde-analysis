@@ -86,6 +86,27 @@ def prep_eval_data(
         dataset_ds = open_dataset_split(
             dataset_configs[source], split, ensemble_members
         )
+        if source == "GCM":
+            # need to upsample GCM data to hourly to match the sample data
+            for var in eval_vars:
+                if var in dataset_ds.data_vars:
+                    dataset_ds[var] = dataset_ds[var].expand_dims(
+                        {"frame": np.arange(0, 24)}, axis=2
+                    )
+
+            dataset_ds = dataset_ds.stack(valid_time=("time", "frame"))
+            dataset_ds = dataset_ds.assign_coords(
+                time_and_frame=dataset_ds.time
+                + pd.to_timedelta(dataset_ds.frame, unit="h").to_pytimedelta()
+                + pd.to_timedelta(30, unit="min").to_pytimedelta()
+                - pd.to_timedelta(12, unit="h").to_pytimedelta()
+            )
+            dataset_ds = (
+                dataset_ds.swap_dims({"valid_time": "time_and_frame"})
+                .drop_vars(["time", "frame", "valid_time"])
+                .rename({"time_and_frame": "time"})
+            )
+
         dataset_ds = dataset_ds.rename(
             {var: f"target_{var}" for var in eval_vars if var in dataset_ds.data_vars}
         )
