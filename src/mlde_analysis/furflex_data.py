@@ -134,8 +134,10 @@ def prep_eval_data(
                 )
 
         samples_ds = samples_ds.assign_coords(
-            grid_latitude=dataset_ds["grid_latitude"].copy(),
-            grid_longitude=dataset_ds["grid_longitude"].copy(),
+            {
+                dataset_ds.cf["Y"].name: dataset_ds.cf["Y"].copy(),
+                dataset_ds.cf["X"].name: dataset_ds.cf["X"].copy(),
+            }
         )
 
         ds = xr.merge([samples_ds, dataset_ds], join="inner", compat="override")
