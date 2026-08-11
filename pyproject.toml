@@ -20,7 +20,7 @@ dependencies = [
   "cmcrameri~=1.9",
   "cmweather~=0.3.2",
   "ipympl~=0.9.7",
-  "mlde-utils==v0.3.1",
+  "mlde-utils==v0.3.5",
   "nbdev~=2.4",
   #"netcdf4==1.7.2",
   "properscoring~=0.1",

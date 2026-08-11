@@ -10,9 +10,8 @@ from pathlib import Path
 import seaborn as sns
 import xarray as xr
 
-from mlde_utils import cp_model_rotated_pole, platecarree
+from mlde_utils import cp_model_rotated_pole, platecarree, osgb_crs
 
-osgb_crs = ccrs.OSGB()
 
 DATA_PATH = Path(os.getenv("DATA_PATH"))
 DERIVED_DATA = Path(os.getenv("DERIVED_DATA", DATA_PATH / "derived"))
@@ -229,6 +228,21 @@ BOX_LOCATIONS = {
         # ),
     }.items()
 }
+
+
+def projection_from_da(da: xr.DataArray) -> ccrs.Projection:
+    if "rotated_latitude_longitude" in da.cf.grid_mapping_names:
+        projection = cp_model_rotated_pole
+    elif "transverse_mercator" in da.cf.grid_mapping_names:
+        projection = osgb_crs
+    elif "latitude_longitude" in da.cf.grid_mapping_names:
+        projection = platecarree
+    else:
+        raise ValueError(
+            f"Unknown grid mapping: {da.cf.grid_mapping_names}. Cannot determine projection."
+        )
+
+    return projection
 
 
 def create_map_fig(
@@ -518,6 +532,7 @@ def compute_gridspec(models, target_name):
 
 
 def plot_mean_bias(ds, target_pr):
+    projection = projection_from_da(target_pr)
     target_mean = target_pr.mean(dim=["ensemble_member", "time"])
     sample_mean = ds["pred_pr"].mean(dim=["ensemble_member", "sample_id", "time"])
     bias = sample_mean - target_mean
@@ -528,7 +543,7 @@ def plot_mean_bias(ds, target_pr):
     fig, axd = plt.subplot_mosaic(
         grid_spec,
         figsize=(grid_spec.shape[1] * 3.5, grid_spec.shape[0] * 3.5),
-        subplot_kw=dict(projection=cp_model_rotated_pole),
+        subplot_kw=dict(projection=projection),
         constrained_layout=True,
     )
 
@@ -573,6 +588,7 @@ def plot_mean_bias(ds, target_pr):
 
 
 def plot_std_bias(ds, target_pr):
+    projection = projection_from_da(target_pr)
     target_std = target_pr.std(dim=["ensemble_member", "time"])
     sample_std = ds["pred_pr"].std(dim=["ensemble_member", "sample_id", "time"])
     std_ratio = 100 * sample_std / target_std
@@ -582,7 +598,7 @@ def plot_std_bias(ds, target_pr):
     fig, axd = plt.subplot_mosaic(
         grid_spec,
         figsize=(grid_spec.shape[1] * 3.5, grid_spec.shape[0] * 3.5),
-        subplot_kw=dict(projection=cp_model_rotated_pole),
+        subplot_kw=dict(projection=projection),
         constrained_layout=True,
     )
     ax = axd[target_name]

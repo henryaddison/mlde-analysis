@@ -8,9 +8,7 @@ import scipy
 import string
 import xarray as xr
 
-from mlde_utils import cp_model_rotated_pole
-
-from mlde_analysis import plot_map
+from mlde_analysis import plot_map, projection_from_da
 
 
 QUANTILES = 1 - np.power(10.0, np.arange(-2, -10, -1))
@@ -520,11 +518,12 @@ def plot_distribution_figure(
         + [np.array(keys).reshape(1, -1) for keys in biases_layout.values()],
         axis=0,
     )
+    projection = projection_from_da(target_da)
     axd = fig.subplot_mosaic(
         spec,
         gridspec_kw=dict(height_ratios=height_ratio),
         per_subplot_kw={
-            ak: {"projection": cp_model_rotated_pole}
+            ak: {"projection": projection}
             for bias_keys in biases_layout.values()
             for ak in bias_keys
         },

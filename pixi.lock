@@ -517,13 +517,13 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/58/6a/9166369a2f092bd286d24e6307de555d63616e8ddb373ebad2b5635ca4cd/ipywidgets-8.1.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b0/04/cb12795bb98c806b165e494c25671329d8dc35ee6c1bb361acf26d47a553/execnb-0.1.14-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b2/dc/19cc9773d842d4cd34874e953073c854c3d4bda4ea7d1f1d8eb1e9cb7e43/mlde_utils-0.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/c2/4a/9da0e166abf2cd9347ab3ead8b1b51c62befef6dbd77ba60bce2b0021af0/nbdev-2.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ca/51/5447876806d1088a0f8f71e16542bf350918128d0a69437df26047c8e46f/widgetsnbextension-4.0.14-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/db/10/979cc0da93644c260d379debb1e9ec396396a6aad05cfbe9056558903137/python_cmethods-2.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e3/1f/1c7e75b6c276358ce25d4d986db5691860501be15504028ca39016e90579/xskillscore-0.0.26-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f9/a2/4c88f17ee50af5093978c4d989936883f959d7d81e1e2fa093863b080c1c/cmcrameri-1.9-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/fb/8c/4cf3800edc411a88f43067c36eea63282c6b1f0225516b817e9657372167/mlde_utils-0.3.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ff/44/107d38f34695368caf404ef2792c5a8b2866aef08a9282d13e7dca34b43d/cmweather-0.3.2-py3-none-any.whl
   dev:
     channels:
@@ -1055,7 +1055,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/58/6a/9166369a2f092bd286d24e6307de555d63616e8ddb373ebad2b5635ca4cd/ipywidgets-8.1.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b0/04/cb12795bb98c806b165e494c25671329d8dc35ee6c1bb361acf26d47a553/execnb-0.1.14-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b2/dc/19cc9773d842d4cd34874e953073c854c3d4bda4ea7d1f1d8eb1e9cb7e43/mlde_utils-0.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/c2/4a/9da0e166abf2cd9347ab3ead8b1b51c62befef6dbd77ba60bce2b0021af0/nbdev-2.4.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ca/51/5447876806d1088a0f8f71e16542bf350918128d0a69437df26047c8e46f/widgetsnbextension-4.0.14-py3-none-any.whl
@@ -1063,6 +1062,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/de/b8/87cfb16045c9d4092cfcf526135d73b88101aac83bc1adcf82dfb5fd3833/pytest_env-1.1.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e3/1f/1c7e75b6c276358ce25d4d986db5691860501be15504028ca39016e90579/xskillscore-0.0.26-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f9/a2/4c88f17ee50af5093978c4d989936883f959d7d81e1e2fa093863b080c1c/cmcrameri-1.9-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/fb/8c/4cf3800edc411a88f43067c36eea63282c6b1f0225516b817e9657372167/mlde_utils-0.3.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ff/44/107d38f34695368caf404ef2792c5a8b2866aef08a9282d13e7dca34b43d/cmweather-0.3.2-py3-none-any.whl
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -8248,7 +8248,7 @@ packages:
   - cmcrameri~=1.9
   - cmweather~=0.3.2
   - ipympl~=0.9.7
-  - mlde-utils==0.3.1
+  - mlde-utils==0.3.5
   - nbdev~=2.4
   - properscoring~=0.1
   - python-cmethods~=2.3
@@ -8421,22 +8421,6 @@ packages:
   - pillow ; extra == 'dev'
   - mistletoe ; extra == 'dev'
   requires_python: '>=3.7'
-- pypi: https://files.pythonhosted.org/packages/b2/dc/19cc9773d842d4cd34874e953073c854c3d4bda4ea7d1f1d8eb1e9cb7e43/mlde_utils-0.3.1-py3-none-any.whl
-  name: mlde-utils
-  version: 0.3.1
-  sha256: 65ed23caa9fb0bb06e5978527795febd2479436cbc7df0fb6e6e41c70da488bf
-  requires_dist:
-  - cartopy
-  - cdo
-  - cf-xarray
-  - cftime
-  - scitools-iris
-  - metpy
-  - netcdf4
-  - pint
-  - xarray
-  - pyyaml
-  requires_python: '>=3.12'
 - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
   name: watchdog
   version: 6.0.0
@@ -8564,6 +8548,22 @@ packages:
   - numpy
   - packaging
   requires_python: '>=3.6'
+- pypi: https://files.pythonhosted.org/packages/fb/8c/4cf3800edc411a88f43067c36eea63282c6b1f0225516b817e9657372167/mlde_utils-0.3.5-py3-none-any.whl
+  name: mlde-utils
+  version: 0.3.5
+  sha256: 89dcb7c43e831f47648c6024cd7d38983b83eddf2710767f4c316728a9c59769
+  requires_dist:
+  - cartopy
+  - cdo
+  - cf-xarray
+  - cftime
+  - scitools-iris
+  - metpy
+  - netcdf4
+  - pint
+  - xarray
+  - pyyaml
+  requires_python: '>=3.12'
 - pypi: https://files.pythonhosted.org/packages/ff/44/107d38f34695368caf404ef2792c5a8b2866aef08a9282d13e7dca34b43d/cmweather-0.3.2-py3-none-any.whl
   name: cmweather
   version: 0.3.2
