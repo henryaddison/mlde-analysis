@@ -231,11 +231,11 @@ BOX_LOCATIONS = {
 
 
 def projection_from_da(da: xr.DataArray) -> ccrs.Projection:
-    if "rotated_latitude_longitude" in da.cf.grid_mapping_names:
+    if "rotated_latitude_longitude" == da.cf.grid_mapping_name:
         projection = cp_model_rotated_pole
-    elif "transverse_mercator" in da.cf.grid_mapping_names:
+    elif "transverse_mercator" == da.cf.grid_mapping_name:
         projection = osgb_crs
-    elif "latitude_longitude" in da.cf.grid_mapping_names:
+    elif "latitude_longitude" == da.cf.grid_mapping_name:
         projection = platecarree
     else:
         raise ValueError(

@@ -1,3 +1,4 @@
+import cf_xarray as cfxr  # noqa: F401
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.shellapp import InteractiveShellApp
 from IPython.core.magic_arguments import (
@@ -40,7 +41,7 @@ class LoadEvalData(Magics):
         target_sim_key = self.shell.user_ns["target_sim_key"]
 
         target_sim_das = {
-            var: eval_ds[target_sim_key][f"target_{var}"] for var in eval_vars
+            var: eval_ds[target_sim_key].cf[f"target_{var}"] for var in eval_vars
         }
 
         pred_das = {
