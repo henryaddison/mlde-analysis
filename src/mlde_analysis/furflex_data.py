@@ -136,6 +136,12 @@ def prep_eval_data(
                     dataset_ds[f"target_{var}"].attrs | attrs
                 )
 
+        samples_ds = samples_ds.rename(
+            {
+                "grid_latitude": dataset_ds.cf["Y"].name,
+                "grid_longitude": dataset_ds.cf["X"].name,
+            }
+        )
         samples_ds = samples_ds.assign_coords(
             {
                 dataset_ds.cf["Y"].name: dataset_ds.cf["Y"].copy(),
