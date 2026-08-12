@@ -90,7 +90,7 @@ def prep_eval_data(
 
         dataset_ds = open_dataset_split(dataset_config, split, ensemble_members)
         if source == "GCM":
-            # need to upsample GCM data to hourly to match the sample data
+            # WARNING: HACK needed to upsample GCM data to hourly to match the sample data. As with spatial coords should fix this at source using this v simple upsampling method.
             for var in eval_vars:
                 if var in dataset_ds.data_vars:
                     dataset_ds[var] = dataset_ds[var].expand_dims(
@@ -125,6 +125,15 @@ def prep_eval_data(
         datasets[source] = dataset_ds
 
     target_dataset = datasets[target_sim_key]
+
+    # WARNING: HACK to put GCM data (currently only derived from mass data regridded to CPM 2.2km data coarsened 4x same as daily work) on same coords as target dataset (for hourly this is from CEDA). These have slightly different coords though should cover the same domain. This is a hack to make the coords match so that we can merge the datasets. This should be fixed in the future by regridding the GCM data to the same coords as the target dataset.
+    if "GCM" in datasets:
+        datasets["GCM"] = datasets["GCM"].assign_coords(
+            {
+                target_dataset.cf["Y"].name: target_dataset.cf["Y"].copy(),
+                target_dataset.cf["X"].name: target_dataset.cf["X"].copy(),
+            }
+        )
 
     for source, sample_config in sample_configs.items():
         dataset_ds = datasets[source]
