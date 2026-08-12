@@ -37,3 +37,8 @@ sample_configs:
         PSD: True
         color: tab:blue
         CCS: True
+examples_to_plot:
+  CPM:
+    v3:
+      times: ["1989-12-01", "1989-12-02"]
+      query: {"ensemble_member": "r001i1p00000"}
