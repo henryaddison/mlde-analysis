@@ -12,24 +12,24 @@ dataset_configs:
 split: val
 ensemble_members:
   - r001i1p00000
-  # - r001i1p01113
-  # - r001i1p01554
-  # - r001i1p01649
-  # - r001i1p01843
-  # - r001i1p01935
-  # - r001i1p02868
-  # - r001i1p02123
-  # - r001i1p02242
-  # - r001i1p02305
-  # - r001i1p02335
-  # - r001i1p02491
+  - r001i1p01113
+  - r001i1p01554
+  - r001i1p01649
+  - r001i1p01843
+  - r001i1p01935
+  - r001i1p02868
+  - r001i1p02123
+  - r001i1p02242
+  - r001i1p02305
+  - r001i1p02335
+  - r001i1p02491
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: b8-2k e1000
+      - label: b8-2k e0500
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
-            checkpoint: "1000"
+            checkpoint: "0500"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
             input_xfm: ""
             variables: [pr]
@@ -39,14 +39,14 @@ sample_configs:
         color: tab:blue
         CCS: True
     GCM:
-      - label: b8-2k-1k e1000
+      - label: b8-2k e0500
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
-            checkpoint: "1000"
+            checkpoint: "0500"
             dataset: engwales_gcm-4x-cpmgem_12em_1hr_pr_preset_v2
             input_xfm: ""
             variables: [pr]
-            config_hash: "1000-steps"
+            config_hash: "2000-steps"
         deterministic: False
         PSD: True
         color: tab:orange
