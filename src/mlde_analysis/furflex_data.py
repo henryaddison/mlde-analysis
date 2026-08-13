@@ -92,6 +92,10 @@ def prep_eval_data(
         if source == "GCM":
             # WARNING: HACK needed to upsample GCM data to hourly to match the sample data. As with spatial coords should fix this at source using this v simple upsampling method.
             for var in eval_vars:
+                if var == "pr":
+                    dataset_ds[var] = (
+                        dataset_ds[var] * 3600 * 24
+                    )  # convert from kg/m2/s to mm/day
                 if var in dataset_ds.data_vars:
                     dataset_ds[var] = dataset_ds[var].expand_dims(
                         {"frame": np.arange(0, 24)}, axis=2
