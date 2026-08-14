@@ -9,24 +9,24 @@ dataset_configs:
 split: val
 ensemble_members:
   - r001i1p00000
-  # - r001i1p01113
-  # - r001i1p01554
-  # - r001i1p01649
-  # - r001i1p01843
-  # - r001i1p01935
-  # - r001i1p02868
-  # - r001i1p02123
-  # - r001i1p02242
-  # - r001i1p02305
-  # - r001i1p02335
-  # - r001i1p02491
+  - r001i1p01113
+  - r001i1p01554
+  - r001i1p01649
+  - r001i1p01843
+  - r001i1p01935
+  - r001i1p02868
+  - r001i1p02123
+  - r001i1p02242
+  - r001i1p02305
+  - r001i1p02335
+  - r001i1p02491
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: b8-2k-1k e0025
+      - label: b8-2k-1k e0180
         sample_specs:
           - fq_model_id: cpmgem-subdaily/v3_engwales_100y_5km_1hr_pr/latte-b8/4rtrecen-2000steps
-            checkpoint: "0025"
+            checkpoint: "0180"
             dataset: v3_engwales_ccpm-5km_100x12em_1hr_pr
             input_xfm: ""
             variables: [pr]
