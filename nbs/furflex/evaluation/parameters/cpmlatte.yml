@@ -25,10 +25,10 @@ ensemble_members:
 samples_per_run: 1
 sample_configs:
     CPM:
-      - label: b8-2k e1000
+      - label: b8-2k e0500
         sample_specs:
           - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen-2000steps
-            checkpoint: "1000"
+            checkpoint: "0500"
             dataset: engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2
             input_xfm: ""
             variables: [pr]
