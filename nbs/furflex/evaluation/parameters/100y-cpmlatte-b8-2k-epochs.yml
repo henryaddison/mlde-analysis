@@ -37,6 +37,18 @@ sample_configs:
         PSD: True
         color: tab:blue
         CCS: True
+      - label: e0300
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/v3_engwales_100y_1hr_pr/latte-b8/4rtrecen-2000steps
+            checkpoint: "0300"
+            dataset: v3_engwales_ccpm-4x_100x12em_1hr_pr
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "2000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:orange
+        CCS: True
 examples_to_plot:
   CPM:
     v3:
