@@ -16,9 +16,11 @@ from .utils import chained_groupby_map
 
 
 def plot_tp_fd(pred_pr, cpm_pr, fig, source, model, spec, hrange=None):
-
+    tps = {
+        tp: years for tp, years in TIME_PERIODS.items() if tp in cpm_pr["time_period"]
+    }
     axd = fig.subplot_mosaic(
-        np.array(["Emulator"] + list(TIME_PERIODS.keys())).reshape(2, 2),
+        np.array(["Emulator"] + list(tps.keys())).reshape(-1, 2),
         sharey=True,
         sharex=True,
     )
@@ -35,7 +37,7 @@ def plot_tp_fd(pred_pr, cpm_pr, fig, source, model, spec, hrange=None):
 
     historical_cpm_pr = cpm_pr.where(cpm_pr["time_period"] == "historic", drop=True)
 
-    for tp_idx, tp_key in enumerate(TIME_PERIODS.keys()):
+    for tp_idx, tp_key in enumerate(tps.keys()):
         tp_cpm_pr = cpm_pr.where(cpm_pr["time_period"] == tp_key, drop=True)
         tp_hist_data = [
             dict(data=tp_cpm_pr, label=f"CPM", color="black", source="CPM"),
@@ -64,7 +66,8 @@ def plot_tp_fd(pred_pr, cpm_pr, fig, source, model, spec, hrange=None):
 
 
 def plot_hist_per_tp(da, ax, **kwargs):
-    linestyles = ["-", "--", ":"]
+    tps = {tp: years for tp, years in TIME_PERIODS.items() if tp in da["time_period"]}
+    linestyles = ["-", "--", "-.", (0, (3, 5, 1, 5, 1, 5)), ":"]
     hist_data = [
         dict(
             data=da.where(da["time_period"] == tp_key, drop=True),
@@ -72,7 +75,7 @@ def plot_hist_per_tp(da, ax, **kwargs):
             color="black",
             linestyle=linestyles[tp_idx],
         )
-        for tp_idx, tp_key in enumerate(TIME_PERIODS.keys())
+        for tp_idx, tp_key in enumerate(tps.keys())
     ]
 
     plot_freq_density(hist_data, ax=ax, alpha=0.75, linewidth=1, **kwargs)
