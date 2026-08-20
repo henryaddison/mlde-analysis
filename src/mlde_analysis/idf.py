@@ -5,8 +5,29 @@ import xarray as xr
 # THRESHOLD = 0.01 # threshold value in mm/10min
 # BINS = [0.0,0.01,0.02,0.05,0.1,0.2,0.5,1.0,2.0,5.0,10.0,20.0,50.0,1000.0]
 THRESHOLD = 0.1  # threshold value in mm/hr used to mark end of a spell
-INTENSITY_BINS = [0, 0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 1000.0]
-DURATIONS_BINS = [1, 2, 3, 4, 5, 6, 12, 18, 24, 36, 48, 72]  # durations of 1 hour
+INTENSITY_BINS = [0, 0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0, 1000.0]
+DURATIONS_BINS = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    18,
+    24,
+    36,
+    48,
+    72,
+    96,
+    120,
+    90 * 24,
+]  # durations of 1 hour
 
 
 def calc_spells(data, threshold=THRESHOLD):
