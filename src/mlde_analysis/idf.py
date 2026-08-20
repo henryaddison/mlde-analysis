@@ -1,11 +1,13 @@
 import numpy as np
 import scipy.ndimage as ndimage
 import xarray as xr
+import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm, SymLogNorm, Normalize
 
 # THRESHOLD = 0.01 # threshold value in mm/10min
 # BINS = [0.0,0.01,0.02,0.05,0.1,0.2,0.5,1.0,2.0,5.0,10.0,20.0,50.0,1000.0]
 THRESHOLD = 0.1  # threshold value in mm/hr used to mark end of a spell
-INTENSITY_BINS = [0, 0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0, 1000.0]
+INTENSITY_BINS = [0, 0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0]
 DURATIONS_BINS = [
     1,
     2,
@@ -26,8 +28,11 @@ DURATIONS_BINS = [
     72,
     96,
     120,
-    90 * 24,
 ]  # durations of 1 hour
+
+NORM = LogNorm(vmin=1e-5, vmax=0.01)
+DIFF_NORM = SymLogNorm(linthresh=0.0001, vmin=-0.1, vmax=0.1)
+REL_DIFF_NORM = Normalize(vmin=-100, vmax=100)
 
 
 def calc_spells(data, threshold=THRESHOLD):
@@ -216,18 +221,66 @@ def plot_pmf(ax, pmf, title, **kwargs):
     title : str
         The title for the plot.
     """
-    xticks = np.arange(0, len(INTENSITY_BINS), 1)
+    plotted_intensity_bins = INTENSITY_BINS[1:]
+    xticks = np.arange(0, len(plotted_intensity_bins), 1)
     yticks = np.arange(0, len(DURATIONS_BINS), 1)
     shw = ax.pcolormesh(
         xticks,
         yticks,
-        pmf,
+        pmf.drop_isel(intensity_bin=0),
         **kwargs,
     )
     ax.set_xticks(xticks)
-    ax.set_xticklabels(INTENSITY_BINS, rotation=90, fontsize="x-small")
+    ax.set_xticklabels(plotted_intensity_bins, rotation=90, fontsize="x-small")
     ax.set_yticks(yticks)
     ax.set_yticklabels(DURATIONS_BINS, fontsize="x-small")
     ax.set_title(title)
 
     return shw
+
+
+def plot_pmfs(
+    target_pmf, pred_pmf, target_cbar=False, cbar_label="Probability", **kwargs
+):
+    entries = ["target"] + list(pred_pmf["model"].values)
+    cols = min(3, len(entries))
+    npads = (cols - len(entries) % cols) % cols
+    grid_spec = np.pad(
+        np.array(entries), (0, npads), mode="constant", constant_values="."
+    ).reshape(-1, cols)
+
+    width = 2 * grid_spec.shape[1] + 1
+    height = 2.5 * grid_spec.shape[0]
+    if target_cbar:
+        width += 0.5
+    fig = plt.figure(layout="constrained", figsize=(width, height))
+    axd = fig.subplot_mosaic(grid_spec, sharex=True, sharey=True)
+
+    ax = axd["target"]
+    shw = plot_pmf(ax, target_pmf, title="CPM", norm=NORM)
+    if target_cbar:
+        cb = fig.colorbar(
+            shw,
+            ax=ax,
+            location="right",
+            extend="max",
+        )
+        cb.set_label("Probability", fontsize="small")
+        cb.ax.tick_params(labelsize="x-small")
+
+    for model, model_pmf in pred_pmf.groupby("model"):
+        ax = axd[model]
+        shw = plot_pmf(ax, model_pmf.squeeze(), title=model, **kwargs)
+        # shw = plot_pmf(ax, (model_pmf.squeeze() - target_pmf), title=model, cmap="RdBu", norm=diff_norm)
+
+    cb = fig.colorbar(
+        shw,
+        ax=[ax for k, ax in axd.items() if not (target_cbar and k == "target")],
+        location="right",
+        extend="max",
+    )
+    cb.set_label(cbar_label, fontsize="small")
+    cb.ax.tick_params(labelsize="small")
+
+    fig.supxlabel("Maximum intensity (mm/hr)")
+    fig.supylabel("Spell duration (hours)")
