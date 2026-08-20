@@ -21,14 +21,15 @@ ATTRS = {
 
 
 def pretty_table(
-    da: xr.DataArray,
+    da: xr.DataArray | xr.Dataset,
     round: int = 1,
     caption: str = None,
     dim_order: bool = None,
     render: bool = True,
     pivot_table: dict = None,
 ) -> None:
-    da = da.drop_vars(lambda x: [v for v, da in x.variables.items() if not da.ndim])
+    if isinstance(da, xr.Dataset):
+        da = da.drop_vars(lambda x: [v for v, da in x.variables.items() if not da.ndim])
     df = da.to_dataframe(dim_order=dim_order)
     if pivot_table:
         df = df.pivot_table(**pivot_table)
