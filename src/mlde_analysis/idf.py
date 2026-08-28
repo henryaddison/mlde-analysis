@@ -28,8 +28,14 @@ DURATIONS_BINS = [
     120,
 ]  # durations of 1 hour
 
-NORM = LogNorm()  # vmin=1e-5, vmax=0.01)
-DIFF_NORM = SymLogNorm(linthresh=1)  # 0.0001, vmin=-0.1, vmax=0.1)
+# Probability based norms
+# NORM = LogNorm(vmin=1e-5, vmax=0.01)
+# DIFF_NORM = SymLogNorm(linthresh=0.0001, vmin=-0.1, vmax=0.1)
+
+# Frequency based norms
+NORM = LogNorm(vmin=1, vmax=1e5)
+DIFF_NORM = SymLogNorm(linthresh=1, vmin=-1e4, vmax=1e4)
+
 REL_DIFF_NORM = Normalize(vmin=-100, vmax=100)
 
 
