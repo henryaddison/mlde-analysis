@@ -33,7 +33,7 @@ DURATIONS_BINS = [
 # DIFF_NORM = SymLogNorm(linthresh=0.0001, vmin=-0.1, vmax=0.1)
 
 # Frequency based norms
-NORM = LogNorm(vmin=1, vmax=1e5)
+NORM = LogNorm(vmin=10, vmax=5e5)
 DIFF_NORM = SymLogNorm(linthresh=1, vmin=-1e4, vmax=1e4)
 
 REL_DIFF_NORM = Normalize(vmin=-100, vmax=100)
@@ -157,7 +157,7 @@ def plot_pmfs(
             shw,
             ax=ax,
             location="right",
-            extend="max",
+            extend="both",
         )
         cb.set_label("Frequency", fontsize="small")
         cb.ax.tick_params(labelsize="x-small")
@@ -171,7 +171,7 @@ def plot_pmfs(
         shw,
         ax=[ax for k, ax in axd.items() if not (target_cbar and k == "target")],
         location="right",
-        extend="max",
+        extend="both",
     )
     cb.set_label(cbar_label, fontsize="small")
     cb.ax.tick_params(labelsize="small")
