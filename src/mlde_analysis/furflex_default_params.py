@@ -1,4 +1,9 @@
-CONTEXT = "8.8km-60y"  # set to "5km-100y", "8.8km-60y", or "8.8km-100y" to select the appropriate  configs
+# Available contexts: "5km-100y", "8.8km-60y", or "8.8km-100y"
+# use to select the appropriate default configs
+# CONTEXT = "5km-100y"
+CONTEXT = "8.8km-60y"
+# CONTEXT = "8.8km-100y"
+
 desc = """
 Describe in more detail the models being compared
 """
