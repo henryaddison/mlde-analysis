@@ -28,8 +28,8 @@ DURATIONS_BINS = [
     120,
 ]  # durations of 1 hour
 
-NORM = LogNorm(vmin=1e-5, vmax=0.01)
-DIFF_NORM = SymLogNorm(linthresh=0.0001, vmin=-0.1, vmax=0.1)
+NORM = LogNorm()  # vmin=1e-5, vmax=0.01)
+DIFF_NORM = SymLogNorm(linthresh=1)  # 0.0001, vmin=-0.1, vmax=0.1)
 REL_DIFF_NORM = Normalize(vmin=-100, vmax=100)
 
 
@@ -91,9 +91,9 @@ def calc_pmf_ndimage(da):
         .cf.sum(dim=["ensemble_member", "X", "Y"])
         .compute()
     )
-    return hist / hist.sum(dim=["duration_bin", "intensity_bin"]).rename(
-        "Probability Mass"
-    )
+    return hist  # / hist.sum(dim=["duration_bin", "intensity_bin"]).rename(
+    # "Probability Mass"
+    # )
 
 
 def plot_pmf(ax, pmf, title, **kwargs):
@@ -128,7 +128,7 @@ def plot_pmf(ax, pmf, title, **kwargs):
 
 
 def plot_pmfs(
-    target_pmf, pred_pmf, target_cbar=False, cbar_label="Probability", **kwargs
+    target_pmf, pred_pmf, target_cbar=False, cbar_label="Frequency", **kwargs
 ):
     entries = ["target"] + list(pred_pmf["model"].values)
     cols = min(3, len(entries))
@@ -153,7 +153,7 @@ def plot_pmfs(
             location="right",
             extend="max",
         )
-        cb.set_label("Probability", fontsize="small")
+        cb.set_label("Frequency", fontsize="small")
         cb.ax.tick_params(labelsize="x-small")
 
     for model, model_pmf in pred_pmf.groupby("model"):
