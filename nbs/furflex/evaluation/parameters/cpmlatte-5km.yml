@@ -47,6 +47,18 @@ sample_configs:
         PSD: True
         color: tab:orange
         CCS: True
+      - label: xl8-2k-400 e0050
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/v3_engwales_100y_5km_1hr_pr/latte-xl8/4rtrecen-2000steps
+            checkpoint: "0050"
+            dataset: v3_engwales_ccpm-5km_100x12em_1hr_pr
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "0400-steps"
+        deterministic: False
+        PSD: True
+        color: tab:orange
+        CCS: True
 examples_to_plot:
   CPM:
     v3:
