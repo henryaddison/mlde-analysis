@@ -1,3 +1,4 @@
+import cf_xarray
 from collections import defaultdict
 import functools
 import math
@@ -120,7 +121,11 @@ def xr_hist(da, bins, **kwargs):
         kwargs=dict(bins=bins, density=True) | kwargs,
         **extra_kwargs,
     )
-    hist = hist.rename("frequency_density")
+    hist = hist.rename("frequency_density").drop_attrs()
+    bins_bnds = cf_xarray.vertices_to_bounds(bins, out_dims=["bnds", "bins"]).rename(
+        "bins_bnds"
+    )
+    hist = xr.merge([hist, bins_bnds]).drop_attrs()
     return hist, bin_edges.values
 
 
