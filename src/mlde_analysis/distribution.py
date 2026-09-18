@@ -69,6 +69,24 @@ def rms(da: xr.DataArray) -> xr.DataArray:
     return dask.array.sqrt((da**2).mean())
 
 
+def rms_bias(sample_stat, target_stat, normalize=False):
+    raw_bias = sample_stat - target_stat
+    if normalize:
+        return (
+            rms(100 * raw_bias / target_stat)
+            .rename("Relative RMS bias [%]")
+            .assign_attrs({"long_name": "RMS Bias", "units": "%"})
+        )
+    else:
+        return (
+            rms(raw_bias)
+            .rename(f"RMS Bias [{target_stat.attrs['units']}]")
+            .assign_attrs(
+                {"long_name": "RMS Bias", "units": target_stat.attrs["units"]}
+            )
+        )
+
+
 def rms_mean_bias(sample_da, target_da, normalize=False):
     return rms(mean_bias(sample_da, target_da, normalize=normalize))
 
@@ -143,90 +161,58 @@ def hist_dist(hist_da, target_hist_da):
     ).rename("JS_distance")
 
 
-def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
-    nan_count = (
-        dask.array.isnan(da)
-        .groupby("model", squeeze=False)
-        .sum(...)
-        .rename(f"NaN Count")
-    )
-    target_max = target_da.max()
+def compute_metrics(samples_stats, target_stats, thresholds=[0.1, 25, 75, 125]):
+    nan_count = samples_stats["NaN Count"].sum(dim="sample_id")
     max_value = (
-        da.groupby("model", squeeze=False)
-        .max(dim=...)
-        .rename(f"Max Value ({target_da.attrs['units']})")
+        samples_stats["max"]
+        .max(dim="sample_id")
+        .rename(f"Max Value ({target_stats['max'].attrs['units']})")
     )
-    max_value_bias = (max_value - target_max).rename(
-        f"Max Value Bias ({target_da.attrs['units']})"
+    max_value_bias = (max_value - target_stats["max"]).rename(
+        f"Max Value Bias ({target_stats['max'].attrs['units']})"
     )
-    target_vhi_exceedence_count = target_da.where(target_da > 60).count()
+
+    rms_biases = [
+        samples_stats[stat]
+        .groupby("model", squeeze=False)
+        .map(rms_bias, target_stat=target_stats[stat], normalize=False)
+        .rename(f"RMS {stat} Bias ({target_stats[stat].attrs['units']})")
+        for stat in ["mean", "std", "q999"]
+    ]
+    relative_rms_biases = [
+        samples_stats[stat]
+        .groupby("model", squeeze=False)
+        .map(rms_bias, target_stat=target_stats[stat], normalize=True)
+        .rename(f"Relative RMS {stat} Bias (%)")
+        for stat in ["mean", "std", "q999"]
+    ]
+
+    target_vhi_exceedence_count = target_stats["vhi_exceedence_count"]
     vhi_exceedence_count = (
-        da.groupby("model", squeeze=False)
-        .map(lambda gda: gda.where(gda > 60).count())
+        samples_stats["vhi_exceedence_count"]
+        .mean(dim="sample_id")
         .rename(f"VHI Exceedence Count")
     )
     vhi_exceedence_bias = (vhi_exceedence_count - target_vhi_exceedence_count).rename(
         f"VHI Exceedence Count Bias"
     )
-    rms_mean_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_mean_bias, target_da=target_da, normalize=False)
-        .rename(f"RMS Mean Bias ({target_da.attrs['units']})")
-    )
-    rms_std_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_std_bias, target_da=target_da, normalize=False)
-        .rename(f"RMS Std Dev Bias ({target_da.attrs['units']})")
-    )
 
-    rms_q999_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_q999_bias, target_da=target_da, normalize=False)
-        .rename(f"RMS Q999 Bias ({target_da.attrs['units']})")
-    )
-
-    relative_rms_mean_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_mean_bias, target_da=target_da, normalize=True)
-        .rename("Relative RMS Mean Bias (%)")
-    )
-    relative_rms_std_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_std_bias, target_da=target_da, normalize=True)
-        .rename("Relative RMS Std Dev Bias (%)")
-    )
-    relative_rms_q999_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_q999_bias, target_da=target_da, normalize=True)
-        .rename(f"Relative RMS Q999 Bias (%)")
-    )
-
-    target_min = target_da.min().compute()
-    target_max = target_da.max().compute()
-    bins = np.histogram_bin_edges(
-        [], bins=200, range=(target_min.item(), target_max.item())
-    )
-    target_hist_da, bins = xr_hist(target_da, bins=bins)
     model_hist_dist = (
-        da.groupby("model", squeeze=False)
-        .map(lambda x: xr_hist(x, bins=bins)[0])
+        samples_stats["frequency_density"]
+        .mean(dim="sample_id")
         .groupby("model", squeeze=False)
-        .map(hist_dist, target_hist_da=target_hist_da)
+        .map(hist_dist, target_hist_da=target_stats["frequency_density"])
         .rename("J-S distance")
     )
 
     metrics_ds = xr.merge(
         [
             nan_count,
-            rms_mean_biases,
-            rms_std_biases,
-            rms_q999_biases,
-            relative_rms_mean_biases,
-            relative_rms_std_biases,
-            relative_rms_q999_biases,
-            model_hist_dist,
+            *rms_biases,
+            *relative_rms_biases,
             max_value,
             max_value_bias,
+            model_hist_dist,
             vhi_exceedence_count,
             vhi_exceedence_bias,
         ],
