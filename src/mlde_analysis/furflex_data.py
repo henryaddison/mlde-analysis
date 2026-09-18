@@ -263,7 +263,9 @@ def _prep_sample_data(
 
         sample_datasets.append(xr.merge(per_var_sample_datasets, join="inner"))
 
-    samples_ds = xr.concat(sample_datasets, dim="model")
+    samples_ds = xr.concat(
+        sample_datasets, dim="model", data_vars="minimal", coords="minimal"
+    )
 
     samples_ds = attach_derived_variables(samples_ds, derived_var_configs)
 
@@ -326,6 +328,8 @@ def _prep_sample_set_ds(
             for sample_run_id in sample_run_ids
         ],
         dim="sample_id",
+        data_vars="minimal",
+        # coords="minimal",
     )
 
     if "sample_id" not in ds.dims:
