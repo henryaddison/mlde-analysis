@@ -27,7 +27,7 @@ class LoadEvalData(Magics):
         args = parse_argstring(self.load_eval_data, line)
         eval_vars = self.shell.user_ns["eval_vars"]
         target_sim_key = self.shell.user_ns["target_sim_key"]
-        eval_ds, models = prep_eval_data(
+        eval_ds, models, stats = prep_eval_data(
             self.shell.user_ns["sample_configs"],
             self.shell.user_ns["dataset_configs"],
             self.shell.user_ns["derived_variables_config"],
@@ -63,7 +63,15 @@ class LoadEvalData(Magics):
             for model_label, model_spec in source_models.items()
         } | {target_sim_key: {"source": target_sim_key, "color": "black"}}
 
-        return eval_ds, models, target_sim_das, pred_das, var_das, modellabel2spec
+        return (
+            eval_ds,
+            models,
+            target_sim_das,
+            pred_das,
+            var_das,
+            modellabel2spec,
+            stats,
+        )
 
 
 def load_ipython_extension(ipython: InteractiveShellApp):

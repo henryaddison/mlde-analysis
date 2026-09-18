@@ -11,6 +11,8 @@ from pathlib import Path
 import xarray as xr
 
 from . import display
+from mlde_analysis import cache
+
 
 WORKDIRS_PATH = Path(os.getenv("WORKDIRS_PATH"))
 
@@ -72,6 +74,9 @@ def prep_eval_data(
     coarsen_time=None,
     target_sim_key="CPM",
 ):
+    # open dataset statistics
+    # open sample sets statistics for each sample run and model
+    # merge across samples runs and models
     order = 1
     models = {}
     for source, data_configs in sample_configs.items():
@@ -83,95 +88,74 @@ def prep_eval_data(
             order += 1
 
     merged_ds = {}
-    datasets = {}
+    stats = {}
+    sim_datasets = {}
     for source, dataset_config in dataset_configs.items():
         if source not in sample_configs:
             continue  # skip datasets that don't have corresponding sample configs
 
-        dataset_ds = open_dataset_split(dataset_config, split, ensemble_members)
-        if source == "GCM":
-            # WARNING: HACK needed to upsample GCM data to hourly to match the sample data. As with spatial coords should fix this at source using this v simple upsampling method.
-            for var in eval_vars:
-                if var == "pr":
-                    dataset_ds[var] = (
-                        dataset_ds[var] * 3600 * 24
-                    )  # convert from kg/m2/s to mm/day
-                if var in dataset_ds.data_vars:
-                    dataset_ds[var] = dataset_ds[var].expand_dims(
-                        {"frame": np.arange(0, 24)}, axis=2
-                    )
-                    # accumlated variables like pr need to be divided by 24 to get hourly values
-                    if var == "pr":
-                        dataset_ds[var] = dataset_ds[var] / 24.0
-
-            dataset_ds = dataset_ds.stack(valid_time=("time", "frame"))
-            dataset_ds = dataset_ds.assign_coords(
-                time_and_frame=dataset_ds.time
-                + pd.to_timedelta(dataset_ds.frame, unit="h").to_pytimedelta()
-                + pd.to_timedelta(30, unit="min").to_pytimedelta()
-                - pd.to_timedelta(12, unit="h").to_pytimedelta()
-            )
-            dataset_ds = (
-                dataset_ds.swap_dims({"valid_time": "time_and_frame"})
-                .drop_vars(["time", "frame", "valid_time"])
-                .rename({"time_and_frame": "time"})
-            )
-
-        dataset_ds = dataset_ds.rename(
-            {var: f"target_{var}" for var in eval_vars if var in dataset_ds.data_vars}
+        ds = _prep_sim_data(
+            dataset_config,
+            source,
+            split,
+            ensemble_members,
+            eval_vars,
+            exclude_days,
+            derived_var_configs=derived_var_configs,
         )
-        dataset_ds = _exclude_days(dataset_ds, exclude_days)
 
-        for var, attrs in display.ATTRS.items():
-            if var in dataset_ds.data_vars:
-                dataset_ds[var] = dataset_ds[var].assign_attrs(attrs)
+        sim_datasets[source] = ds
 
-        datasets[source] = dataset_ds
-
-    target_dataset = datasets[target_sim_key]
+    target_sim_ds = sim_datasets[target_sim_key]
 
     # WARNING: HACK to put GCM data (currently only derived from mass data regridded to CPM 2.2km data coarsened 4x same as daily work) on same coords as target dataset (for hourly this is from CEDA). These have slightly different coords though should cover the same domain. This is a hack to make the coords match so that we can merge the datasets. This should be fixed in the future by regridding the GCM data to the same coords as the target dataset.
-    if "GCM" in datasets:
-        datasets["GCM"] = datasets["GCM"].assign_coords(
+    if "GCM" in sim_datasets:
+        sim_datasets["GCM"] = sim_datasets["GCM"].assign_coords(
             {
-                target_dataset.cf["Y"].name: target_dataset.cf["Y"].copy(),
-                target_dataset.cf["X"].name: target_dataset.cf["X"].copy(),
+                target_sim_ds.cf["Y"].name: target_sim_ds.cf["Y"].copy(),
+                target_sim_ds.cf["X"].name: target_sim_ds.cf["X"].copy(),
             }
         )
 
     for source, sample_config in sample_configs.items():
-        dataset_ds = datasets[source]
-        samples_ds = open_concat_sample_datasets(
+        dataset_ds = sim_datasets[source]
+        samples_ds = _prep_sample_data(
             sample_config,
             split=split,
             ensemble_members=ensemble_members,
             samples_per_run=samples_per_run,
+            eval_vars=eval_vars,
+            target_sim_ds=target_sim_ds,
+            sim_ds=sim_datasets[source],
+            derived_var_configs=derived_var_configs,
         )
-        samples_ds = samples_ds.rename(
-            {var: f"pred_{var}" for var in eval_vars if var in samples_ds.data_vars}
-        )
-
-        for var, attrs in display.ATTRS.items():
-            pvarname = f"pred_{var}"
-            if pvarname in samples_ds.data_vars:
-                samples_ds[pvarname] = samples_ds[pvarname].assign_attrs(
-                    dataset_ds[f"target_{var}"].attrs | attrs
+        sim_stats = cache.stats_for_vars(dataset_ds, (0, 200), eval_vars)
+        samples_stats = xr.merge(
+            [
+                cache.stats_for_vars(
+                    ds.squeeze("stacked_sample_id_model").drop_vars(
+                        "stacked_sample_id_model"
+                    ),
+                    var_range=(0, 200),
+                    variables=eval_vars,
+                ).map_over_datasets(
+                    xr.Dataset.expand_dims,
+                    kwargs=dict(model=[model], sample_id=[sample_id]),
                 )
-
-        samples_ds = samples_ds.rename(
-            {
-                "grid_latitude": target_dataset.cf["Y"].name,
-                "grid_longitude": target_dataset.cf["X"].name,
-            }
+                for (sample_id, model), ds in samples_ds.groupby(["sample_id", "model"])
+            ]
         )
-        samples_ds = samples_ds.assign_coords(
+        stats[source] = xr.DataTree.from_dict(
             {
-                target_dataset.cf["Y"].name: target_dataset.cf["Y"].copy(),
-                target_dataset.cf["X"].name: target_dataset.cf["X"].copy(),
+                "/sim": sim_stats,
+                "/samples": samples_stats,
             }
-        )
+        ).compute()
 
+        dataset_ds = dataset_ds.rename({var: f"target_{var}" for var in eval_vars})
+        samples_ds = samples_ds.rename({var: f"pred_{var}" for var in eval_vars})
         ds = xr.merge([samples_ds, dataset_ds], join="inner", compat="override")
+
         assert len(dataset_ds["time"]) == len(ds["time"]), (
             f"Different time length for dataset before and after merging with samples: "
             f"{len(ds['time'])} != {len(dataset_ds['time'])}. "
@@ -194,94 +178,72 @@ def prep_eval_data(
                 .coarsen(time=coarsen_time)
                 .sum(keep_attrs=True)
             )
-
-        ds = attach_eval_coords(ds)
-
-        ds = attach_derived_variables(ds, derived_var_configs)
+        # for source, ds in sim_datasets.items():
+        #     sim_datasets[source] = xr.DataTree.from_dict({"/": ds.rename({var: f"target_{var}" for var in eval_vars}), "/stats": cache.stats_for_vars(ds, (0, 200), eval_vars).compute()})
 
         merged_ds[source] = ds
 
-    return merged_ds, models
+    samples_stats = None
+    return merged_ds, models, stats
 
 
-def open_samples_ds(
-    run_name,
-    checkpoint_id,
-    dataset_name,
-    input_xfm_key,
+def _prep_sim_data(
+    dataset_config,
+    source,
     split,
     ensemble_members,
-    num_samples,
-    deterministic,
-    config_hash=None,
+    eval_vars,
+    exclude_days,
+    derived_var_configs,
 ):
-    eo_meta = FurflexEmulatorOutputMetadata(fq_run_id=run_name, base_dir=WORKDIRS_PATH)
-    per_em_datasets = []
-    for ensemble_member in ensemble_members:
-        samples_dir = eo_meta.samples_path(
-            checkpoint=checkpoint_id,
-            input_xfm=input_xfm_key,
-            dataset=dataset_name,
-            split=split,
-            ensemble_member=ensemble_member,
-            config_hash=config_hash,
-        )
-        sample_files_list = list(
-            eo_meta.samples_glob(
-                checkpoint=checkpoint_id,
-                input_xfm=input_xfm_key,
-                dataset=dataset_name,
-                split=split,
-                ensemble_member=ensemble_member,
-                config_hash=config_hash,
-            )
-        )
-        if len(sample_files_list) == 0:
-            raise RuntimeError(f"{samples_dir} has no sample files")
-
-        if deterministic:
-            em_ds = xr.open_dataset(
-                sample_files_list[0],
-                chunks={},
-            )
-        else:
-            sample_files_list = sample_files_list[:num_samples]
-            if len(sample_files_list) < num_samples:
-                raise RuntimeError(
-                    f"{samples_dir} does not have {num_samples} sample files"
+    dataset_ds = open_dataset_split(dataset_config, split, ensemble_members)
+    if source == "GCM":
+        # WARNING: HACK needed to upsample GCM data to hourly to match the sample data. As with spatial coords should fix this at source using this v simple upsampling method.
+        for var in eval_vars:
+            if var == "pr":
+                dataset_ds[var] = (
+                    dataset_ds[var] * 3600 * 24
+                )  # convert from kg/m2/s to mm/day
+            if var in dataset_ds.data_vars:
+                dataset_ds[var] = dataset_ds[var].expand_dims(
+                    {"frame": np.arange(0, 24)}, axis=2
                 )
-            em_ds = xr.concat(
-                [
-                    xr.open_dataset(sample_filepath, chunks={})
-                    for sample_filepath in sample_files_list
-                ],
-                dim="sample_id",
-            ).isel(sample_id=range(num_samples))
+                # accumlated variables like pr need to be divided by 24 to get hourly values
+                if var == "pr":
+                    dataset_ds[var] = dataset_ds[var] / 24.0
 
-        em_ds = em_ds.stack(valid_time=("time", "frame"))
-        em_ds = em_ds.assign_coords(
-            time_and_frame=em_ds.time
-            + pd.to_timedelta(em_ds.frame, unit="h").to_pytimedelta()
-            + pd.to_timedelta(30, unit="min").to_pytimedelta()
+        # merge_time_and_frame_dims assumes time is set to midnight but for daily sim data it's set to noon
+        dataset_ds["time"] = (
+            dataset_ds["time"] - pd.to_timedelta(12, unit="h").to_pytimedelta()
         )
-        em_ds = (
-            em_ds.swap_dims({"valid_time": "time_and_frame"})
-            .drop_vars(["time", "frame", "valid_time"])
-            .rename({"time_and_frame": "time"})
-        )
-        per_em_datasets.append(em_ds)
+        dataset_ds = merge_time_and_frame_dims(dataset_ds)
 
-    ds = xr.concat(per_em_datasets, dim="ensemble_member")
+    dataset_ds = _exclude_days(dataset_ds, exclude_days)
 
-    return ds
+    for var, attrs in display.ATTRS.items():
+        if var in dataset_ds.data_vars:
+            dataset_ds[var] = dataset_ds[var].assign_attrs(attrs)
+
+    dataset_ds = attach_eval_coords(dataset_ds)
+    dataset_ds = attach_derived_variables(dataset_ds, derived_var_configs)
+    return dataset_ds
 
 
-def open_concat_sample_datasets(sample_runs, split, ensemble_members, samples_per_run):
+def _prep_sample_data(
+    sample_runs,
+    split,
+    ensemble_members,
+    samples_per_run,
+    eval_vars,
+    target_sim_ds,
+    sim_ds,
+    derived_var_configs,
+):
     sample_datasets = []
     for sample_run in sample_runs:
         per_var_sample_datasets = [
-            open_samples_ds(
-                run_name=sample_src["fq_model_id"],
+            _prep_sample_set_ds(
+                fq_run_id=sample_src["fq_model_id"],
                 checkpoint_id=sample_src["checkpoint"],
                 dataset_name=sample_src["dataset"],
                 input_xfm_key=sample_src["input_xfm"],
@@ -292,24 +254,162 @@ def open_concat_sample_datasets(sample_runs, split, ensemble_members, samples_pe
                 ensemble_members=ensemble_members,
                 num_samples=samples_per_run,
                 deterministic=sample_run["deterministic"],
-            )[f"{var}"]
+                target_sim_ds=target_sim_ds,
+                sim_ds=sim_ds,
+                vars=list(set(eval_vars) & set(sample_src["variables"])),
+            ).expand_dims({"model": [sample_run["label"]]})
             for sample_src in sample_run["sample_specs"]
-            for var in sample_src["variables"]
         ]
 
         sample_datasets.append(xr.merge(per_var_sample_datasets, join="inner"))
 
-    samples_ds = xr.concat(
-        sample_datasets, pd.Index([sr["label"] for sr in sample_runs], name="model")
-    )
+    samples_ds = xr.concat(sample_datasets, dim="model")
 
-    if "sample_id" not in samples_ds.dims:
-        samples_ds = samples_ds.expand_dims("sample_id")
+    samples_ds = attach_derived_variables(samples_ds, derived_var_configs)
 
     return samples_ds
 
 
-def attach_derived_variables(ds, conf, prefixes=["target", "pred"]):
+def _prep_sample_set_ds(
+    fq_run_id,
+    checkpoint_id,
+    dataset_name,
+    input_xfm_key,
+    split,
+    ensemble_members,
+    num_samples,
+    deterministic,
+    config_hash,
+    target_sim_ds,
+    sim_ds,
+    vars,
+):
+    eo_meta = FurflexEmulatorOutputMetadata(fq_run_id=fq_run_id, base_dir=WORKDIRS_PATH)
+
+    sample_set_path = eo_meta.sample_set_dirpath(
+        checkpoint=checkpoint_id,
+        # input_xfm=input_xfm_key,
+        dataset=dataset_name,
+        split=split,
+        config_hash=config_hash,
+    )
+    # find all the sample runs in this sample set using directory layout
+    # eventually this might need to be set in parameters
+    sample_run_ids = list(map(lambda p: p.name, sample_set_path.glob("*")))
+
+    assert len(sample_run_ids) > 0, f"{sample_set_path} has no sample files"
+
+    if deterministic:
+        num_samples = 1
+
+    sample_run_ids = sample_run_ids[:num_samples]
+    if len(sample_run_ids) < num_samples:
+        raise RuntimeError(
+            f"{sample_set_path} does not have {num_samples} sample files"
+        )
+
+    ds = xr.concat(
+        [
+            _prep_sample_run_ds(
+                eo_meta,
+                sample_run_id,
+                checkpoint_id=checkpoint_id,
+                dataset_name=dataset_name,
+                input_xfm_key=input_xfm_key,
+                split=split,
+                ensemble_members=ensemble_members,
+                config_hash=config_hash,
+                target_sim_ds=target_sim_ds,
+                sim_ds=sim_ds,
+                vars=vars,
+            )
+            for sample_run_id in sample_run_ids
+        ],
+        dim="sample_id",
+    )
+
+    if "sample_id" not in ds.dims:
+        ds = ds.expand_dims("sample_id")
+
+    return ds
+
+
+def _prep_sample_run_ds(
+    eo_meta,
+    sample_run_id,
+    checkpoint_id,
+    dataset_name,
+    input_xfm_key,
+    split,
+    ensemble_members,
+    config_hash,
+    target_sim_ds,
+    sim_ds,
+    vars,
+):
+    sample_filepaths = [
+        eo_meta.samples_path(
+            checkpoint=checkpoint_id,
+            # input_xfm=input_xfm_key,
+            dataset=dataset_name,
+            split=split,
+            config_hash=config_hash,
+            sample_run_id=sample_run_id,
+            ensemble_member=ensemble_member,
+        )
+        for ensemble_member in ensemble_members
+    ]
+
+    sample_run_ds = xr.concat(
+        [
+            xr.open_dataset(sample_filepath, chunks={})
+            for sample_filepath in sample_filepaths
+        ],
+        dim="ensemble_member",
+    )
+    sample_run_ds = merge_time_and_frame_dims(sample_run_ds)
+    sample_run_ds = attach_eval_coords(sample_run_ds)
+
+    for var, attrs in display.ATTRS.items():
+        if var in sample_run_ds.data_vars:
+            sample_run_ds[var] = sample_run_ds[var].assign_attrs(
+                sim_ds[var].attrs | attrs
+            )
+
+    sample_run_ds = sample_run_ds.rename(
+        {
+            "grid_latitude": target_sim_ds.cf["Y"].name,
+            "grid_longitude": target_sim_ds.cf["X"].name,
+        }
+    )
+    sample_run_ds = sample_run_ds.assign_coords(
+        {
+            target_sim_ds.cf["Y"].name: target_sim_ds.cf["Y"].copy(),
+            target_sim_ds.cf["X"].name: target_sim_ds.cf["X"].copy(),
+        }
+    )
+
+    return sample_run_ds
+
+
+def merge_time_and_frame_dims(ds):
+    # merge time and frame dimensions in sample ds into single time dimension
+    ds = ds.stack(valid_time=("time", "frame"))
+    ds = ds.assign_coords(
+        time_and_frame=ds.time
+        + pd.to_timedelta(ds.frame, unit="h").to_pytimedelta()
+        + pd.to_timedelta(30, unit="min").to_pytimedelta()
+    )
+    ds = (
+        ds.swap_dims({"valid_time": "time_and_frame"})
+        .drop_vars(["time", "frame", "valid_time"])
+        .rename({"time_and_frame": "time"})
+    )
+
+    return ds
+
+
+def attach_derived_variables(ds, conf):
     for var, argsconf in conf.items():
 
         parts = argsconf[0].split(".")
@@ -317,13 +417,9 @@ def attach_derived_variables(ds, conf, prefixes=["target", "pred"]):
         module = importlib.import_module(module_name)
         function = getattr(module, function_name)
 
-        for prefix in prefixes:
+        kwargs = {argname: ds[val] for argname, val in argsconf[1].items()}
 
-            kwargs = {
-                argname: ds[f"{prefix}_{val}"] for argname, val in argsconf[1].items()
-            }
-
-            ds[f"{prefix}_{var}"] = function(**kwargs)
+        ds[var] = function(**kwargs)
 
     return ds
 
