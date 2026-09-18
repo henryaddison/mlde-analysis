@@ -148,7 +148,7 @@ def prep_eval_data(
         stats[source] = xr.DataTree.from_dict(
             {
                 "/sim": sim_stats,
-                "/samples": samples_stats,
+                "/pred": samples_stats,
             }
         ).compute()
 

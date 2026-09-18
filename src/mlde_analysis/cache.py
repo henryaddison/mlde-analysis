@@ -101,12 +101,13 @@ def _stats(da: xr.DataArray, nbins: int, var_range: tuple) -> xr.Dataset:
     return xr.merge(
         [
             dask.array.isnan(da).sum().rename(f"NaN Count"),
-            da.max().rename(f"Max Value"),
-            da.cf.mean(dim=["T", "ensemble_member"]).rename("Mean"),
-            da.cf.std(dim=["T", "ensemble_member"]).rename("Standard Deviation"),
+            da.max().rename(f"max"),
+            da.cf.mean(dim=["T", "ensemble_member"]).rename("mean"),
+            da.cf.std(dim=["T", "ensemble_member"]).rename("std"),
             da.cf.quantile(0.999, dim=["T", "ensemble_member"])
             .drop("quantile")
-            .rename("99.9th Percentile"),
+            .rename("q999"),
+            da.cf.where(da > 60).count().rename("vhi_exceedence_count"),
             hist_da,
         ],
         compat="no_conflicts",
