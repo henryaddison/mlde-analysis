@@ -378,7 +378,6 @@ def _prep_sample_run_ds(
         ],
         dim="ensemble_member",
     )
-    sample_run_ds = merge_time_and_frame_dims(sample_run_ds)
     sample_run_ds = attach_eval_coords(sample_run_ds)
 
     for var, attrs in display.ATTRS.items():
