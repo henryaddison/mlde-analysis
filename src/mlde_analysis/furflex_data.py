@@ -145,6 +145,13 @@ def prep_eval_data(
                 for (sample_id, model), ds in samples_ds.groupby(["sample_id", "model"])
             ]
         )
+        # samples_stats =xr.concat([
+        #     xr.concat([
+        #         cache.stats_for_vars(sample_run_ds, (0, 200), eval_vars) for sample_id, sample_run_ds in model_ds.groupby("sample_id")
+        #     ], dim="sample_id", data_vars="minimal")
+        #     for model, model_ds in samples_ds.groupby("model")
+        # ], dim="model", data_vars="minimal")
+
         stats[source] = xr.DataTree.from_dict(
             {
                 "/sim": sim_stats,
