@@ -11,8 +11,6 @@ from pathlib import Path
 import xarray as xr
 
 from . import display
-from mlde_analysis import stats
-
 
 WORKDIRS_PATH = Path(os.getenv("WORKDIRS_PATH"))
 
@@ -26,6 +24,14 @@ def open_dataset_split(dataset_name, split, ensemble_members="all"):
         ds = ds.sel(ensemble_member=ensemble_members)
 
     return ds
+
+
+def load_dataset_split_stats(dataset_name, split):
+    stats_dt = xr.load_datatree(
+        FurflexDatasetMetadata(dataset_name).split_path(split) / "eval_stats.zarr"
+    )
+
+    return stats_dt
 
 
 def open_dataset_predictors_split(dataset_name, split, ensemble_members="all"):
@@ -90,11 +96,12 @@ def prep_eval_data(
     merged_ds = {}
     stats_dts = {}
     sim_datasets = {}
+    sim_stats = {}
     for source, dataset_config in dataset_configs.items():
         if source not in sample_configs:
             continue  # skip datasets that don't have corresponding sample configs
 
-        ds = _prep_sim_data(
+        ds, stats_dt = _prep_sim_data(
             dataset_config,
             source,
             split,
@@ -105,8 +112,10 @@ def prep_eval_data(
         )
 
         sim_datasets[source] = ds
+        sim_stats[source] = stats_dt
 
     target_sim_ds = sim_datasets[target_sim_key]
+    # target_sim_stats_dt = sim_stats[target_sim_key]
 
     # WARNING: HACK to put GCM data (currently only derived from mass data regridded to CPM 2.2km data coarsened 4x same as daily work) on same coords as target dataset (for hourly this is from CEDA). These have slightly different coords though should cover the same domain. This is a hack to make the coords match so that we can merge the datasets. This should be fixed in the future by regridding the GCM data to the same coords as the target dataset.
     if "GCM" in sim_datasets:
@@ -129,11 +138,10 @@ def prep_eval_data(
             sim_ds=sim_ds,
             derived_var_configs=derived_var_configs,
         )
-        sim_stats_dt = stats.from_dataset(sim_ds, (0, 200), eval_vars)
 
         stats_dts[source] = xr.DataTree.from_dict(
             {
-                "/sim": sim_stats_dt,
+                "/sim": sim_stats[source],
                 "/pred": pred_stats_dt,
             }
         ).compute()
@@ -211,7 +219,11 @@ def _prep_sim_data(
 
     dataset_ds = attach_eval_coords(dataset_ds)
     dataset_ds = attach_derived_variables(dataset_ds, derived_var_configs)
-    return dataset_ds
+
+    # sim_stats_dt = stats.from_dataset(dataset_ds, (0, 200), eval_vars)
+    sim_stats_dt = load_dataset_split_stats(dataset_config, split)
+
+    return dataset_ds, sim_stats_dt
 
 
 def _prep_sample_data(
