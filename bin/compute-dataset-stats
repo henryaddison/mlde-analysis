@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# 60y 8.8km cCPM
+for p in /gws/ssde/j25a/furflex/henrya/projects/furflex/data/cpmgem-hourly/datasets/engwales_ccpm-4x-cpmgem_12em_1hr_pr_preset_v2/*/; do
+  pixi run mlde-analysis stats dataset ${p} pr
+done
+
+# 60y 8.8km GCM
+# for p in /gws/ssde/j25a/furflex/henrya/projects/furflex/data/cpmgem-hourly/datasets/engwales_gcm-4x-cpmgem_12em_1hr_pr_preset_v2/*/; do
+#   pixi run mlde-analysis stats dataset ${p} pr
+# done
+
+# 100y 8.8km
+for p in /gws/ssde/j25a/furflex/henrya/projects/furflex/data/cpmgem-hourly/datasets/v3_engwales_ccpm-4x_100x12em_1hr_pr/*/; do
+  pixi run mlde-analysis stats dataset ${p} pr
+done
+
+# 5km
+for p in /gws/ssde/j25a/furflex/henrya/projects/furflex/data/cpmgem-hourly/datasets/v3_engwales_ccpm-5km_100x12em_1hr_pr/*/; do
+  pixi run mlde-analysis stats dataset ${p} pr
+done
