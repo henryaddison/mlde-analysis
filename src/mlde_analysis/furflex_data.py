@@ -11,7 +11,7 @@ from pathlib import Path
 import xarray as xr
 
 from . import display
-from mlde_analysis import cache
+from mlde_analysis import stats
 
 
 WORKDIRS_PATH = Path(os.getenv("WORKDIRS_PATH"))
@@ -88,7 +88,7 @@ def prep_eval_data(
             order += 1
 
     merged_ds = {}
-    stats = {}
+    stats_dts = {}
     sim_datasets = {}
     for source, dataset_config in dataset_configs.items():
         if source not in sample_configs:
@@ -118,54 +118,33 @@ def prep_eval_data(
         )
 
     for source, sample_config in sample_configs.items():
-        dataset_ds = sim_datasets[source]
-        samples_ds = _prep_sample_data(
+        sim_ds = sim_datasets[source]
+        preds_ds, pred_stats_dt = _prep_sample_data(
             sample_config,
             split=split,
             ensemble_members=ensemble_members,
             samples_per_run=samples_per_run,
             eval_vars=eval_vars,
             target_sim_ds=target_sim_ds,
-            sim_ds=sim_datasets[source],
+            sim_ds=sim_ds,
             derived_var_configs=derived_var_configs,
         )
-        sim_stats = cache.stats_for_vars(dataset_ds, (0, 200), eval_vars)
-        samples_stats = xr.merge(
-            [
-                cache.stats_for_vars(
-                    ds.squeeze("stacked_sample_id_model").drop_vars(
-                        "stacked_sample_id_model"
-                    ),
-                    var_range=(0, 200),
-                    variables=eval_vars,
-                ).map_over_datasets(
-                    xr.Dataset.expand_dims,
-                    kwargs=dict(model=[model], sample_id=[sample_id]),
-                )
-                for (sample_id, model), ds in samples_ds.groupby(["sample_id", "model"])
-            ]
-        )
-        # samples_stats =xr.concat([
-        #     xr.concat([
-        #         cache.stats_for_vars(sample_run_ds, (0, 200), eval_vars) for sample_id, sample_run_ds in model_ds.groupby("sample_id")
-        #     ], dim="sample_id", data_vars="minimal")
-        #     for model, model_ds in samples_ds.groupby("model")
-        # ], dim="model", data_vars="minimal")
+        sim_stats_dt = stats.from_dataset(sim_ds, (0, 200), eval_vars)
 
-        stats[source] = xr.DataTree.from_dict(
+        stats_dts[source] = xr.DataTree.from_dict(
             {
-                "/sim": sim_stats,
-                "/pred": samples_stats,
+                "/sim": sim_stats_dt,
+                "/pred": pred_stats_dt,
             }
         ).compute()
 
-        dataset_ds = dataset_ds.rename({var: f"target_{var}" for var in eval_vars})
-        samples_ds = samples_ds.rename({var: f"pred_{var}" for var in eval_vars})
-        ds = xr.merge([samples_ds, dataset_ds], join="inner", compat="override")
+        sim_ds = sim_ds.rename({var: f"target_{var}" for var in eval_vars})
+        preds_ds = preds_ds.rename({var: f"pred_{var}" for var in eval_vars})
+        ds = xr.merge([preds_ds, sim_ds], join="inner", compat="override")
 
-        assert len(dataset_ds["time"]) == len(ds["time"]), (
+        assert len(sim_ds["time"]) == len(ds["time"]), (
             f"Different time length for dataset before and after merging with samples: "
-            f"{len(ds['time'])} != {len(dataset_ds['time'])}. "
+            f"{len(ds['time'])} != {len(sim_ds['time'])}. "
             "Perhaps samples do not cover the time period of the dataset."
         )
 
@@ -186,12 +165,11 @@ def prep_eval_data(
                 .sum(keep_attrs=True)
             )
         # for source, ds in sim_datasets.items():
-        #     sim_datasets[source] = xr.DataTree.from_dict({"/": ds.rename({var: f"target_{var}" for var in eval_vars}), "/stats": cache.stats_for_vars(ds, (0, 200), eval_vars).compute()})
+        #     sim_datasets[source] = xr.DataTree.from_dict({"/": ds.rename({var: f"target_{var}" for var in eval_vars}), "/stats": stats.from_dataset(ds, (0, 200), eval_vars).compute()})
 
         merged_ds[source] = ds
 
-    samples_stats = None
-    return merged_ds, models, stats
+    return merged_ds, models, stats_dts
 
 
 def _prep_sim_data(
@@ -247,6 +225,7 @@ def _prep_sample_data(
     derived_var_configs,
 ):
     sample_datasets = []
+    sample_stats = []
     for sample_run in sample_runs:
         per_var_sample_datasets = [
             _prep_sample_set_ds(
@@ -264,19 +243,28 @@ def _prep_sample_data(
                 target_sim_ds=target_sim_ds,
                 sim_ds=sim_ds,
                 vars=list(set(eval_vars) & set(sample_src["variables"])),
-            ).expand_dims({"model": [sample_run["label"]]})
+                emulator_label=sample_run["label"],
+            )
             for sample_src in sample_run["sample_specs"]
         ]
 
-        sample_datasets.append(xr.merge(per_var_sample_datasets, join="inner"))
+        sample_datasets.append(
+            xr.merge([ds for (ds, _) in per_var_sample_datasets], join="inner")
+        )
+        sample_stats.append(
+            xr.merge([stats for (_, stats) in per_var_sample_datasets], join="inner")
+        )
 
     samples_ds = xr.concat(
         sample_datasets, dim="model", data_vars="minimal", coords="minimal"
     )
-
     samples_ds = attach_derived_variables(samples_ds, derived_var_configs)
 
-    return samples_ds
+    sample_stats_dt = xr.concat(
+        sample_stats, dim="model", data_vars="minimal", coords="minimal"
+    )
+
+    return samples_ds, sample_stats_dt
 
 
 def _prep_sample_set_ds(
@@ -292,6 +280,7 @@ def _prep_sample_set_ds(
     target_sim_ds,
     sim_ds,
     vars,
+    emulator_label,
 ):
     eo_meta = FurflexEmulatorOutputMetadata(fq_run_id=fq_run_id, base_dir=WORKDIRS_PATH)
 
@@ -317,7 +306,7 @@ def _prep_sample_set_ds(
             f"{sample_set_path} does not have {num_samples} sample files"
         )
 
-    ds = xr.concat(
+    sample_set_ds = xr.concat(
         [
             _prep_sample_run_ds(
                 eo_meta,
@@ -336,13 +325,30 @@ def _prep_sample_set_ds(
         ],
         dim="sample_id",
         data_vars="minimal",
-        # coords="minimal",
+        coords="minimal",
     )
 
-    if "sample_id" not in ds.dims:
-        ds = ds.expand_dims("sample_id")
+    sample_set_ds = sample_set_ds.expand_dims({"model": [emulator_label]})
 
-    return ds
+    sample_set_stats = xr.concat(
+        [
+            _pred_sample_run_stats(
+                eo_meta,
+                sample_run_id,
+                checkpoint_id=checkpoint_id,
+                dataset_name=dataset_name,
+                split=split,
+                config_hash=config_hash,
+                target_sim_ds=target_sim_ds,
+            )
+            for sample_run_id in sample_run_ids
+        ],
+        dim="sample_id",
+        data_vars="minimal",
+        coords="minimal",
+    ).map_over_datasets(lambda ds: ds.expand_dims({"model": [emulator_label]}))
+
+    return sample_set_ds, sample_set_stats
 
 
 def _prep_sample_run_ds(
@@ -386,20 +392,66 @@ def _prep_sample_run_ds(
                 sim_ds[var].attrs | attrs
             )
 
-    sample_run_ds = sample_run_ds.rename(
+    sample_run_ds = _assign_xy_coords_to_samples(sample_run_ds, target_sim_ds)
+
+    sample_run_ds = sample_run_ds.expand_dims("sample_id")
+
+    return sample_run_ds
+
+
+def _pred_sample_run_stats(
+    eo_meta,
+    sample_run_id,
+    checkpoint_id,
+    dataset_name,
+    split,
+    config_hash,
+    target_sim_ds,
+):
+    sample_set_stats = xr.load_datatree(
+        eo_meta.sample_run_eval_stats_path(
+            checkpoint=checkpoint_id,
+            dataset=dataset_name,
+            split=split,
+            config_hash=config_hash,
+            sample_run_id=sample_run_id,
+        )
+    )
+
+    sample_set_stats = sample_set_stats.map_over_datasets(
+        _assign_xy_coords_to_samples, kwargs={"target_sim_ds": target_sim_ds}
+    )
+
+    sample_set_stats = sample_set_stats.map_over_datasets(
+        lambda ds: ds.expand_dims("sample_id")
+    )
+
+    return sample_set_stats
+
+
+def _assign_xy_coords_to_samples(ds, target_sim_ds):
+    # TODO: do this a sampling time!
+
+    # sampling uses grid_latitude and grid_longitude dim names but without coords
+    # if there's no grid_latitude dim, then assume not a spatial dataset so skip it
+    if "grid_latitude" not in ds.cf:
+        return ds
+
+    # rename spatial dimensions to match the target dataset
+    ds = ds.rename(
         {
             "grid_latitude": target_sim_ds.cf["Y"].name,
             "grid_longitude": target_sim_ds.cf["X"].name,
         }
     )
-    sample_run_ds = sample_run_ds.assign_coords(
+    # assign the spatial coordinates to sample spatial dimensions to match the target dataset
+    ds = ds.assign_coords(
         {
             target_sim_ds.cf["Y"].name: target_sim_ds.cf["Y"].copy(),
             target_sim_ds.cf["X"].name: target_sim_ds.cf["X"].copy(),
         }
     )
-
-    return sample_run_ds
+    return ds
 
 
 def merge_time_and_frame_dims(ds):

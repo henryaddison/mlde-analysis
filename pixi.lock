@@ -511,11 +511,11 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/2b/03/13dde6512ad7b4557eb792fbcf0c653af6076b81e5941d36ec61f7ce6028/astunparse-1.6.3-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/43/6a/ca128561b22b60bd5a0c4ea26649e68c8556b82bc70a0c396eebc977fe86/jupyterlab_widgets-3.0.15-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/45/2e/ccd754e473b972155f7e8ca60af373a8bc13ae951a5cb76363c43363e69d/cloup-3.0.7-py2.py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/49/76/e21342874cb9d463a2ca6c5c44c0096f5da2c8a73376228fa649a181809f/mlde_utils-0.4.0a3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4c/ad/f7204c0c38175f300621af7880737ca6379dd633e9b7d1c0a8fc2748f0dc/ghapi-1.0.6-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/54/56/5ea99d5057146e273c90175e7fb40e52b803739c961e50a1dd0fe2dfa645/fastcore-1.8.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/58/6a/9166369a2f092bd286d24e6307de555d63616e8ddb373ebad2b5635ca4cd/ipywidgets-8.1.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/65/ce/5c4f4660da5521d90bea62cdf8396d7e4ce4a00513e218d267b97f9ea453/cf_xarray-0.10.11-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/70/22/973c5da23adfe9a92f738b3dabaffa7447c642b8b590e7185c83891b589d/mlde_utils-0.4.0a4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b0/04/cb12795bb98c806b165e494c25671329d8dc35ee6c1bb361acf26d47a553/execnb-0.1.14-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
@@ -1048,12 +1048,12 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/2f/de/afa024cbe022b1b318a3d224125aa24939e99b4ff6f22e0ba639a2eaee47/pytest-8.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/43/6a/ca128561b22b60bd5a0c4ea26649e68c8556b82bc70a0c396eebc977fe86/jupyterlab_widgets-3.0.15-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/45/2e/ccd754e473b972155f7e8ca60af373a8bc13ae951a5cb76363c43363e69d/cloup-3.0.7-py2.py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/49/76/e21342874cb9d463a2ca6c5c44c0096f5da2c8a73376228fa649a181809f/mlde_utils-0.4.0a3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4c/ad/f7204c0c38175f300621af7880737ca6379dd633e9b7d1c0a8fc2748f0dc/ghapi-1.0.6-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/54/56/5ea99d5057146e273c90175e7fb40e52b803739c961e50a1dd0fe2dfa645/fastcore-1.8.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/58/6a/9166369a2f092bd286d24e6307de555d63616e8ddb373ebad2b5635ca4cd/ipywidgets-8.1.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/65/ce/5c4f4660da5521d90bea62cdf8396d7e4ce4a00513e218d267b97f9ea453/cf_xarray-0.10.11-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/70/22/973c5da23adfe9a92f738b3dabaffa7447c642b8b590e7185c83891b589d/mlde_utils-0.4.0a4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b0/04/cb12795bb98c806b165e494c25671329d8dc35ee6c1bb361acf26d47a553/execnb-0.1.14-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b5/e8/dbf020b4d98251a9860752a094d09a65e1b436ad181faf929983f697048f/watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl
@@ -8248,7 +8248,7 @@ packages:
   - cmcrameri~=1.9
   - cmweather~=0.3.2
   - ipympl~=0.9.7
-  - mlde-utils==0.4.0a3
+  - mlde-utils==0.4.0a4
   - nbdev~=2.4
   - properscoring~=0.1
   - python-cmethods~=2.3
@@ -8325,22 +8325,6 @@ packages:
   - click>=8.0,<9.0
   - typing-extensions ; python_full_version < '3.11'
   requires_python: '>=3.9'
-- pypi: https://files.pythonhosted.org/packages/49/76/e21342874cb9d463a2ca6c5c44c0096f5da2c8a73376228fa649a181809f/mlde_utils-0.4.0a3-py3-none-any.whl
-  name: mlde-utils
-  version: 0.4.0a3
-  sha256: c096ed76ec4a2368f5429f83abb2f7e76fc6ea390aaba910e6f6cacb28d56572
-  requires_dist:
-  - cartopy
-  - cdo
-  - cf-xarray
-  - cftime
-  - scitools-iris
-  - metpy
-  - netcdf4
-  - pint
-  - xarray
-  - pyyaml
-  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/4c/ad/f7204c0c38175f300621af7880737ca6379dd633e9b7d1c0a8fc2748f0dc/ghapi-1.0.6-py3-none-any.whl
   name: ghapi
   version: 1.0.6
@@ -8407,6 +8391,22 @@ packages:
   - regex ; extra == 'all'
   - rich ; extra == 'all'
   - pooch ; extra == 'all'
+  requires_python: '>=3.11'
+- pypi: https://files.pythonhosted.org/packages/70/22/973c5da23adfe9a92f738b3dabaffa7447c642b8b590e7185c83891b589d/mlde_utils-0.4.0a4-py3-none-any.whl
+  name: mlde-utils
+  version: 0.4.0a4
+  sha256: 9cf775a16c249c13051e33597997522abd776cdeb9a841e2ecc0fb589fa6dcd6
+  requires_dist:
+  - cartopy
+  - cdo
+  - cf-xarray
+  - cftime
+  - scitools-iris
+  - metpy
+  - netcdf4
+  - pint
+  - xarray
+  - pyyaml
   requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl
   name: ipympl

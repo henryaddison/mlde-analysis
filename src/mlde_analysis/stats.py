@@ -6,7 +6,7 @@ import xarray as xr
 from mlde_analysis.distribution import xr_hist
 
 
-def stats_for_vars(
+def from_dataset(
     ds: xr.Dataset, var_range: tuple, variables: list[str]
 ) -> dict[str, xr.DataTree]:
     """
@@ -32,11 +32,11 @@ def stats_for_vars(
     """
 
     return xr.DataTree.from_dict(
-        {var: stats(ds.cf[var], var_range) for var in variables}
+        {var: from_dataarray(ds.cf[var], var_range) for var in variables}
     )
 
 
-def stats(da: xr.DataArray, var_range: tuple) -> xr.DataTree:
+def from_dataarray(da: xr.DataArray, var_range: tuple) -> xr.DataTree:
     """
     Compute the cache statistics for a given dataset or sample set.
 
@@ -58,12 +58,14 @@ def stats(da: xr.DataArray, var_range: tuple) -> xr.DataTree:
 
     nbins = 200
 
-    root_stats = _stats(da, nbins=nbins, var_range=var_range)
+    root_stats = _basic_stats(da, nbins=nbins, var_range=var_range)
 
     day_qtr_stats = da.groupby_bins("time.hour", [-1, 5, 11, 17, 23]).map(
-        _stats, nbins=nbins, var_range=var_range
+        _basic_stats, nbins=nbins, var_range=var_range
     )
 
+    # replace hour_bins with bounds that can be saved to zarr
+    # groupby_bins uses Interval objects which cannot be saved to zarr
     hr_bnds = xr.DataArray(
         data=np.stack(
             [
@@ -80,7 +82,7 @@ def stats(da: xr.DataArray, var_range: tuple) -> xr.DataTree:
     day_qtr_stats = xr.merge([day_qtr_stats, hr_bnds]).drop_attrs()
 
     seasonal_stats = da.groupby("time.season").map(
-        _stats, nbins=nbins, var_range=var_range
+        _basic_stats, nbins=nbins, var_range=var_range
     )
 
     tree = xr.DataTree(
@@ -94,7 +96,7 @@ def stats(da: xr.DataArray, var_range: tuple) -> xr.DataTree:
     return tree
 
 
-def _stats(da: xr.DataArray, nbins: int, var_range: tuple) -> xr.Dataset:
+def _basic_stats(da: xr.DataArray, nbins: int, var_range: tuple) -> xr.Dataset:
     bins = np.histogram_bin_edges([], bins=nbins, range=var_range)
     hist_da, bins = xr_hist(da, bins=bins)
 
