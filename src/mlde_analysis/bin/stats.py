@@ -21,17 +21,20 @@ def callback():
 
 
 @app.command()
-def store(sample_run_path: Path, eval_vars: list[str]):
-    """Store evaluation statistics for a run of samples split over simualation ensemble members."""
+def predictions(prediction_run_path: Path, eval_vars: list[str]):
+    """Store evaluation statistics for a run of predictions split over simualation ensemble members."""
 
+    logger.info(
+        f"Computing prediction run evaluation statistics for {prediction_run_path}..."
+    )
     ds = xr.concat(
         [
             xr.open_dataset(fp, chunks={})
-            for fp in sample_run_path.glob("*/predictions.zarr")
+            for fp in prediction_run_path.glob("*/predictions.zarr")
         ],
         dim="ensemble_member",
     )
 
     samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
 
-    samples_stats.to_zarr(sample_run_path / f"eval_stats.zarr", mode="w")
+    samples_stats.to_zarr(prediction_run_path / f"eval_stats.zarr", mode="w")
