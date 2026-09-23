@@ -33,6 +33,9 @@ def predictions(prediction_run_path: Path, eval_vars: list[str]):
             for fp in prediction_run_path.glob("*/predictions.zarr")
         ],
         dim="ensemble_member",
+        data_vars="minimal",
+        coords="minimal",
+        join="exact",
     )
 
     samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
