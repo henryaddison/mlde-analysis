@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # 60y 8.8km
-for p in /gws/ssde/j25a/furflex/henrya/projects/furflex/workdirs/cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-{b,xl}8/4rtrecen-2000steps/samples/*/*/val/*/*; do
+for p in /gws/ssde/j25a/furflex/henrya/projects/furflex/workdirs/cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-{b,xl}8/4rtrecen-2000steps/samples/*/*/val/2000-steps/*; do
   pixi run mlde-analysis stats predictions ${p} pr
 done
 
