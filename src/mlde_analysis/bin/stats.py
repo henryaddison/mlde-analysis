@@ -1,3 +1,4 @@
+from dask.distributed import Client
 import logging
 from pathlib import Path
 import typer
@@ -46,10 +47,11 @@ def predictions(prediction_run_path: Path, eval_vars: list[str]):
 @app.command()
 def dataset(dataset_split_path: Path, eval_vars: list[str]):
     """Store evaluation statistics for a dataset of samples split over simulation ensemble members."""
-
     logger.info(f"Computing dataset evaluation statistics for {dataset_split_path}...")
+    client = Client()
     ds = xr.open_dataset(dataset_split_path / "predictands.zarr", chunks={})
 
     samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
 
     samples_stats.to_zarr(dataset_split_path / f"eval_stats.zarr", mode="w")
+    client.close()
