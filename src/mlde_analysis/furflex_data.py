@@ -93,8 +93,6 @@ def prep_eval_data(
             )
             order += 1
 
-    merged_ds = {}
-    stats_dts = {}
     sim_datasets = {}
     sim_stats = {}
     for source, dataset_config in dataset_configs.items():
@@ -126,8 +124,11 @@ def prep_eval_data(
             }
         )
 
+    merged_ds = {}
+    stats_dts = {}
     for source, sample_config in sample_configs.items():
         sim_ds = sim_datasets[source]
+        sim_stats_dt = sim_stats[source]
         preds_ds, pred_stats_dt = _prep_sample_data(
             sample_config,
             split=split,
@@ -138,13 +139,6 @@ def prep_eval_data(
             sim_ds=sim_ds,
             derived_var_configs=derived_var_configs,
         )
-
-        stats_dts[source] = xr.DataTree.from_dict(
-            {
-                "/sim": sim_stats[source],
-                "/pred": pred_stats_dt,
-            }
-        ).compute()
 
         sim_ds = sim_ds.rename({var: f"target_{var}" for var in eval_vars})
         preds_ds = preds_ds.rename({var: f"pred_{var}" for var in eval_vars})
@@ -175,6 +169,12 @@ def prep_eval_data(
         # for source, ds in sim_datasets.items():
         #     sim_datasets[source] = xr.DataTree.from_dict({"/": ds.rename({var: f"target_{var}" for var in eval_vars}), "/stats": stats.from_dataset(ds, (0, 200), eval_vars).compute()})
 
+        stats_dts[source] = xr.DataTree.from_dict(
+            {
+                "/sim": sim_stats_dt,
+                "/pred": pred_stats_dt,
+            }
+        ).compute()
         merged_ds[source] = ds
 
     return merged_ds, models, stats_dts
@@ -395,6 +395,9 @@ def _prep_sample_run_ds(
             for sample_filepath in sample_filepaths
         ],
         dim="ensemble_member",
+        data_vars="minimal",
+        coords="minimal",
+        join="exact",
     )
     sample_run_ds = attach_eval_coords(sample_run_ds)
 
@@ -403,8 +406,6 @@ def _prep_sample_run_ds(
             sample_run_ds[var] = sample_run_ds[var].assign_attrs(
                 sim_ds[var].attrs | attrs
             )
-
-    sample_run_ds = _assign_xy_coords_to_samples(sample_run_ds, target_sim_ds)
 
     sample_run_ds = sample_run_ds.expand_dims("sample_id")
 
