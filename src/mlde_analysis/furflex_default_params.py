@@ -1,14 +1,35 @@
-# Available contexts: "5km-100y", "8.8km-60y", or "8.8km-100y"
+# Available contexts: "5km-100y", "8.8km-60y", "8.8km-100y" or "5km-uk-small"
 # use to select the appropriate default configs
 # CONTEXT = "5km-100y"
-CONTEXT = "8.8km-60y"
+# CONTEXT = "8.8km-60y"
 # CONTEXT = "8.8km-100y"
+CONTEXT = "5km-uk-small"  # small dataset for testing
 
 desc = """
 Describe in more detail the models being compared
 """
 eval_vars = ["pr"]
 target_sim_key = "CPM"
+exclude_days = 0  # Number of days to exclude from each start of each season
+split = "val"
+ensemble_members = [
+    "r001i1p00000",
+    "r001i1p01113",
+    "r001i1p01554",
+    # "r001i1p01649",
+    # "r001i1p01843",
+    # "r001i1p01935",
+    # "r001i1p02868",
+    # "r001i1p02123",
+    # "r001i1p02242",
+    # "r001i1p02305",
+    # "r001i1p02335",
+    # "r001i1p02491",
+]
+samples_per_run = 1
+
+derived_variables_config = {}
+
 if CONTEXT == "5km-100y":
     dataset_configs = {
         "CPM": "v3_engwales_ccpm-5km_100x12em_1hr_pr",
@@ -19,14 +40,14 @@ if CONTEXT == "5km-100y":
                 "sample_specs": [
                     {
                         "fq_model_id": "v3_engwales_100y_5km_1hr_pr/latte-b8/4rtrecen-2000steps",
-                        "checkpoint": "0025",
+                        "checkpoint": "0300",
                         "dataset": "v3_engwales_ccpm-5km_100x12em_1hr_pr",
                         "input_xfm": "",
                         "variables": ["pr"],
                         "config_hash": "1000-steps",
                     },
                 ],
-                "label": "e0025",
+                "label": "e0100 latent",
                 "deterministic": False,
                 "PSD": True,
                 "color": "tab:blue",
@@ -122,24 +143,39 @@ elif CONTEXT == "8.8km-100y":
             },
         },
     }
+elif CONTEXT == "5km-uk-small":
+    ensemble_members = ["r001i1p00000"]
+    dataset_configs = {
+        "CPM": "uk_ccpm-5km_small_1hr_pr",
+    }
+    sample_configs = {
+        "CPM": [
+            {
+                "sample_specs": [
+                    {
+                        "fq_model_id": "uk_ccpm-5km_small_1hr_pr/latte-b8/4rtrecen-2000steps",
+                        "checkpoint": "2000",
+                        "dataset": "uk_ccpm-5km_small_1hr_pr",
+                        "input_xfm": "",
+                        "variables": ["pr"],
+                        "config_hash": "2000-steps",
+                    },
+                ],
+                "label": "e2000 cCPM",
+                "deterministic": False,
+                "PSD": True,
+                "color": "tab:blue",
+                "CCS": True,
+            },
+        ],
+    }
+    examples_to_plot = {
+        "CPM": {
+            "example": {
+                "times": ["1990-03-01", "1990-03-01"],
+                "query": {"ensemble_member": "r001i1p00000"},
+            },
+        },
+    }
 else:
     raise ValueError(f"Unknown context: {CONTEXT}")
-exclude_days = 0  # Number of days to exclude from each start of each season
-split = "val"
-ensemble_members = [
-    "r001i1p00000",
-    # "r001i1p01113",
-    # "r001i1p01554",
-    # "r001i1p01649",
-    # "r001i1p01843",
-    # "r001i1p01935",
-    # "r001i1p02868",
-    # "r001i1p02123",
-    # "r001i1p02242",
-    # "r001i1p02305",
-    # "r001i1p02335",
-    # "r001i1p02491",
-]
-samples_per_run = 1
-
-derived_variables_config = {}

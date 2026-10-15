@@ -28,6 +28,6 @@ sample_configs:
         CCS: True
 examples_to_plot:
   CPM:
-    v3:
-      times: ["1989-12-01", "1989-12-02"]
+    example:
+      times: ["1990-03-01", "1990-03-01"]
       query: {"ensemble_member": "r001i1p00000"}
