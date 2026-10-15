@@ -29,7 +29,7 @@ def predictions(prediction_run_path: Path, eval_vars: list[str]):
     )
     ds = xr.concat(
         [
-            xr.open_dataset(fp, chunks={})
+            xr.open_dataset(fp, chunks={}, engine="zarr")
             for fp in prediction_run_path.glob("*/predictions.zarr")
         ],
         dim="ensemble_member",
@@ -51,7 +51,7 @@ def dataset(dataset_split_path: Path, eval_vars: list[str]):
     logger.info(f"Computing dataset evaluation statistics for {dataset_split_path}...")
 
     logger.debug("Loading data")
-    ds = xr.load_dataset(dataset_split_path / "predictands.zarr")
+    ds = xr.load_dataset(dataset_split_path / "predictands.zarr", engine="zarr")
 
     logger.debug("Computing stats")
     samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
