@@ -10,7 +10,7 @@ logging.basicConfig(
     format="%(levelname)s - %(filename)s - %(asctime)s - %(message)s",
 )
 logger = logging.getLogger()
-logger.setLevel("INFO")
+logger.setLevel("DEBUG")
 
 app = typer.Typer()
 
@@ -38,8 +38,10 @@ def predictions(prediction_run_path: Path, eval_vars: list[str]):
         join="exact",
     )
 
+    logger.debug("Computing stats")
     samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
 
+    logger.debug("Writing stats to disk")
     samples_stats.to_zarr(prediction_run_path / f"eval_stats.zarr", mode="w")
 
 
