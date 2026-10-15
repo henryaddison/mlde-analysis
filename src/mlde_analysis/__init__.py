@@ -234,15 +234,15 @@ BOX_LOCATIONS = {
 
 
 def projection_from_da(da: xr.DataArray) -> ccrs.Projection:
-    if "rotated_latitude_longitude" == da.cf.grid_mapping_name:
+    if "rotated_latitude_longitude" == da.grid_mapping:
         projection = cp_model_rotated_pole
-    elif "transverse_mercator" == da.cf.grid_mapping_name:
+    elif "transverse_mercator" == da.grid_mapping:
         projection = osgb_crs
-    elif "latitude_longitude" == da.cf.grid_mapping_name:
+    elif "latitude_longitude" == da.grid_mapping:
         projection = platecarree
     else:
         raise ValueError(
-            f"Unknown grid mapping: {da.cf.grid_mapping_names}. Cannot determine projection."
+            f"Unknown grid mapping: {da.grid_mapping}. Cannot determine projection."
         )
 
     return projection
