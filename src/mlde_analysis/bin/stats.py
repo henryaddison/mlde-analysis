@@ -47,8 +47,12 @@ def predictions(prediction_run_path: Path, eval_vars: list[str]):
 def dataset(dataset_split_path: Path, eval_vars: list[str]):
     """Store evaluation statistics for a dataset of samples split over simulation ensemble members."""
     logger.info(f"Computing dataset evaluation statistics for {dataset_split_path}...")
+
+    logger.debug("Loading data")
     ds = xr.load_dataset(dataset_split_path / "predictands.zarr")
 
+    logger.debug("Computing stats")
     samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
 
+    logger.debug("Writing stats to disk")
     samples_stats.to_zarr(dataset_split_path / f"eval_stats.zarr", mode="w")
