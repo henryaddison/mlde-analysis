@@ -25,17 +25,17 @@ def midnight_jump_correlations(da):
             xr.concat(
                 [
                     sda.shift(time=2)
-                    .expand_dims(hours_after_midnight=[-2])
-                    .isel(time=slice(0, -1, 24)),
+                    .isel(time=slice(0, -1, 24))
+                    .expand_dims(hours_after_midnight=[-2]),
                     sda.shift(time=1)
-                    .expand_dims(hours_after_midnight=[-1])
-                    .isel(time=slice(0, -1, 24)),
+                    .isel(time=slice(0, -1, 24))
+                    .expand_dims(hours_after_midnight=[-1]),
                     sda.shift(time=0)
-                    .expand_dims(hours_after_midnight=[0])
-                    .isel(time=slice(0, -1, 24)),
+                    .isel(time=slice(0, -1, 24))
+                    .expand_dims(hours_after_midnight=[0]),
                     sda.shift(time=-1)
-                    .expand_dims(hours_after_midnight=[1])
-                    .isel(time=slice(0, -1, 24)),
+                    .isel(time=slice(0, -1, 24))
+                    .expand_dims(hours_after_midnight=[1]),
                 ],
                 dim="hours_after_midnight",
                 join="exact",
