@@ -268,7 +268,11 @@ def _prep_sample_data(
         )
 
     samples_ds = xr.concat(
-        sample_datasets, dim="model", data_vars="minimal", coords="minimal"
+        sample_datasets,
+        dim="model",
+        data_vars="minimal",
+        coords="minimal",
+        join="inner",
     )
     samples_ds = attach_derived_variables(samples_ds, derived_var_configs)
 
