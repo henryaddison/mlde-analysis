@@ -79,7 +79,7 @@ def from_dataarray(da: xr.DataArray, var_range: tuple) -> xr.DataTree:
     )
 
     day_qtr_stats["hour_bins"] = day_qtr_stats["hour_bins"].data.mid
-    day_qtr_stats = xr.merge([day_qtr_stats, hr_bnds]).drop_attrs()
+    day_qtr_stats = xr.merge([day_qtr_stats, hr_bnds])
 
     seasonal_stats = da.groupby("time.season").map(
         _basic_stats, nbins=nbins, var_range=var_range
@@ -109,6 +109,12 @@ def _basic_stats(da: xr.DataArray, nbins: int, var_range: tuple) -> xr.Dataset:
             da.cf.quantile(0.999, dim=["T", "ensemble_member"])
             .drop("quantile")
             .rename("q999"),
+            da.cf.quantile(0.9999, dim=["T", "ensemble_member"])
+            .drop("quantile")
+            .rename("q9999"),
+            da.cf.quantile(0.99999, dim=["T", "ensemble_member"])
+            .drop("quantile")
+            .rename("q99999"),
             da.cf.where(da > 60).count().rename("vhi_exceedence_count"),
             hist_da,
         ],
