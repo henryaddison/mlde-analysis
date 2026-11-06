@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 import typer
 import xarray as xr
@@ -10,7 +11,7 @@ logging.basicConfig(
     format="%(levelname)s - %(filename)s - %(asctime)s - %(message)s",
 )
 logger = logging.getLogger()
-logger.setLevel("DEBUG")
+logger.setLevel(os.getenv("LOG_LEVEL", "INFO"))
 
 app = typer.Typer()
 
