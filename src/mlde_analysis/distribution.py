@@ -81,9 +81,9 @@ def rms_bias(sample_stat, target_stat, normalize=False):
     else:
         return (
             rms(raw_bias)
-            .rename(f"RMS Bias [{target_stat.attrs['units']}]")
+            .rename(f"RMS Bias [{target_stat.attrs.get('units')}]")
             .assign_attrs(
-                {"long_name": "RMS Bias", "units": target_stat.attrs["units"]}
+                {"long_name": "RMS Bias", "units": target_stat.attrs.get("units")}
             )
         )
 
@@ -167,17 +167,17 @@ def compute_metrics(samples_stats, target_stats, thresholds=[0.1, 25, 75, 125]):
     max_value = (
         samples_stats["max"]
         .max(dim="sample_id")
-        .rename(f"Max Value ({target_stats['max'].attrs['units']})")
+        .rename(f"Max Value ({target_stats['max'].attrs.get('units')})")
     )
     max_value_bias = (max_value - target_stats["max"]).rename(
-        f"Max Value Bias ({target_stats['max'].attrs['units']})"
+        f"Max Value Bias ({target_stats['max'].attrs.get('units')})"
     )
 
     rms_biases = [
         samples_stats[stat]
         .groupby("model", squeeze=False)
         .map(rms_bias, target_stat=target_stats[stat], normalize=False)
-        .rename(f"RMS {stat} Bias ({target_stats[stat].attrs['units']})")
+        .rename(f"RMS {stat} Bias ({target_stats[stat].attrs.get('units')})")
         for stat in ["mean", "std", "q999"]
     ]
     relative_rms_biases = [
