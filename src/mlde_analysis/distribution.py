@@ -1,6 +1,8 @@
+import cf_xarray
 from collections import defaultdict
 import functools
-import math
+
+# import math
 import dask
 from matplotlib import pyplot as plt
 import numpy as np
@@ -68,6 +70,24 @@ def rms(da: xr.DataArray) -> xr.DataArray:
     return dask.array.sqrt((da**2).mean())
 
 
+def rms_bias(sample_stat, target_stat, normalize=False):
+    raw_bias = sample_stat - target_stat
+    if normalize:
+        return (
+            rms(100 * raw_bias / target_stat)
+            .rename("Relative RMS bias [%]")
+            .assign_attrs({"long_name": "RMS Bias", "units": "%"})
+        )
+    else:
+        return (
+            rms(raw_bias)
+            .rename(f"RMS Bias [{target_stat.attrs['units']}]")
+            .assign_attrs(
+                {"long_name": "RMS Bias", "units": target_stat.attrs["units"]}
+            )
+        )
+
+
 def rms_mean_bias(sample_da, target_da, normalize=False):
     return rms(mean_bias(sample_da, target_da, normalize=normalize))
 
@@ -120,7 +140,11 @@ def xr_hist(da, bins, **kwargs):
         kwargs=dict(bins=bins, density=True) | kwargs,
         **extra_kwargs,
     )
-    hist = hist.rename("frequency_density")
+    hist = hist.rename("frequency_density").drop_attrs()
+    bins_bnds = cf_xarray.vertices_to_bounds(bins, out_dims=["bnds", "bins"]).rename(
+        "bins_bnds"
+    )
+    hist = xr.merge([hist, bins_bnds]).drop_attrs()
     return hist, bin_edges.values
 
 
@@ -138,90 +162,58 @@ def hist_dist(hist_da, target_hist_da):
     ).rename("JS_distance")
 
 
-def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
-    nan_count = (
-        dask.array.isnan(da)
-        .groupby("model", squeeze=False)
-        .sum(...)
-        .rename(f"NaN Count")
-    )
-    target_max = target_da.max()
+def compute_metrics(samples_stats, target_stats, thresholds=[0.1, 25, 75, 125]):
+    nan_count = samples_stats["NaN Count"].sum(dim="sample_id")
     max_value = (
-        da.groupby("model", squeeze=False)
-        .max(dim=...)
-        .rename(f"Max Value ({target_da.attrs['units']})")
+        samples_stats["max"]
+        .max(dim="sample_id")
+        .rename(f"Max Value ({target_stats['max'].attrs['units']})")
     )
-    max_value_bias = (max_value - target_max).rename(
-        f"Max Value Bias ({target_da.attrs['units']})"
+    max_value_bias = (max_value - target_stats["max"]).rename(
+        f"Max Value Bias ({target_stats['max'].attrs['units']})"
     )
-    target_vhi_exceedence_count = target_da.where(target_da > 60).count()
+
+    rms_biases = [
+        samples_stats[stat]
+        .groupby("model", squeeze=False)
+        .map(rms_bias, target_stat=target_stats[stat], normalize=False)
+        .rename(f"RMS {stat} Bias ({target_stats[stat].attrs['units']})")
+        for stat in ["mean", "std", "q999"]
+    ]
+    relative_rms_biases = [
+        samples_stats[stat]
+        .groupby("model", squeeze=False)
+        .map(rms_bias, target_stat=target_stats[stat], normalize=True)
+        .rename(f"Relative RMS {stat} Bias (%)")
+        for stat in ["mean", "std", "q999"]
+    ]
+
+    target_vhi_exceedence_count = target_stats["vhi_exceedence_count"]
     vhi_exceedence_count = (
-        da.groupby("model", squeeze=False)
-        .map(lambda gda: gda.where(gda > 60).count())
+        samples_stats["vhi_exceedence_count"]
+        .mean(dim="sample_id")
         .rename(f"VHI Exceedence Count")
     )
     vhi_exceedence_bias = (vhi_exceedence_count - target_vhi_exceedence_count).rename(
         f"VHI Exceedence Count Bias"
     )
-    rms_mean_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_mean_bias, target_da=target_da, normalize=False)
-        .rename(f"RMS Mean Bias ({target_da.attrs['units']})")
-    )
-    rms_std_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_std_bias, target_da=target_da, normalize=False)
-        .rename(f"RMS Std Dev Bias ({target_da.attrs['units']})")
-    )
 
-    rms_q999_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_q999_bias, target_da=target_da, normalize=False)
-        .rename(f"RMS Q999 Bias ({target_da.attrs['units']})")
-    )
-
-    relative_rms_mean_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_mean_bias, target_da=target_da, normalize=True)
-        .rename("Relative RMS Mean Bias (%)")
-    )
-    relative_rms_std_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_std_bias, target_da=target_da, normalize=True)
-        .rename("Relative RMS Std Dev Bias (%)")
-    )
-    relative_rms_q999_biases = (
-        da.groupby("model", squeeze=False)
-        .map(rms_q999_bias, target_da=target_da, normalize=True)
-        .rename(f"Relative RMS Q999 Bias (%)")
-    )
-
-    target_min = target_da.min().compute()
-    target_max = target_da.max().compute()
-    bins = np.histogram_bin_edges(
-        [], bins=200, range=(target_min.item(), target_max.item())
-    )
-    target_hist_da, bins = xr_hist(target_da, bins=bins)
     model_hist_dist = (
-        da.groupby("model", squeeze=False)
-        .map(lambda x: xr_hist(x, bins=bins)[0])
+        samples_stats["frequency_density"]
+        .mean(dim="sample_id")
         .groupby("model", squeeze=False)
-        .map(hist_dist, target_hist_da=target_hist_da)
+        .map(hist_dist, target_hist_da=target_stats["frequency_density"])
         .rename("J-S distance")
     )
 
     metrics_ds = xr.merge(
         [
             nan_count,
-            rms_mean_biases,
-            rms_std_biases,
-            rms_q999_biases,
-            relative_rms_mean_biases,
-            relative_rms_std_biases,
-            relative_rms_q999_biases,
-            model_hist_dist,
+            *rms_biases,
+            *relative_rms_biases,
             max_value,
             max_value_bias,
+            model_hist_dist,
             vhi_exceedence_count,
             vhi_exceedence_bias,
         ],
@@ -256,9 +248,10 @@ def compute_metrics(da, target_da, thresholds=[0.1, 25, 75, 125]):
 
 
 def plot_freq_density(
-    hist_data,
+    pred_hist,
+    bins,
     ax,
-    target_da=None,
+    target_hist=None,
     target_label="CPM",
     title="",
     legend=True,
@@ -272,41 +265,38 @@ def plot_freq_density(
 ):
 
     if xlabel is None:
-        if target_da is not None:
-            xlabel = xr.plot.utils.label_from_attrs(da=target_da)
+        if target_hist is not None:
+            xlabel = xr.plot.utils.label_from_attrs(da=target_hist)
         else:
-            xlabel = xr.plot.utils.label_from_attrs(da=hist_data[0]["data"])
+            xlabel = xr.plot.utils.label_from_attrs(da=pred_hist)
     # xlabel = "Precip (mm/day)"
 
     if hrange is None:
         hrange = (
-            min([d["data"].min().values for d in hist_data]),
-            max([d["data"].max().values for d in hist_data]),
+            pred_hist.bins.min().item(),
+            pred_hist.bins.max().item(),
         )
-        if target_da is not None:
+        if target_hist is not None:
             hrange = (
-                min(hrange[0], target_da.min().values),
-                max(hrange[1], target_da.max().values),
+                min(hrange[0], target_hist.bins.min().values),
+                max(hrange[1], target_hist.bins.max().values),
             )
 
-    bins = np.histogram_bin_edges([], bins=200, range=hrange)
-
-    if target_da is not None:
-        if yscale == "log":
-            min_density = 1 / np.prod(target_da.shape)
-            ymin = 10 ** (math.floor(math.log10(min_density))) / 2
-        elif yscale == "linear":
-            ymin = 0
-        else:
-            ymin = None
+    if target_hist is not None:
+        # if yscale == "log":
+        #     min_density = 1 / np.prod(target_da.shape)
+        #     ymin = 10 ** (math.floor(math.log10(min_density))) / 2
+        # elif yscale == "linear":
+        #     ymin = 0
+        # else:
+        #     ymin = None
+        ymin = None
         # target_counts, bins = np.histogram(
         #     target_da, bins=bins, range=hrange, density=True
         # )
-
-        target_counts, bins = xr_hist(target_da, bins, range=hrange)
         ax.stairs(
-            target_counts,
-            bins,
+            target_hist.values,
+            bins,  # TODO: use bins_bnds from targets stats
             fill=True,
             color="black",
             alpha=0.2,
@@ -315,17 +305,16 @@ def plot_freq_density(
     else:
         ymin = None
 
-    for pred in hist_data:
-        counts, bins = xr_hist(pred["data"], bins, range=hrange)
+    for model, model_hist in pred_hist.groupby("model", squeeze=False):
         ax.stairs(
-            counts,
-            bins,
+            model_hist.squeeze("model").values,
+            bins,  # TODO: use bins_bnds from model stats
             fill=False,
-            color=pred["color"],
-            alpha=pred.get("alpha", alpha),
-            linestyle=pred.get("linestyle", linestyle),
+            # color=pred["color"],
+            # alpha=pred.get("alpha", alpha),
+            # linestyle=pred.get("linestyle", linestyle),
             linewidth=linewidth,
-            label=f"{pred['label']}",
+            label=model,
             **kwargs,
         )
 
@@ -467,8 +456,8 @@ def plot_freq_density_figure(pred_da, target_label, modellabel2spec, fig):
 
 def plot_distribution_figure(
     fig,
-    hist_das,
-    target_da,
+    pred_stats: xr.DataTree,
+    target_stats: xr.DataTree,
     biases_das,
     modellabel2spec,
     error_ax=None,
@@ -477,20 +466,21 @@ def plot_distribution_figure(
     fd_kwargs={},
     bias_kwargs={},
 ):
+
     if height_ratio is None:
         height_ratio = [3] + [1] * len(biases_das)
     # re-organize data for visualizing
-    hist_data = sorted(
-        map(
-            lambda modelgp: dict(
-                data=modelgp[1].squeeze("model"),
-                label=modelgp[0],
-                color=modellabel2spec[modelgp[0]]["color"],
-            ),
-            hist_das.groupby("model", squeeze=False),
-        ),
-        key=lambda x: modellabel2spec[x["label"]]["order"],
-    )
+    # hist_data = sorted(
+    #     map(
+    #         lambda modelgp: dict(
+    #             data=modelgp[1].squeeze("model"),
+    #             label=modelgp[0],
+    #             color=modellabel2spec[modelgp[0]]["color"],
+    #         ),
+    #         hist_das.groupby("model", squeeze=False),
+    #     ),
+    #     key=lambda x: modellabel2spec[x["label"]]["order"],
+    # )
     decorated_biases = {
         bias_key: sorted(
             map(
@@ -518,7 +508,7 @@ def plot_distribution_figure(
         + [np.array(keys).reshape(1, -1) for keys in biases_layout.values()],
         axis=0,
     )
-    projection = projection_from_da(target_da)
+    projection = projection_from_da(target_stats["mean"])
     axd = fig.subplot_mosaic(
         spec,
         gridspec_kw=dict(height_ratios=height_ratio),
@@ -530,8 +520,17 @@ def plot_distribution_figure(
     )
 
     ax = axd["Density"]
+    bounds = pred_stats["bins_bnds"].isel(model=0, sample_id=0).values
+    # import pdb; pdb.set_trace()
+    bins = np.concatenate((bounds[:, 0], bounds[-1:, 1]), axis=-1)
     plot_freq_density(
-        hist_data, ax=ax, target_da=target_da, linewidth=1, hrange=hrange, **fd_kwargs
+        pred_stats["frequency_density"].mean(dim="sample_id"),
+        bins=bins,
+        ax=ax,
+        target_hist=target_stats["frequency_density"],
+        linewidth=1,
+        hrange=hrange,
+        **fd_kwargs,
     )
     ax.annotate(
         "a.",
@@ -554,47 +553,47 @@ def plot_distribution_figure(
             va="bottom",
         )
 
-    if error_ax is not None:
-        # TODO: make this dask-friendly (mainly by storing the computed histograms from previous steps and reusing them here, instead of recomputing them)
-        if hrange is None:
-            hrange = (
-                min(
-                    [d["data"].min().values for d in hist_data]
-                    + [target_da.min().values]
-                ),
-                max(
-                    [d["data"].max().values for d in hist_data]
-                    + [target_da.max().values]
-                ),
-            )
-        bins = np.histogram_bin_edges([], bins=200, range=hrange)
-        true_counts, bins = np.histogram(
-            target_da, bins=bins, range=hrange, density=True
-        )
-        mindensity = 1 / (np.prod(target_da.shape))
-        print(mindensity)
-        ymin = 10 ** (math.floor(math.log10(mindensity))) / 2
-        print(ymin)
-        error_ax.set_ylim(ymin, None)
-        error_ax.set_yscale("log")
+    # if error_ax is not None:
+    #     # TODO: make this dask-friendly (mainly by storing the computed histograms from previous steps and reusing them here, instead of recomputing them)
+    #     if hrange is None:
+    #         hrange = (
+    #             min(
+    #                 [d["data"].min().values for d in hist_data]
+    #                 + [target_da.min().values]
+    #             ),
+    #             max(
+    #                 [d["data"].max().values for d in hist_data]
+    #                 + [target_da.max().values]
+    #             ),
+    #         )
+    #     bins = np.histogram_bin_edges([], bins=200, range=hrange)
+    #     true_counts, bins = xr_hist(
+    #         target_da, bins=bins, range=hrange, density=True
+    #     )
+    #     mindensity = 1 / (np.prod(target_da.shape))
+    #     print(mindensity)
+    #     ymin = 10 ** (math.floor(math.log10(mindensity))) / 2
+    #     print(ymin)
+    #     error_ax.set_ylim(ymin, None)
+    #     error_ax.set_yscale("log")
 
-        for pred in hist_data:
-            pred_counts, bins = np.histogram(
-                pred["data"], bins=bins, range=hrange, density=True
-            )
-            error_ax.stairs(
-                np.abs(true_counts - pred_counts),
-                bins,
-                baseline=None,
-                fill=False,
-                color=pred["color"],
-                alpha=pred.get("alpha", 0.95),
-                linestyle=pred.get("linestyle", "-"),
-                linewidth=1,
-                label=f"{pred['label']}",
-            )
-        error_ax.legend(fontsize="small")
-        error_ax.set_title("Absolute Error in freq density")
-        error_ax.set_xlabel(xr.plot.utils.label_from_attrs(da=target_da))
+    #     for pred in hist_data:
+    #         pred_counts, bins = xr_hist(
+    #             pred["data"], bins=bins, range=hrange, density=True
+    #         )
+    #         error_ax.stairs(
+    #             np.abs(true_counts - pred_counts),
+    #             bins,
+    #             baseline=None,
+    #             fill=False,
+    #             color=pred["color"],
+    #             alpha=pred.get("alpha", 0.95),
+    #             linestyle=pred.get("linestyle", "-"),
+    #             linewidth=1,
+    #             label=f"{pred['label']}",
+    #         )
+    #     error_ax.legend(fontsize="small")
+    #     error_ax.set_title("Absolute Error in freq density")
+    #     error_ax.set_xlabel(xr.plot.utils.label_from_attrs(da=target_da))
 
     return axd

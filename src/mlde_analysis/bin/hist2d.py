@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 import logging
 from pathlib import Path
 import typer
@@ -18,8 +17,6 @@ logger = logging.getLogger()
 logger.setLevel("INFO")
 
 app = typer.Typer()
-
-load_dotenv()  # take environment variables from .env.
 
 
 @app.callback()
