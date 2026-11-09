@@ -144,11 +144,13 @@ def prep_eval_data(
         preds_ds = preds_ds.rename({var: f"pred_{var}" for var in eval_vars})
         ds = xr.merge([preds_ds, sim_ds], join="inner", compat="override")
 
-        assert len(sim_ds["time"]) == len(ds["time"]), (
-            f"Different time length for dataset before and after merging with samples: "
-            f"{len(ds['time'])} != {len(sim_ds['time'])}. "
-            "Perhaps samples do not cover the time period of the dataset."
-        )
+        # TODO: make this work when using conditioning windows
+        # as end up with fewer samples because can't sample from start and end of each season.
+        # assert len(preds_ds["time"]) == len(ds["time"]), (
+        #     f"Different time length for dataset before and after merging with samples: "
+        #     f"{len(ds['time'])} != {len(preds_ds['time'])}. "
+        #     "Perhaps samples do not cover the time period of the dataset."
+        # )
 
         if coarsen_time is not None:
             # ds = ds.assign_coords(date=ds.time.dt.floor("D")).groupby("date").mean().rename(date="time")
@@ -268,7 +270,11 @@ def _prep_sample_data(
         )
 
     samples_ds = xr.concat(
-        sample_datasets, dim="model", data_vars="minimal", coords="minimal"
+        sample_datasets,
+        dim="model",
+        data_vars="minimal",
+        coords="minimal",
+        join="inner",
     )
     samples_ds = attach_derived_variables(samples_ds, derived_var_configs)
 
