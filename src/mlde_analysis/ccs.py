@@ -102,12 +102,14 @@ def compute_changes(pred_pr_das, cpm_pr, seasons, stat_func):
             "future",
             ["ensemble_member", "time"],
             stat_func,
-        )
+        ).compute()
+
         changes[season] = {
             "CPM change": cpm_change,
             "ML changes": [],
             "ML labels": [],
         }
+
         for pred_pr_da in pred_pr_das:
             changes[season]["ML changes"].append(
                 change_over_time(
@@ -116,7 +118,7 @@ def compute_changes(pred_pr_das, cpm_pr, seasons, stat_func):
                     "future",
                     ["ensemble_member", "time", "sample_id"],
                     stat_func,
-                ),
+                ).compute(),
             )
             changes[season]["ML labels"].append(pred_pr_da["model"].data.item())
 
