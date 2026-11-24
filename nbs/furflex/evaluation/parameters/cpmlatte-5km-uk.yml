@@ -28,5 +28,5 @@ sample_configs:
 examples_to_plot:
   CPM:
     example:
-      times: ["1989-12-01", "1989-12-02"]
+      times: ["2058-03-16", "2058-03-17"]
       query: {"ensemble_member": "r001i1p00000"}
