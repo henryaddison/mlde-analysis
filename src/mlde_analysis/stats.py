@@ -100,21 +100,21 @@ def _basic_stats(da: xr.DataArray, nbins: int, var_range: tuple) -> xr.Dataset:
     bins = np.histogram_bin_edges([], bins=nbins, range=var_range)
     hist_da, bins = xr_hist(da, bins=bins)
 
+    quantiles_da = da.cf.quantile(
+        [0.999, 0.9999, 0.99999], dim=["T", "ensemble_member"]
+    ).compute()
+
     return xr.merge(
         [
             dask.array.isnan(da).sum().rename(f"NaN Count"),
             da.max().rename(f"max"),
             da.cf.mean(dim=["T", "ensemble_member"]).rename("mean"),
             da.cf.std(dim=["T", "ensemble_member"]).rename("std"),
-            da.cf.quantile(0.999, dim=["T", "ensemble_member"])
-            .drop("quantile")
-            .rename("q999"),
-            da.cf.quantile(0.9999, dim=["T", "ensemble_member"])
-            .drop("quantile")
-            .rename("q9999"),
-            da.cf.quantile(0.99999, dim=["T", "ensemble_member"])
-            .drop("quantile")
-            .rename("q99999"),
+            quantiles_da.sel(quantile=0.999).drop_vars("quantile").rename("q_0.999"),
+            quantiles_da.sel(quantile=0.9999).drop_vars("quantile").rename("q_0.9999"),
+            quantiles_da.sel(quantile=0.99999)
+            .drop_vars("quantile")
+            .rename("q_0.99999"),
             da.cf.where(da > 60).count().rename("vhi_exceedence_count"),
             hist_da,
         ],

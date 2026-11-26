@@ -52,7 +52,9 @@ def dataset(dataset_split_path: Path, eval_vars: list[str]):
     logger.info(f"Computing dataset evaluation statistics for {dataset_split_path}...")
 
     logger.debug("Loading data")
-    ds = xr.load_dataset(dataset_split_path / "predictands.zarr", engine="zarr")
+    ds = xr.open_dataset(
+        dataset_split_path / "predictands.zarr", engine="zarr", chunks={}
+    )
 
     logger.debug("Computing stats")
     samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
