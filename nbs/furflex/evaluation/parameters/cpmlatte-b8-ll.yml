@@ -88,8 +88,8 @@ sample_configs:
 examples_to_plot:
   CPM:
     "Summer Convective Event":
-      times: ["2029-06-23", "2029-06-23"]
+      times: ["2029-06-22", "2029-06-24"]
       query: {"ensemble_member": "r001i1p02868"}
     "Large-scale Event":
-      times: ["2064-11-24", "2064-11-24"]
+      times: ["2064-11-23", "2064-11-25"]
       query: {"ensemble_member": "r001i1p00000"}
