@@ -49,6 +49,30 @@ sample_configs:
         PSD: True
         color: tab:orange
         CCS: True
+      - label: e0300 llv1w1
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/v3_engwales_ccpm-4x_60x12em_1hr_pr_preset/latte-b8-leadlagcond/4rtrecen-w1
+            checkpoint: "0300"
+            dataset: v3_engwales_ccpm-4x_60x12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:red
+        CCS: True
+      - label: e0300 llv1w3
+        sample_specs:
+          - fq_model_id: cpmgem-subdaily/v3_engwales_ccpm-4x_60x12em_1hr_pr_preset/latte-b8-leadlagcond/4rtrecen-w3
+            checkpoint: "0300"
+            dataset: v3_engwales_ccpm-4x_60x12em_1hr_pr_preset
+            input_xfm: ""
+            variables: [pr]
+            config_hash: "1000-steps"
+        deterministic: False
+        PSD: True
+        color: tab:green
+        CCS: True
       # - label: e0300 orig
       #   sample_specs:
       #     - fq_model_id: cpmgem-subdaily/ew_pr_cpmgem-daily_preset/latte-b8/4rtrecen
