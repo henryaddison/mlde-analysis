@@ -102,7 +102,7 @@ def _basic_stats(da: xr.DataArray, nbins: int, var_range: tuple) -> xr.Dataset:
 
     quantiles_da = da.cf.quantile(
         [0.999, 0.9999, 0.99999], dim=["T", "ensemble_member"]
-    ).compute()
+    )
 
     return xr.merge(
         [
