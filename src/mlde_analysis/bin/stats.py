@@ -28,6 +28,8 @@ def predictions(prediction_run_path: Path, eval_vars: list[str]):
     logger.info(
         f"Computing prediction run evaluation statistics for {prediction_run_path}..."
     )
+
+    logger.info("Opening data")
     ds = xr.concat(
         [
             xr.open_dataset(fp, chunks={}, engine="zarr")
@@ -44,6 +46,7 @@ def predictions(prediction_run_path: Path, eval_vars: list[str]):
 
     logger.info("Writing stats to disk")
     samples_stats.to_zarr(prediction_run_path / f"eval_stats.zarr", mode="w")
+    logger.info("Done")
 
 
 @app.command()
@@ -51,12 +54,13 @@ def dataset(dataset_split_path: Path, eval_vars: list[str]):
     """Store evaluation statistics for a dataset of samples split over simulation ensemble members."""
     logger.info(f"Computing dataset evaluation statistics for {dataset_split_path}...")
 
-    logger.info("Loading data")
-    with xr.open_dataset(
+    logger.info("Opening data")
+    ds = xr.open_dataset(
         dataset_split_path / "predictands.zarr", engine="zarr", chunks={}
-    ) as ds:
-        logger.info("Computing stats")
-        samples_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
+    )
+    logger.info("Computing stats")
+    dataset_stats = stats.from_dataset(ds, (0, 200), eval_vars).compute()
 
-        logger.info("Writing stats to disk")
-        samples_stats.to_zarr(dataset_split_path / f"eval_stats.zarr", mode="w")
+    logger.info("Writing stats to disk")
+    dataset_stats.to_zarr(dataset_split_path / f"eval_stats.zarr", mode="w")
+    logger.info("Done")
