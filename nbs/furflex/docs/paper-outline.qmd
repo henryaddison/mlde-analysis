@@ -1,0 +1,101 @@
+---
+title: "Paper outline"
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+
+{{< include _setup.qmd >}}
+
+```{python}
+#| output: false
+#| echo: false
+import functools
+import IPython
+import math
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import string
+import xarray as xr
+
+from mlde_analysis import plot_map
+from mlde_analysis.furflex_data import prep_eval_data
+from mlde_analysis.display import pretty_table, VAR_RANGES
+from mlde_analysis.distribution import mean_bias, std_bias, stat_bias, plot_freq_density, plot_distribution_figure, compute_metrics, DIST_THRESHOLDS, plot_freq_density_figure
+from mlde_analysis.wet_dry import threshold_exceeded_prop_stats, THRESHOLDS
+from mlde_utils import cp_model_rotated_pole
+from mlde_analysis.psd import plot_psd, pysteps_rapsd
+```
+
+## Samples
+
+```{python}
+#| label: fig-sample-plot
+#| fig-cap: "Sample plot"
+#| echo: false
+
+from mlde_analysis.subdaily_examples import animate_day
+
+for source, examples in examples_to_plot.items():
+    IPython.display.display_html(f"<h2>{source} Samples</h2>", raw=True)
+
+    for label, example_spec in examples.items():
+        animate_day(EVAL_DS[source], example_spec, label, source, filepath = f"{source}-{label}-{'-'.join(example_spec['query'].values())}-hourly_precip.gif")
+
+```
+
+## Distribution
+
+Annual summary of distribution: @fig-annual-distribution-summary
+
+```{python}
+#| label: fig-annual-distribution-summary
+#| fig-cap: "Annual distribution summary"
+#| echo: false
+var="pr"
+
+pred_stats = EVAL_STATS["CPM"]["pred"][var]
+target_stats = EVAL_STATS[target_sim_key]["sim"][var]
+
+#metrics_ds = compute_metrics(pred_stats, target_stats, thresholds=DIST_THRESHOLDS[var]).compute()
+
+#pretty_table(metrics_ds, round=4)
+
+normalize=(var == "pr")
+
+def bias(pred_stat, target_stat, normalize):
+    raw_bias = pred_stat - target_stat
+    if normalize:
+        return (
+            (100 * raw_bias / target_stat)
+            .rename("Relative bias [%]")
+            .assign_attrs({"long_name": "Bias", "units": "%"})
+        )
+    else:
+        return raw_bias.rename(f"Bias [{target_da.attrs['units']}]").assign_attrs(
+            {"long_name": "Bias", "units": target_da.attrs["units"]}
+        )
+
+biases = { f"{stat}b": bias(pred_stats[stat], target_stats[stat], normalize=normalize).mean(dim="sample_id") for stat in ["mean", "std"] }#, "q999"] } # , "q9999", "q99999"] }
+
+bias_kwargs = {"style": f"{var}Bias"}
+for fd_kwargs in [{"yscale": "log", "target_label": target_sim_key}]:
+    fig = plt.figure(layout="constrained", figsize=(5.5, 5))
+
+    axd = plot_distribution_figure(
+        fig,
+        pred_stats,
+        target_stats,
+        biases,
+        MODELLABEL2SPEC,
+        hrange=VAR_RANGES[var],
+        fd_kwargs=fd_kwargs,
+        bias_kwargs=bias_kwargs
+    )
+    if var == "relhum150cm":
+        axd["Density"].axvline(x=100, color='k', linestyle='--', linewidth=1)
+
+plt.show()
+```

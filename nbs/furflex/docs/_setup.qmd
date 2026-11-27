@@ -1,0 +1,54 @@
+```{python}
+#| output: false
+#| echo: false
+%reload_ext autoreload
+
+%autoreload 2
+
+%reload_ext dotenv
+%dotenv
+```
+
+```{python}
+#| tags: [parameters]
+#| output: false
+#| echo: false
+from mlde_analysis.furflex_default_params import *
+```
+
+```{python}
+#| output: false
+#| echo: false
+import dask
+import dask.array
+from dask.distributed import Client
+
+client = Client()
+
+
+import matplotlib
+
+matplotlib.rcParams['figure.dpi'] = 100
+
+# EVAL_DS, MODELS, EVAL_STATS = prep_eval_data(
+#   sample_configs,
+#   dataset_configs,
+#   derived_variables_config,
+#   eval_vars,
+#   split,
+#   exclude_days,
+#   ensemble_members=ensemble_members,
+#   samples_per_run=samples_per_run,
+#   coarsen_time=None,
+#   target_sim_key=target_sim_key,
+# )
+# MODELLABEL2SPEC = {
+#             model_label: {"source": source} | model_spec
+#             for source, source_models in MODELS.items()
+#             for model_label, model_spec in source_models.items()
+#         } | {target_sim_key: {"source": target_sim_key, "color": "black"}}
+
+%reload_ext mlde_analysis.furflex_magics
+EVAL_DS, MODELS, TARGET_DAS, PRED_DAS, VAR_DAS, MODELLABEL2SPEC, EVAL_STATS = %load_eval_data
+display(EVAL_STATS[target_sim_key])
+```
