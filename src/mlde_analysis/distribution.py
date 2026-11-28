@@ -178,14 +178,14 @@ def compute_metrics(samples_stats, target_stats, thresholds=[0.1, 25, 75, 125]):
         .groupby("model", squeeze=False)
         .map(rms_bias, target_stat=target_stats[stat], normalize=False)
         .rename(f"RMS {stat} Bias ({target_stats[stat].attrs.get('units')})")
-        for stat in ["mean", "std", "q999"]
+        for stat in ["mean", "std", "q0.999"]
     ]
     relative_rms_biases = [
         samples_stats[stat]
         .groupby("model", squeeze=False)
         .map(rms_bias, target_stat=target_stats[stat], normalize=True)
         .rename(f"Relative RMS {stat} Bias (%)")
-        for stat in ["mean", "std", "q999"]
+        for stat in ["mean", "std", "q0.999"]
     ]
 
     target_vhi_exceedence_count = target_stats["vhi_exceedence_count"]
